@@ -1,50 +1,92 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Credra Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Honest Trust Model (NON-NEGOTIABLE)
+Credra MUST describe exactly who does what. Verification results are recorded onchain by an
+application-authorised transaction from the verifier wallet; they MUST NOT be described as
+DON-signed or CRE-attested writes. Any data source that is simulated, mocked or unavailable MUST be
+labelled as such in the UI, the README and the evidence files. A demo MUST NOT imply that an
+external buyer payment was detected unless that integration exists; repayment is an explicit
+transaction.
+Rationale: both sponsor tracks reward verifiable claims, and a misleading claim is worse than a
+missing feature.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Fail-Safe Verification
+An invoice MUST become Eligible only through a successfully parsed ELIGIBLE verdict from the CRE
+workflow or an explicit, recorded operator approval. Any error, timeout, outage, unparsable output
+or unknown verdict MUST resolve to manual review (UnderReview), never Eligible. The CRE workflow
+MUST be in the real eligibility path; the eligibility rules MUST NOT be reimplemented in the app
+to bypass it.
+Rationale: financing decisions must not silently approve on failure, and the workflow must be used
+meaningfully, not decoratively.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Keys and Secrets Stay Server-Side and Testnet-Only
+Private keys, passcodes and CRE credentials MUST live only in gitignored environment files or the
+server process. They MUST NOT appear in browser bundles, `NEXT_PUBLIC_` variables, logs, commits,
+chat output or documents. Keys in this project MUST be throwaway testnet keys; no key holding real
+value is permitted. The `.env` files MUST remain gitignored.
+Rationale: the demo repository is public and the testing tools run with broad local access.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Privacy by Design
+Confidential invoice documents and personal data MUST NOT be stored or published onchain. Only
+document fingerprints (keccak256), hashed buyer references and the minimum terms needed for
+settlement go onchain. Documents are stored off-chain and served only to the issuer and the
+operator.
+Rationale: onchain data is public and permanent.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Official Settlement Asset
+All financing and repayment payments MUST use the official Whitechain test USDT contract
+(`0xcedfB56113143d55b2358b8CFbB0dEB5Ad2f55a7`). A replacement or mock token MUST NOT be used in the
+main application flow; mock tokens are permitted only inside unit tests. Contracts MUST never
+custody investor funds and MUST NOT provide an administrator withdrawal path. Token amounts MUST be
+handled as integers in base units (6 decimals), never as floating point.
+Rationale: the Whitechain track requires official USDT payments in the main flow, and non-custodial
+settlement removes a class of risk.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### VI. Evidence and Proof
+Every claimed lifecycle step MUST be backed by evidence in the repository: a verified-contract
+explorer link, a transaction hash, or a captured CRE simulation log. Behaviour that protects funds
+or eligibility MUST be covered by an automated test, and existing suites (`forge test`, `bun test`)
+MUST stay green. Commits MUST be small and frequent so the history shows continuous development.
+Rationale: judges inspect the public repository, and untested claims cannot be trusted.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Scope and Technical Constraints
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+- Network: Whitechain Sepolia, chain id 1874, only. Cross-chain, CCIP and multi-chain features
+  are out of scope.
+- Scope MUST follow the PRD for V1: single investor per invoice, no credit scoring, no real KYC,
+  no automated bank or buyer payment detection, no secondary-market trading. Additions require a
+  documented amendment to the spec first.
+- The three deployed contracts (InvoiceRegistry, InvestorAllowlist, ReceivableFinance) are fixed.
+  A redeploy requires a written reason, re-verification on the explorer, re-seeding and refreshed
+  evidence.
+- The web app is a single Next.js TypeScript application; no additional backend services are added
+  without a documented need. The simulated external verification API stays a separate process.
+- RPC access MUST use a fallback transport with timeouts because both public RPCs are intermittently
+  unreliable.
+- Deploy access to the CRE network is not enabled; the CRE workflow is exercised through the CLI
+  simulator.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow
+
+- Work follows Spec Kit: specify, plan, tasks, implement, with the plan's Constitution Check gated
+  on this document.
+- Each plan MUST map every principle to PASS or a justified violation in Complexity Tracking.
+- Before any user-facing claim is added to the README or demo script, the matching evidence file
+  MUST exist.
+- Changes to contract code, the CRE workflow or the simulated API MUST be accompanied by updated
+  tests and, where onchain, updated evidence.
+- `CLAUDE.md` MUST be kept current with commands, addresses and decisions.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes other practices in this repository. Amendments require a written
+change to this file stating the rationale, a version bump, and an update to any plan or spec whose
+gates change. Versioning follows semantic versioning: MAJOR for removing or redefining a
+principle, MINOR for adding a principle or materially expanding guidance, PATCH for wording
+clarifications. Compliance is reviewed at each plan (Constitution Check) and before any release or
+submission; violations MUST be fixed or justified in the plan's Complexity Tracking table. Runtime
+guidance lives in `CLAUDE.md`.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-11-05 | **Last Amended**: 2026-11-05

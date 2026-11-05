@@ -34,7 +34,7 @@ Approach: a single Next.js (TypeScript) app serves both the UI and a thin server
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-`.specify/memory/constitution.md` is still the unfilled template, so there are no ratified principles. Provisional gates are taken from the project's own rules in `CLAUDE.md` and the PRD (recommend ratifying them via `/speckit-constitution`):
+`.specify/memory/constitution.md` v1.0.0 (ratified 2026-11-05) governs. Gates map to its principles:
 
 | Gate | Pre-research | Post-design |
 |------|--------------|-------------|
