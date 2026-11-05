@@ -165,6 +165,26 @@ Single Next.js app in `apps/web/` with `src/app/` (pages and `api/` routes), `sr
 
 ---
 
+## Phase 9: User Story 6 - Landing page (Priority: P3, after US1 and US2)
+
+**Goal**: marketing page at `/` that explains Credra honestly and routes both audiences into the app (now under `/app`). Source: [landing-brief.md](landing-brief.md) (reconciled with the repository). Build only after the MVP and funding flow work.
+
+**Independent Test**: load `/` at 375, 768, 1280 px; every visible CTA works; no invented figures; Verified status shown only when real.
+
+- [ ] T074 [P] [US6] Update `/Users/abby/Eth Mumbai/DESIGN.md`: add the marketing type scale, `pine-hover #092E29`, and the single pine CTA-band exception (needs approval, see landing-brief.md item 3)
+- [ ] T075 [US6] Restructure routes: marketing at `src/app/(marketing)/page.tsx` (`/`), application under `/app/*` (route group `(app)` with an `app` segment); update links in ui-spec and API redirects
+- [ ] T076 [P] [US6] Build `src/components/marketing/Navbar.tsx` and `MobileMenu.tsx` (72px sticky, anchor links, Launch app only filled action; no Sign in)
+- [ ] T077 [US6] Build `HeroSection.tsx` and `ProductPreview.tsx` using the real `StatusChip`, `Amount`, `EvidencePanel` components; render INV-1001 from live data when available, otherwise labelled "Illustrative demo data"; never show a Verified status or transaction without a real recorded result
+- [ ] T078 [P] [US6] Build `TrustSection.tsx` (four approach cards) and `ProcessTimeline.tsx` (five steps, horizontal and vertical)
+- [ ] T079 [P] [US6] Build `AudienceSection.tsx` (business and investor, distinct CTAs; investor CTA hidden until `/app/investor` exists) and `TechnologySection.tsx` (use "Recorded onchain by the verifier wallet", say CRE is demonstrated in the simulator)
+- [ ] T080 [P] [US6] Build `ProductShowcase.tsx` (one to three alternating stories from real components) and `FinalCTA.tsx` (pine band)
+- [ ] T081 [P] [US6] Build `Footer.tsx` and the `/risk` page (demo and risk notice); link only to real destinations (trust-model page, explorer link to the registry contract)
+- [ ] T082 [US6] Add SEO basics (title, description, Open Graph, canonical, robots, sitemap); check layout at 375, 390, 430, 768, 1024, 1280, 1440 px; run a link check; reduced-motion check
+
+**Checkpoint**: landing page works alone and every CTA resolves.
+
+---
+
 ## Phase 8: Polish & Cross-Cutting Concerns
 
 - [ ] T066 [P] Write `scripts/e2e-lifecycle.sh`: scripted testnet lifecycle (submit, verify via `POST /api/invoices/.../verify`, allowlist, approve, fund, approve, repay) using env keys without printing them

@@ -97,6 +97,24 @@ Every financing step shows its transaction link on the block explorer, and every
 
 ---
 
+---
+
+### User Story 6 - Visitors understand Credra and enter the right journey (Priority: P3)
+
+A visitor lands on a marketing page that explains in plain language how verified invoices become working capital, shows the real product (invoice, financing terms, verification record), and sends businesses and investors into their own journeys.
+
+**Why this priority**: It builds credibility but does not change the core financing flow, so it follows the lifecycle stories.
+
+**Independent Test**: Open the root page on desktop and phone widths; the message is clear, every visible call to action reaches a working destination, and no claim, figure or status is shown that the product cannot back up.
+
+**Acceptance Scenarios**:
+
+1. **Given** a first-time visitor, **When** the page loads, **Then** the headline, one supporting sentence and a product preview explain the offer without crypto jargon.
+2. **Given** the product preview, **When** it shows an invoice as verified, **Then** that status reflects a real recorded result and the preview is labelled as demo data.
+3. **Given** a business visitor and an investor visitor, **When** each clicks their call to action, **Then** each reaches a different, working journey; a journey that does not exist yet is not offered.
+4. **Given** any page content, **When** reviewed, **Then** it contains no guaranteed returns, no invented customer numbers and no claim that verification equals legal enforceability.
+5. **Given** the footer, **When** read, **Then** it states the demo and risk limitations and links only to real destinations.
+
 ### Edge Cases
 
 - A user connects a wallet on the wrong network: the app prompts a switch and blocks actions until corrected.
