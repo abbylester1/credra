@@ -102,18 +102,18 @@ Single Next.js app in `apps/web/` with `src/app/` (pages and `api/` routes), `sr
 
 ### Tests for User Story 2
 
-- [ ] T040 [P] [US2] Tests in `tests/shortfall.test.ts`: balance below financing amount, allowance below financing amount, both sufficient, exact boundary (integers in base units)
+- [x] T040 [P] [US2] Tests in `tests/shortfall.test.ts`: balance below financing amount, allowance below financing amount, both sufficient, exact boundary (integers in base units)
 
 ### Implementation for User Story 2
 
-- [ ] T041 [P] [US2] Implement `src/lib/shortfall.ts` (`computeShortfall({ balance, allowance, required })`) used by the fund and repay panels
-- [ ] T042 [P] [US2] Implement `GET /api/positions?wallet=0x..` in `src/app/api/positions/route.ts` (reads `positions()` and `ownerOf` from the chain; funded amount, expected repayment, status)
-- [ ] T043 [US2] Implement `POST /api/invoices/[invoiceId]/sync` in `src/app/api/invoices/[invoiceId]/sync/route.ts`: body `{ txHash }`; confirm the receipt on chain, read the resulting status, append a `status_events` row and refresh the `positions` cache (status never taken from the client); also add this route to `specs/001-credra-web-app/contracts/api.md`
-- [ ] T044 [US2] Implement role resolution hook `src/lib/useRole.ts` (investor if `allowlist.isAllowed(wallet)`; operator if session; else business) per data-model.md
-- [ ] T045 [US2] Build `src/components/FundPanel.tsx`: balance and allowance check (T041), clear separate steps "Approve USDT" then "Fund invoice", block with "wallet not approved" before any payment when not allowlisted, fund unavailable unless status is Eligible and not past due, error mapping (T013), explorer links for both transactions, then `POST .../sync`
-- [ ] T046 [US2] Build `src/app/investor/page.tsx`: marketplace of Eligible invoices with issuer, buyer, amount, financing amount, implied return (`amount - financing_amount`), due date
-- [ ] T047 [US2] Integrate `FundPanel` and the verification evidence/risk flags into `src/app/invoices/[invoiceId]/page.tsx` for investors (FR-009)
-- [ ] T048 [US2] Build `src/app/investor/positions/page.tsx`: funded positions with holder, funded amount, expected repayment, status, explorer links (FR-021)
+- [x] T041 [P] [US2] Implement `src/lib/shortfall.ts` (`computeShortfall({ balance, allowance, required })`) used by the fund and repay panels
+- [x] T042 [P] [US2] Implement `GET /api/positions?wallet=0x..` in `src/app/api/positions/route.ts` (reads `positions()` and `ownerOf` from the chain; funded amount, expected repayment, status)
+- [x] T043 [US2] Implement `POST /api/invoices/[invoiceId]/sync` in `src/app/api/invoices/[invoiceId]/sync/route.ts`: body `{ txHash }`; confirm the receipt on chain, read the resulting status, append a `status_events` row and refresh the `positions` cache (status never taken from the client); also add this route to `specs/001-credra-web-app/contracts/api.md`
+- [x] T044 [US2] Implement role resolution hook `src/lib/useRole.ts` (investor if `allowlist.isAllowed(wallet)`; operator if session; else business) per data-model.md
+- [x] T045 [US2] Build `src/components/FundPanel.tsx`: balance and allowance check (T041), clear separate steps "Approve USDT" then "Fund invoice", block with "wallet not approved" before any payment when not allowlisted, fund unavailable unless status is Eligible and not past due, error mapping (T013), explorer links for both transactions, then `POST .../sync`
+- [x] T046 [US2] Build `src/app/investor/page.tsx`: marketplace of Eligible invoices with issuer, buyer, amount, financing amount, implied return (`amount - financing_amount`), due date
+- [x] T047 [US2] Integrate `FundPanel` and the verification evidence/risk flags into `src/app/invoices/[invoiceId]/page.tsx` for investors (FR-009)
+- [x] T048 [US2] Build `src/app/investor/positions/page.tsx`: funded positions with holder, funded amount, expected repayment, status, explorer links (FR-021)
 - [ ] T049 [US2] Validate quickstart scenario 5 on testnet once USDT arrives; record the approve and fund transaction links in `evidence/whitechain-transactions.md`
 
 **Checkpoint**: US1 and US2 work; an invoice can be verified and funded.
@@ -126,10 +126,10 @@ Single Next.js app in `apps/web/` with `src/app/` (pages and `api/` routes), `sr
 
 **Independent Test**: quickstart scenario 6: repay a Funded invoice; investor balance rises by the invoice amount; second repay refused.
 
-- [ ] T050 [P] [US3] Build `src/components/RepayPanel.tsx`: shortfall check against the full `amount`, "Approve USDT" then "Repay", refuse unless status is Funded, error mapping, explorer links, then `POST .../sync`
-- [ ] T051 [P] [US3] Build `src/components/DefaultButton.tsx`: visible only when status is Funded and `now > dueDate + 259200`; calls `markDefaulted`; explains the grace period
-- [ ] T052 [US3] Integrate `RepayPanel` and `DefaultButton` into `src/app/invoices/[invoiceId]/page.tsx`; show the current receivable holder (supports transferred receivables)
-- [ ] T053 [US3] Update `src/app/investor/positions/page.tsx` to show repaid amount, repaid time and the repayment explorer link
+- [x] T050 [P] [US3] Build `src/components/RepayPanel.tsx`: shortfall check against the full `amount`, "Approve USDT" then "Repay", refuse unless status is Funded, error mapping, explorer links, then `POST .../sync`
+- [x] T051 [P] [US3] Build `src/components/DefaultButton.tsx`: visible only when status is Funded and `now > dueDate + 259200`; calls `markDefaulted`; explains the grace period
+- [x] T052 [US3] Integrate `RepayPanel` and `DefaultButton` into `src/app/invoices/[invoiceId]/page.tsx`; show the current receivable holder (supports transferred receivables)
+- [x] T053 [US3] Update `src/app/investor/positions/page.tsx` to show repaid amount, repaid time and the repayment explorer link
 - [ ] T054 [US3] Validate quickstart scenario 6 on testnet; record repay transaction links and the second-repay refusal in `evidence/whitechain-transactions.md`
 
 **Checkpoint**: full lifecycle (submit, verify, fund, repay) demonstrable.
@@ -144,11 +144,11 @@ Single Next.js app in `apps/web/` with `src/app/` (pages and `api/` routes), `sr
 
 - [ ] T055 [P] [US4] Tests in `tests/decision.test.ts`: reason required; APPROVE maps to Eligible and REJECT to Rejected; only from UnderReview; refused for any other status
 - [ ] T056 [P] [US4] Implement `GET /api/operator/queue` in `src/app/api/operator/queue/route.ts` (operator session; invoices currently UnderReview with latest evidence and risk flags)
-- [ ] T057 [US4] Implement `POST /api/operator/invoices/[invoiceId]/decision` in `src/app/api/operator/invoices/[invoiceId]/decision/route.ts`: body `{ decision: "APPROVE" | "REJECT", reason }` (reason required); re-read chain status first; send `recordVerification` with the verifier key; store the `operator_decisions` row and a status event
-- [ ] T058 [P] [US4] Implement `GET` and `POST /api/operator/investors` in `src/app/api/operator/investors/route.ts`: list wallets from `InvestorAdded`/`InvestorRemoved` events; add/remove with the admin key via `InvestorAllowlist.add/remove`
-- [ ] T059 [US4] Extend `src/app/operator/page.tsx` with the review queue (evidence, approve/reject with reason) and the allowlist manager
+- [x] T057 [US4] Implement `POST /api/operator/invoices/[invoiceId]/decision` in `src/app/api/operator/invoices/[invoiceId]/decision/route.ts`: body `{ decision: "APPROVE" | "REJECT", reason }` (reason required); re-read chain status first; send `recordVerification` with the verifier key; store the `operator_decisions` row and a status event
+- [x] T058 [P] [US4] Implement `GET` and `POST /api/operator/investors` in `src/app/api/operator/investors/route.ts`: list wallets from `InvestorAdded`/`InvestorRemoved` events; add/remove with the admin key via `InvestorAllowlist.add/remove`
+- [x] T059 [US4] Extend `src/app/operator/page.tsx` with the review queue (evidence, approve/reject with reason) and the allowlist manager
 - [ ] T060 [US4] Add route protection for `/operator` and `/api/operator/*` in `src/middleware.ts`: non-operators get access denied (FR-016)
-- [ ] T061 [US4] Validate quickstart scenario 3 on testnet; add evidence to `evidence/whitechain-transactions.md`
+- [x] T061 [US4] Validate quickstart scenario 3 on testnet; add evidence to `evidence/whitechain-transactions.md`
 
 ---
 

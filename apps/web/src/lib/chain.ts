@@ -51,3 +51,11 @@ export async function readPosition(id: `0x${string}`) {
 	})
 	return { originalInvestor, fundedAmount, repaidAmount, fundedAt, repaidAt }
 }
+
+export async function readHolder(id: `0x${string}`): Promise<`0x${string}` | null> {
+	try {
+		return await publicClient.readContract({ address: ADDRESSES.finance, abi: financeAbi, functionName: 'ownerOf', args: [BigInt(id)] })
+	} catch {
+		return null // token not minted yet
+	}
+}

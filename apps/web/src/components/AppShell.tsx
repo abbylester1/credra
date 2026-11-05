@@ -14,6 +14,7 @@ const NAV: { group: string; items: Item[] }[] = [
 		items: [
 			{ href: '/app', label: 'Overview' },
 			{ href: '/app/invoices', label: 'Invoices' },
+			{ href: '/app/positions', label: 'Positions', roles: ['investor'] },
 		],
 	},
 	{ group: 'Admin', items: [{ href: '/app/operator', label: 'Operator console' }] },
@@ -72,8 +73,8 @@ function NetworkBanner() {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname()
-	const { operator } = useRole()
-	const groups = NAV.filter((g) => g.group !== 'Admin' || operator)
+	const { operator, role } = useRole()
+	const groups = NAV.filter((g) => g.group !== 'Admin' || operator).map((g) => ({ ...g, items: g.items.filter((i) => !i.roles || i.roles.includes(role)) }))
 	const active = (href: string) => (href === '/app' ? pathname === '/app' : pathname.startsWith(href))
 
 	return (

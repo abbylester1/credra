@@ -104,8 +104,22 @@ export const allRuns = () =>
 export function insertEvent(e: { invoice_id: string; status: string; tx_hash?: string | null; source: string; actor?: string | null }) {
 	getDb()
 		.prepare('INSERT INTO status_events (invoice_id, status, tx_hash, source, actor, created_at) VALUES (?,?,?,?,?,?)')
-		.run(e.invoice_id.toLowerCase(), e.status, e.tx_hash ?? null, e.source, e.actor ?? null, now())
+		.run(e.invoice_id.toLowerCase(), e.status, e.tx_hash ? e.tx_hash.toLowerCase() : null, e.source, e.actor ?? null, now())
 }
 
 export const eventsFor = (invoiceId: string) =>
 	getDb().prepare('SELECT * FROM status_events WHERE invoice_id = ? ORDER BY id ASC').all(invoiceId.toLowerCase()) as EventRow[]
+
+export const eventExistsForTx = (txHash: string) =>
+	!!getDb().prepare('SELECT 1 FROM status_events WHERE tx_hash = ? LIMIT 1').get(txHash.toLowerCase())
+
+export function insertDecision(d: { invoice_id: string; decision: 'APPROVE' | 'REJECT'; reason: string; tx_hash: string }) {
+	getDb()
+		.prepare('INSERT INTO operator_decisions (invoice_id, decision, reason, tx_hash, created_at) VALUES (?,?,?,?,?)')
+		.run(d.invoice_id.toLowerCase(), d.decision, d.reason, d.tx_hash, now())
+}
+
+export const latestDecision = (invoiceId: string) =>
+	getDb().prepare('SELECT * FROM operator_decisions WHERE invoice_id = ? ORDER BY id DESC LIMIT 1').get(invoiceId.toLowerCase()) as
+		| { decision: string; reason: string; tx_hash: string; created_at: number }
+		| undefined

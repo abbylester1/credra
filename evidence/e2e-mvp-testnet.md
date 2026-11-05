@@ -12,3 +12,11 @@ Script: `apps/web/scripts/e2e-mvp.ts` (acts as the business wallet against the r
 | Same document, new invoice number | refused onchain (`DuplicateDocument`) | n/a | unchanged | n/a (simulated call reverted) |
 
 First matching run: invoice registration tx [0x4c13c492...984](https://explorer.testnet.whitechain.io/tx/0x4c13c4920cefacefe382bb5c594e31feb49502ff9566a5d12030073121a94984).
+
+## Operator decision (manual review resolved onchain)
+
+A disputed invoice (status Under review) was approved by the operator with a written reason through `POST /api/operator/invoices/{id}/decision`. The reason is required (10 or more characters), a missing session is refused, and a second decision on a non-reviewable invoice is refused. Approval was recorded onchain by the verifier wallet: [0x214ee0a1...586](https://explorer.testnet.whitechain.io/tx/0x214ee0a1d46d23356067e451bfbbae950406a9df713f71b081f8333db13e5586). Timeline: Submitted, Under review (verification), Eligible (operator).
+
+## Funding and repayment
+
+Not yet recorded. The app's fund and repay flow (approve USDT, then fund or repay) is implemented and the contracts are covered by 29 Foundry tests, but the investor and business wallets hold no official test USDT yet, so no explorer-linked USDT payment exists. This file will be updated with the transaction links once recorded.

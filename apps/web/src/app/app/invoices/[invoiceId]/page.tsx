@@ -10,6 +10,8 @@ import { apiJson, useWalletHeaders } from '@/lib/client'
 import { friendlyError } from '@/lib/errors'
 import { shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
+import { PayPanel, DefaultButton } from '@/components/PayPanels'
+import { GRACE_PERIOD_SECONDS } from '@/lib/config'
 import type { InvoiceSummary } from '@/lib/useInvoices'
 
 type Detail = {
@@ -17,9 +19,12 @@ type Detail = {
 	verification: Verification | null
 	timeline: { status: string; txHash: string | null; source: string; actor: string | null; at: number }[]
 	position: { originalInvestor: string; fundedAmount: string; repaidAmount: string; fundedAt: number; repaidAt: number } | null
+	holder: string | null
+	decision: { decision: string; reason: string; txHash: string; at: number } | null
 }
 
-const SOURCE_LABEL: Record<string, string> = { submit: 'Business wallet', verification: 'Verifier wallet', operator: 'Operator', fund: 'Investor wallet', repay: 'Repayer wallet' }
+const now = () => Math.floor(Date.now() / 1000)
+const SOURCE_LABEL: Record<string, string> = { submit: 'Business wallet', verification: 'Verifier wallet', operator: 'Operator', fund: 'Investor wallet', repay: 'Repayer wallet', default: 'Any wallet' }
 
 export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId: string }> }) {
 	const { invoiceId } = use(params)
@@ -34,7 +39,7 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 	if (q.isLoading) return <p className="text-[14px] text-ink-3">Loading invoice</p>
 	if (q.error || !q.data) return <InlineNotice tone="error">{(q.error as Error)?.message ?? 'Invoice not found.'} Nothing was changed.</InlineNotice>
 
-	const { invoice: i, verification: v, timeline, position } = q.data
+	const { invoice: i, verification: v, timeline, position, holder, decision } = q.data
 	const isIssuer = !!address && address.toLowerCase() === i.issuerWallet.toLowerCase()
 	const canManage = isIssuer || role === 'operator'
 	const due = relativeDue(i.dueDate)
@@ -106,7 +111,16 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 							['Document fingerprint', <span key="h" className="num text-[12px]" title={i.documentHash}>{shorten(i.documentHash, 10, 6)}</span>],
 						]} />
 					</Card>
-					<Card><EvidencePanel v={v} /></Card>
+					<Card>
+						<EvidencePanel v={v} />
+						{decision && (
+							<div className="mt-4 rounded-ctl border border-hair bg-canvas p-3 text-[14px]">
+								<div className="font-medium">Operator {decision.decision === 'APPROVE' ? 'approved' : 'rejected'} this invoice</div>
+								<p className="mt-1 text-ink-2">{decision.reason}</p>
+								<div className="mt-1"><TxLink hash={decision.txHash} /></div>
+							</div>
+						)}
+					</Card>
 					<Card>
 						<h2 className="mb-3 text-[16px] font-semibold">Timeline</h2>
 						{timeline.length === 0 ? <p className="text-[14px] text-ink-2">No activity recorded yet.</p> : (
@@ -126,19 +140,36 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 
 				<div className="space-y-6">
 					<Card>
-						<h2 className="mb-2 text-[16px] font-semibold">Next step</h2>
+						<h2 className="mb-3 text-[16px] font-semibold">Next step</h2>
 						{i.status === 1 && <p className="text-[14px] text-ink-2">{canManage ? 'Run verification to check this invoice against the external record.' : 'Verification has not run yet.'}</p>}
-						{i.status === 2 && <p className="text-[14px] text-ink-2">This invoice is under review. {canManage ? 'You can verify it again once the cause is fixed.' : 'It cannot be funded until review finishes.'}</p>}
-						{i.status === 3 && <p className="text-[14px] text-ink-2">This invoice is eligible and open for funding.</p>}
-						{i.status === 4 && <p className="text-[14px] text-ink-2">This invoice was rejected. {isIssuer ? 'Submit a corrected invoice with a new number.' : ''}</p>}
-						{i.status >= 5 && <p className="text-[14px] text-ink-2">Funding and repayment are recorded below once they happen.</p>}
+						{i.status === 2 && (
+							<>
+								<p className="text-[14px] text-ink-2">This invoice is under review and cannot be funded until review finishes.{canManage && role !== 'operator' ? ' You can verify it again once the cause is fixed.' : ''}</p>
+								{role === 'operator' && <OperatorDecision invoiceId={invoiceId} />}
+							</>
+						)}
+						{i.status === 3 && (isIssuer
+							? <p className="text-[14px] text-ink-2">This invoice is eligible and open for funding by approved investors.</p>
+							: relativeDue(i.dueDate).late
+								? <p className="text-[14px] text-ink-2">The due date has passed, so this invoice can no longer be funded.</p>
+								: <PayPanel invoiceId={invoiceId as `0x${string}`} required={BigInt(i.financingAmount)} kind="fund" requireAllowlist />)}
+						{i.status === 4 && <p className="text-[14px] text-ink-2">This invoice was rejected.{isIssuer ? ' Submit a corrected invoice with a new number.' : ''}</p>}
+						{i.status === 5 && (
+							<div className="space-y-4">
+								<p className="text-[14px] text-ink-2">Funded. Repayment of the full invoice amount goes to the current receivable holder{holder ? <> (<AddressLink address={holder} />)</> : ''}.</p>
+								{now() > i.dueDate + GRACE_PERIOD_SECONDS && <DefaultButton invoiceId={invoiceId as `0x${string}`} />}
+								<PayPanel invoiceId={invoiceId as `0x${string}`} required={BigInt(i.amount)} kind="repay" />
+							</div>
+						)}
+						{i.status === 6 && <p className="text-[14px] text-ink-2">Repaid in full. The receivable holder received {<Amount value={i.amount} />}.</p>}
+						{i.status === 7 && <p className="text-[14px] text-ink-2">This invoice was marked defaulted. Repayment is no longer accepted.</p>}
 					</Card>
 					<Card>
 						<h2 className="mb-1 text-[16px] font-semibold">Parties</h2>
 						<Dl rows={[
 							['Issuer wallet', <AddressLink key="a" address={i.issuerWallet} />],
 							['Registration', <TxLink key="b" hash={i.submitTx} />],
-							...(position && position.fundedAt ? ([['Investor', <AddressLink key="c" address={position.originalInvestor} />]] as [string, React.ReactNode][]) : []),
+							...(position && position.fundedAt ? ([['Original investor', <AddressLink key="c" address={position.originalInvestor} />], ['Receivable holder', holder ? <AddressLink key="h" address={holder} /> : 'Unknown']] as [string, React.ReactNode][]) : []),
 						]} />
 						<ProvenanceStrip tx={i.submitTx} recordedBy="business wallet" />
 					</Card>
@@ -152,5 +183,31 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 				</div>
 			</div>
 		</>
+	)
+}
+
+function OperatorDecision({ invoiceId }: { invoiceId: string }) {
+	const qc = useQueryClient()
+	const [reason, setReason] = useState('')
+	const [busy, setBusy] = useState(false)
+	const [err, setErr] = useState<string | null>(null)
+	async function decide(decision: 'APPROVE' | 'REJECT') {
+		setBusy(true); setErr(null)
+		try {
+			await apiJson(`/api/operator/invoices/${invoiceId}/decision`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ decision, reason }) })
+			await qc.invalidateQueries({ queryKey: ['invoice', invoiceId] })
+		} catch (e) { setErr((e as Error).message) } finally { setBusy(false) }
+	}
+	return (
+		<div className="mt-3 space-y-3">
+			<label className="block text-[13px] font-medium">Reason (required, at least 10 characters)
+				<textarea className="mt-1 w-full rounded-ctl border border-field bg-card p-3 text-[14px]" rows={3} value={reason} onChange={(e) => setReason(e.target.value)} />
+			</label>
+			{err && <InlineNotice tone="error">{err}</InlineNotice>}
+			<div className="flex gap-2">
+				<Button variant="primary" disabled={busy || reason.trim().length < 10} onClick={() => decide('APPROVE')}>Approve</Button>
+				<Button variant="danger" disabled={busy || reason.trim().length < 10} onClick={() => decide('REJECT')}>Reject</Button>
+			</div>
+		</div>
 	)
 }

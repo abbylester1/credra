@@ -54,7 +54,8 @@ An honest snapshot of what works today.
 | CRE workflow: reads Whitechain state, calls an external API, runs through the CRE CLI | Done |
 | Web app: submit invoice, verification, invoice pipeline, detail page, operator tools | Done |
 | Verdict recorded onchain; failures and outages fall back to manual review, never "eligible" | Done, tested on testnet |
-| Investor funding and repayment in official USDT from the UI | **In progress.** Contracts and tests are done; the UI and the explorer-linked USDT payment are pending |
+| Investor funding and repayment UI (approve USDT, then fund or repay; positions; default) | Built and typechecked. **The explorer-linked USDT payment is pending** until the wallets receive official test USDT |
+| Operator: approve or reject manual-review invoices, manage the investor allowlist | Done, tested on testnet |
 | Demo video, landing page | Pending |
 
 Evidence lives in [`evidence/`](evidence/): CRE runs, the supported-chains output, deployment and end-to-end transaction links.
@@ -186,15 +187,16 @@ Static analysis ([Slither](evidence/slither.md)) found 5 low-severity items and 
 - One investor per invoice. No secondary market, KYC, credit scoring or automatic detection of the buyer's payment; repayment is an explicit transaction.
 - Operator access is a demo passcode. Wallet authentication is signature based with a 10-minute window and no nonce store.
 - Both public RPCs are intermittently slow, so the app reads through a fallback transport.
-- Investor funding and repayment screens, the demo video and the landing page are not finished at the time of writing.
+- No funding or repayment has been executed on testnet yet because the wallets hold no official test USDT. The demo video and landing page are not finished at the time of writing.
 
 ## Roadmap
 
 - [x] Contracts, deployment and explorer verification
 - [x] CRE verification workflow driving eligibility
 - [x] Invoice submission and verification in the app
-- [ ] Investor funding and repayment in official USDT, with explorer links
-- [ ] Operator review of manual-review invoices and allowlist management
+- [x] Investor funding and repayment screens, positions and default
+- [x] Operator review of manual-review invoices and allowlist management
+- [ ] Record the official-USDT funding and repayment transactions on testnet (needs test USDT)
 - [ ] Transactions and verification pages
 - [ ] Landing page and demo video
 
