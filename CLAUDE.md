@@ -30,7 +30,8 @@ Business submits an invoice onchain (`InvoiceRegistry`). A Chainlink CRE workflo
 - Whitechain Sepolia, chain id 1874, native gas WBT. RPC `https://rpc.testnet.whitechain.io` (fallback `https://rpc.ankr.com/whitechain_testnet`, both flaky). Explorer `https://explorer.testnet.whitechain.io` (Blockscout).
 - Official USDT `0xcedfB56113143d55b2358b8CFbB0dEB5Ad2f55a7`, 6 decimals, mint is owner-only. No public USDT faucet: test USDT must come from the Whitechain sponsor. Never deploy a replacement token for the main flow.
 - WBT faucet is GitHub-login gated, one drip per account.
-- Deployed (verified): InvoiceRegistry `0x37645b05895b66E4ed4a4578D3Ed1A091E9ab209`, InvestorAllowlist `0xf35310d844E50AECeA899CeB888965e9Be50a65A`, ReceivableFinance `0xdCc3464deb1779be5D8e59E8f2385b190E8C04f6`.
+- Receivable token: `Credra Receivable` / `CRDR` (ERC-721). Earlier `Invoice Receivable`/`RCVBL` deployment was superseded (see evidence/whitechain-transactions.md).
+- Deployed (verified): InvoiceRegistry `0xc11162A72F388Efb6Ddd0B73Eea578598d733122`, InvestorAllowlist `0xE27c2C0BF2A6C34749257f0FD519c9e531ff4B51`, ReceivableFinance `0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6`.
 
 ## Decisions and trust model (state these honestly in the README)
 - Whitechain is NOT in the CRE tenant's supported-chains list (`evidence/cre-supported-chains.txt`). It is declared as an `experimental-chains` entry (selector 1874) in `cre/project.yaml`, so CRE reads Whitechain state via RPC in simulation. There is no CRE/DON write: the backend signs `recordVerification`. Never claim a DON-attested write.
@@ -46,4 +47,4 @@ Business submits an invoice onchain (`InvoiceRegistry`). A Chainlink CRE workflo
 
 ## Status and next steps
 Done: contracts + tests, deploy + explorer verification, CRE workflow simulated against live testnet (ELIGIBLE / REJECTED / MANUAL_REVIEW / not-found), evidence committed.
-Pending: backend step that writes verdicts onchain, Next.js web app (business, investor, admin views), USDT funding + repayment on testnet (blocked on sponsor USDT for the investor wallet `0x195194047B45c06c946603ef1CD7cE22abc990D6`; business wallet also needs ~10,000 USDT to repay), README, WHITECHAIN_FEEDBACK.md, architecture docs, demo video, clean up duplicate rows in `evidence/whitechain-transactions.md`.
+Pending: backend step that writes verdicts onchain, Next.js web app (business, investor, admin views), USDT funding + repayment on testnet (blocked on sponsor USDT for the investor wallet `0x195194047B45c06c946603ef1CD7cE22abc990D6`; business wallet also needs ~10,000 USDT to repay), README, WHITECHAIN_FEEDBACK.md, architecture docs, demo video.

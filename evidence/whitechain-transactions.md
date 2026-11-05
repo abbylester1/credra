@@ -2,20 +2,32 @@
 
 Explorer: https://explorer.testnet.whitechain.io
 
-## Deployment
+Current deployment (token `Credra Receivable` / `CRDR`). All contracts are source-verified on the explorer.
 
-- InvoiceRegistry: `0x37645b05895b66e4ed4a4578d3ed1a091e9ab209`
-- InvestorAllowlist: `0xf35310d844e50aecea899ceb888965e9be50a65a`
-- ReceivableFinance: `0xdcc3464deb1779be5d8e59e8f2385b190e8c04f6`
-- InvoiceRegistry: `0x37645b05895b66e4ed4a4578d3ed1a091e9ab209`
-- InvoiceRegistry: `0x37645b05895b66e4ed4a4578d3ed1a091e9ab209`
-- InvestorAllowlist: `0xf35310d844e50aecea899ceb888965e9be50a65a`
+## Contracts
 
-## Deployment tx hashes
+| Contract | Address |
+|---|---|
+| InvoiceRegistry | [0xc11162a72f388efb6ddd0b73eea578598d733122](https://explorer.testnet.whitechain.io/address/0xc11162a72f388efb6ddd0b73eea578598d733122) |
+| InvestorAllowlist | [0xe27c2c0bf2a6c34749257f0fd519c9e531ff4b51](https://explorer.testnet.whitechain.io/address/0xe27c2c0bf2a6c34749257f0fd519c9e531ff4b51) |
+| ReceivableFinance | [0x3025fdea4aa3a96dec46451b7eec2e83188307b6](https://explorer.testnet.whitechain.io/address/0x3025fdea4aa3a96dec46451b7eec2e83188307b6) |
 
-- [0x51339eca97ec877d40989e5e77d09eed11f602b492d1eaab334515784b3043da](https://explorer.testnet.whitechain.io/tx/0x51339eca97ec877d40989e5e77d09eed11f602b492d1eaab334515784b3043da) block 12298986
-- [0x4f7c1a7c0e2102a88239cc17f1eb31d3a2da9351f3f781a0bd457d5ec74d6399](https://explorer.testnet.whitechain.io/tx/0x4f7c1a7c0e2102a88239cc17f1eb31d3a2da9351f3f781a0bd457d5ec74d6399) block 12298989
-- [0xb471bbf4c1d6981872d33fd9e9646d0083c54b943c8dfa17864691eb2f83af10](https://explorer.testnet.whitechain.io/tx/0xb471bbf4c1d6981872d33fd9e9646d0083c54b943c8dfa17864691eb2f83af10) block 12298992
-- [0x7dc14d72fab7d6a860ee9da2f76276c58a368701b0fbb7721b9e983230e672af](https://explorer.testnet.whitechain.io/tx/0x7dc14d72fab7d6a860ee9da2f76276c58a368701b0fbb7721b9e983230e672af) block 12298996
-- [0x92984d4a08252686d31e3eccef7a8198f015f310f0989915ebc0728bb2d673ab](https://explorer.testnet.whitechain.io/tx/0x92984d4a08252686d31e3eccef7a8198f015f310f0989915ebc0728bb2d673ab) block 12298999
-- [0x089b88d8be7afcc6a74f5a005e0572333e5c433cdedf09fa3697d6b55b1c3532](https://explorer.testnet.whitechain.io/tx/0x089b88d8be7afcc6a74f5a005e0572333e5c433cdedf09fa3697d6b55b1c3532) block 12299003
+## Deployment transactions
+
+| # | Action | Tx | Block |
+|---|---|---|---|
+| 1 | Deploy InvoiceRegistry | [0xeeccb3339596d95ffb1c8fab384ed90c95fa8728e0b3d97787997d1f616544d1](https://explorer.testnet.whitechain.io/tx/0xeeccb3339596d95ffb1c8fab384ed90c95fa8728e0b3d97787997d1f616544d1) | 12299635 |
+| 2 | Deploy InvestorAllowlist | [0x6b730175338d830848ddf8a3f9910e356bc8b61e0699f61edf50a1b7d9f56b2a](https://explorer.testnet.whitechain.io/tx/0x6b730175338d830848ddf8a3f9910e356bc8b61e0699f61edf50a1b7d9f56b2a) | 12299638 |
+| 3 | Deploy ReceivableFinance | [0xa48c7ba149c0f15c4c428e491ae3e0beca965f773dea47e4a65c243f212a99d1](https://explorer.testnet.whitechain.io/tx/0xa48c7ba149c0f15c4c428e491ae3e0beca965f773dea47e4a65c243f212a99d1) | 12299641 |
+| 4 | grantRole | [0x553f5a332ee3be1da2b18dd2ea3048cfe72f150333ef71f7915fc7f6eb24d053](https://explorer.testnet.whitechain.io/tx/0x553f5a332ee3be1da2b18dd2ea3048cfe72f150333ef71f7915fc7f6eb24d053) | 12299644 |
+| 5 | grantRole | [0x11eec8856581641a704fa4c493f119f02930f18b0fb4ae998014df5d88601ced](https://explorer.testnet.whitechain.io/tx/0x11eec8856581641a704fa4c493f119f02930f18b0fb4ae998014df5d88601ced) | 12299648 |
+| 6 | add | [0xcb4fee7e646156947553189529481ec579065de0fa7b79bc91de072d5af8ab46](https://explorer.testnet.whitechain.io/tx/0xcb4fee7e646156947553189529481ec579065de0fa7b79bc91de072d5af8ab46) | 12299651 |
+
+## Superseded
+
+An earlier deployment with token name `Invoice Receivable` / `RCVBL` was replaced before any funding took place:
+InvoiceRegistry `0x37645b05895b66E4ed4a4578D3Ed1A091E9ab209`, InvestorAllowlist `0xf35310d844E50AECeA899CeB888965e9Be50a65A`, ReceivableFinance `0xdCc3464deb1779be5D8e59E8f2385b190E8C04f6`.
+
+## Funding / repayment (official USDT)
+
+_Pending: waiting for sponsor-provided test USDT._

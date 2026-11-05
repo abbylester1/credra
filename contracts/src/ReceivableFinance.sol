@@ -57,7 +57,7 @@ contract ReceivableFinance is ERC721, AccessControl, Pausable, ReentrancyGuard {
         InvestorAllowlist allowlist_,
         IERC20 usdt_,
         uint64 gracePeriod_
-    ) ERC721("Invoice Receivable", "RCVBL") {
+    ) ERC721("Credra Receivable", "CRDR") {
         if (admin == address(0) || address(usdt_) == address(0)) revert ZeroAddress();
         registry = registry_;
         allowlist = allowlist_;
