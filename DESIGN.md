@@ -17,9 +17,9 @@ A calm financial ledger. Credra moves money and makes trust claims, so the inter
 
 ## Design direction (v1.1, 2026-11-06)
 
-Two references, for different reasons: **Mercury for feel** (calm, premium, generous whitespace, few competing elements, easy-to-scan numbers) and **Ramp for structure** (workflow-led navigation, operational tables, contextual actions per state, flat bordered surfaces). We borrow patterns, not colours, fonts or button styles: Credra keeps its own pine palette and Geist. We do not adopt Mercury's pill buttons or indigo, or Ramp's yellow. Numeric details reported for those products come from third-party analyses, not official specs, so they are treated as ranges and direction only.
+Two qualities guide every screen. **Feel:** calm and premium, with generous whitespace, few competing elements and numbers that are easy to scan. **Structure:** workflow-led navigation, operational tables, contextual actions that change with the invoice state, and flat bordered surfaces. Credra keeps its own pine palette, Geist type and 8px-radius controls; no pill buttons.
 
-Rule of thumb: Mercury's calmness, Ramp's operational precision, Credra's trust infrastructure. Blockchain detail is shown when a user needs evidence (provenance strip, transaction links), not everywhere; the main surfaces speak in invoices, verification and funding.
+Rule of thumb: calm to look at, precise to operate, and clear about trust. Blockchain detail is shown when a user needs evidence (provenance strip, transaction links), not everywhere; the main surfaces speak in invoices, verification and funding.
 
 Full screen-by-screen behaviour lives in `specs/001-credra-web-app/ui-spec.md`.
 
