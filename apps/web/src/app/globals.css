@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/* Credra tokens: single source, mirrors /DESIGN.md. Add a token there first. */
+@theme {
+	--color-canvas: #F3F5F2;
+	--color-card: #FFFFFF;
+	--color-inset: #EAEEEA;
+	--color-hair: #DCE2DD;
+	--color-field: #74807A;
+	--color-ink: #0F1A16;
+	--color-ink-2: #44544B;
+	--color-ink-3: #5C6B63;
+	--color-accent: #0A6C63;
+	--color-accent-soft: #E3F1EE;
+	--color-pine: #0D3B35;
+	--color-pine-hover: #092E29;
+
+	--color-s-neutral: #5C6B63;
+	--color-s-neutral-soft: #EAEEEA;
+	--color-s-review: #8F5200;
+	--color-s-review-soft: #FBEFD9;
+	--color-s-reject: #B03A2E;
+	--color-s-reject-soft: #FBE6E3;
+	--color-s-funded: #2F4FBF;
+	--color-s-funded-soft: #E6EBFA;
+	--color-s-repaid: #2B7A3E;
+	--color-s-repaid-soft: #E2F2E6;
+	--color-s-default: #7A1F2B;
+	--color-s-default-soft: #F3E1E4;
+
+	--radius-chip: 6px;
+	--radius-ctl: 8px;
+	--radius-card: 12px;
+	--radius-win: 16px;
+
+	--font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+	--font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+	background: var(--color-canvas);
+}
+
+body {
+	background: var(--color-canvas);
+	color: var(--color-ink);
+	font-family: var(--font-sans);
+	font-size: 15px;
+	line-height: 1.55;
+	-webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+.num {
+	font-family: var(--font-mono);
+	font-variant-numeric: tabular-nums;
+}
+
+.label {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--color-ink-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation: none !important;
+		transition: none !important;
+	}
+}

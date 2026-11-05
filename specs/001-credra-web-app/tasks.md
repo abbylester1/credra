@@ -27,11 +27,11 @@ Single Next.js app in `apps/web/` with `src/app/` (pages and `api/` routes), `sr
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-- [ ] T001 Scaffold a Next.js (App Router) TypeScript + Tailwind CSS app in `apps/web/` (package.json, tsconfig.json, `src/app/layout.tsx`, `src/app/page.tsx`)
-- [ ] T002 Install dependencies in `apps/web/package.json`: wagmi, viem, @tanstack/react-query, zod, vitest (use bun; Node 22)
-- [ ] T003 [P] Configure vitest in `apps/web/vitest.config.ts` and add `test`, `typecheck` scripts to `apps/web/package.json`
-- [ ] T004 [P] Append `apps/web/uploads/`, `apps/web/*.db`, `apps/web/.next/` to `/Users/abby/Eth Mumbai/.gitignore` (constitution III, IV)
-- [ ] T005 [P] Load the repository-root `.env` for server code in `apps/web/next.config.ts` (read `../../.env`; expose no secret via `NEXT_PUBLIC_`) and add `apps/web/src/lib/env.ts` (server-only, zod-validated: `PRIVATE_KEY_VERIFIER`, `PRIVATE_KEY_DEPLOYER`, `OPERATOR_PASSCODE`, `REGISTRY_ADDRESS`, `ALLOWLIST_ADDRESS`, `FINANCE_ADDRESS`, `USDT`, `WHITECHAIN_RPC`, `WHITECHAIN_RPC_FALLBACK`, `MOCK_REGISTRY_URL`)
+- [x] T001 Scaffold a Next.js (App Router) TypeScript + Tailwind CSS app in `apps/web/` (package.json, tsconfig.json, `src/app/layout.tsx`, `src/app/page.tsx`)
+- [x] T002 Install dependencies in `apps/web/package.json`: wagmi, viem, @tanstack/react-query, zod, vitest (use bun; Node 22)
+- [x] T003 [P] Configure vitest in `apps/web/vitest.config.ts` and add `test`, `typecheck` scripts to `apps/web/package.json`
+- [x] T004 [P] Append `apps/web/uploads/`, `apps/web/*.db`, `apps/web/.next/` to `/Users/abby/Eth Mumbai/.gitignore` (constitution III, IV)
+- [x] T005 [P] Load the repository-root `.env` for server code in `apps/web/next.config.ts` (read `../../.env`; expose no secret via `NEXT_PUBLIC_`) and add `apps/web/src/lib/env.ts` (server-only, zod-validated: `PRIVATE_KEY_VERIFIER`, `PRIVATE_KEY_DEPLOYER`, `OPERATOR_PASSCODE`, `REGISTRY_ADDRESS`, `ALLOWLIST_ADDRESS`, `FINANCE_ADDRESS`, `USDT`, `WHITECHAIN_RPC`, `WHITECHAIN_RPC_FALLBACK`, `MOCK_REGISTRY_URL`)
 
 ---
 
@@ -39,24 +39,24 @@ Single Next.js app in `apps/web/` with `src/app/` (pages and `api/` routes), `sr
 
 **Purpose**: Core infrastructure every user story needs. No user story work starts before this phase is complete.
 
-- [ ] T006 [P] Implement 6-decimal USDT helpers in `src/lib/money.ts` (`parseUsdt(string) -> bigint`, `formatUsdt(bigint) -> string`; integers only, never floating point; reject more than 6 decimals)
-- [ ] T007 [P] Unit tests for money in `tests/money.test.ts` (round trip, 6-decimal rejection, `10000.000001`, zero, negative)
-- [ ] T008 [P] Implement `src/lib/hash.ts`: `documentHash(bytes) = keccak256(file bytes)`, `invoiceId(number) = keccak256(utf8(invoiceNumber))`, `buyerRef(name) = keccak256("buyer:" + name)` (must match `scripts/seed-demo.sh`)
-- [ ] T009 [P] Unit tests for hash in `tests/hash.test.ts` (known vectors incl. `INV-1001 -> 0xe4f729cc5c74e26942b90175714ea77f0711eb25e5ea3b3620ff097d6805a571`; same bytes give same hash)
-- [ ] T010 [P] Generate ABIs into `src/lib/abi.ts` for InvoiceRegistry, InvestorAllowlist, ReceivableFinance (from `contracts/out` via `forge inspect <Contract> abi --json`) plus the minimal ERC-20 ABI (`balanceOf`, `allowance`, `approve`, `decimals`); export as `as const`
-- [ ] T011 Implement `src/lib/chain.ts`: Whitechain Sepolia chain definition (id 1874, WBT, explorer `https://explorer.testnet.whitechain.io`), addresses from env, viem public client using `fallback` transport over `WHITECHAIN_RPC` then `WHITECHAIN_RPC_FALLBACK` with timeouts, `explorerTx(hash)`, `explorerAddress(addr)` (depends on T010, T005)
-- [ ] T012 [P] Implement `src/lib/status.ts`: enum `0 None, 1 Submitted, 2 UnderReview, 3 Eligible, 4 Rejected, 5 Funded, 6 Repaid, 7 Defaulted`, labels, allowed transitions exactly as in data-model.md (Rejected, Repaid, Defaulted terminal)
-- [ ] T013 [P] Implement `src/lib/errors.ts` mapping contract/ERC-20/wallet errors to user messages per contracts/onchain.md ("Error mapping (UI)"): `DuplicateInvoice`/`DuplicateDocument` -> "already submitted"; `InvalidTerms`; `NotAllowlisted` -> "wallet not approved"; `NotEligible` -> "no longer available"; `NotFunded` -> "not awaiting repayment"; allowance/balance shortfall; wrong chain
-- [ ] T014 Implement `src/lib/db.ts` (server-only, `node:sqlite`, file `apps/web/credra.db`) creating tables per data-model.md: `invoices` (`invoice_number` unique, `document_hash` unique), `documents` (allowed mime: pdf, png, jpg; max 10 MB), `verification_runs` (verdict: ELIGIBLE / REJECTED / MANUAL_REVIEW / ERROR), `operator_decisions` (decision APPROVE / REJECT, reason required), `status_events`, `positions`; add a `better-sqlite3` fallback note if `node:sqlite` fails under Next bundling
-- [ ] T015 [P] Implement `src/lib/signer.ts` (server-only): viem wallet clients for the verifier key and the deployer/admin key; never exported to client modules (add `import "server-only"`)
-- [ ] T016 [P] Implement `src/lib/auth.ts` (server-only): operator passcode check (constant-time compare against `OPERATOR_PASSCODE`), signed httpOnly session cookie, in-memory rate limit on login
-- [ ] T017 [P] Unit tests for auth in `tests/auth.test.ts` (wrong passcode rejected, rate limit, tampered cookie rejected, valid cookie accepted)
-- [ ] T018 [P] Implement `src/lib/walletAuth.ts` (server-only): issue nonce message, verify `x-wallet` / `x-signature` with viem `verifyMessage`, nonce single-use and expiring
-- [ ] T019 [P] Implement `src/lib/api.ts`: zod-validated request helper and error envelope `{ error, message }` per contracts/api.md
-- [ ] T020 Implement `src/lib/wagmi.ts` (injected connector, chain 1874, fallback transport), `src/components/Providers.tsx` (wagmi + react-query) and wire into `src/app/layout.tsx`
-- [ ] T021 [P] Build `src/components/WalletButton.tsx` and `src/components/NetworkGuard.tsx` (blocks actions and prompts a switch when the wallet is not on chain 1874; FR-001, FR-002)
-- [ ] T022 [P] Build `src/components/StatusBadge.tsx`, `TxLink.tsx`, `AddressLink.tsx`, `SimulatedBadge.tsx`, `AmountText.tsx` (explorer links via `explorerTx`; SimulatedBadge text "simulated data")
-- [ ] T023 [P] Implement `GET /api/config` in `src/app/api/config/route.ts` returning `{ chainId, registry, allowlist, finance, usdt, explorer, usdtDecimals: 6 }` and no secrets
+- [x] T006 [P] Implement 6-decimal USDT helpers in `src/lib/money.ts` (`parseUsdt(string) -> bigint`, `formatUsdt(bigint) -> string`; integers only, never floating point; reject more than 6 decimals)
+- [x] T007 [P] Unit tests for money in `tests/money.test.ts` (round trip, 6-decimal rejection, `10000.000001`, zero, negative)
+- [x] T008 [P] Implement `src/lib/hash.ts`: `documentHash(bytes) = keccak256(file bytes)`, `invoiceId(number) = keccak256(utf8(invoiceNumber))`, `buyerRef(name) = keccak256("buyer:" + name)` (must match `scripts/seed-demo.sh`)
+- [x] T009 [P] Unit tests for hash in `tests/hash.test.ts` (known vectors incl. `INV-1001 -> 0xe4f729cc5c74e26942b90175714ea77f0711eb25e5ea3b3620ff097d6805a571`; same bytes give same hash)
+- [x] T010 [P] Generate ABIs into `src/lib/abi.ts` for InvoiceRegistry, InvestorAllowlist, ReceivableFinance (from `contracts/out` via `forge inspect <Contract> abi --json`) plus the minimal ERC-20 ABI (`balanceOf`, `allowance`, `approve`, `decimals`); export as `as const`
+- [x] T011 Implement `src/lib/chain.ts`: Whitechain Sepolia chain definition (id 1874, WBT, explorer `https://explorer.testnet.whitechain.io`), addresses from env, viem public client using `fallback` transport over `WHITECHAIN_RPC` then `WHITECHAIN_RPC_FALLBACK` with timeouts, `explorerTx(hash)`, `explorerAddress(addr)` (depends on T010, T005)
+- [x] T012 [P] Implement `src/lib/status.ts`: enum `0 None, 1 Submitted, 2 UnderReview, 3 Eligible, 4 Rejected, 5 Funded, 6 Repaid, 7 Defaulted`, labels, allowed transitions exactly as in data-model.md (Rejected, Repaid, Defaulted terminal)
+- [x] T013 [P] Implement `src/lib/errors.ts` mapping contract/ERC-20/wallet errors to user messages per contracts/onchain.md ("Error mapping (UI)"): `DuplicateInvoice`/`DuplicateDocument` -> "already submitted"; `InvalidTerms`; `NotAllowlisted` -> "wallet not approved"; `NotEligible` -> "no longer available"; `NotFunded` -> "not awaiting repayment"; allowance/balance shortfall; wrong chain
+- [x] T014 Implement `src/lib/db.ts` (server-only, `node:sqlite`, file `apps/web/credra.db`) creating tables per data-model.md: `invoices` (`invoice_number` unique, `document_hash` unique), `documents` (allowed mime: pdf, png, jpg; max 10 MB), `verification_runs` (verdict: ELIGIBLE / REJECTED / MANUAL_REVIEW / ERROR), `operator_decisions` (decision APPROVE / REJECT, reason required), `status_events`, `positions`; add a `better-sqlite3` fallback note if `node:sqlite` fails under Next bundling
+- [x] T015 [P] Implement `src/lib/signer.ts` (server-only): viem wallet clients for the verifier key and the deployer/admin key; never exported to client modules (add `import "server-only"`)
+- [x] T016 [P] Implement `src/lib/auth.ts` (server-only): operator passcode check (constant-time compare against `OPERATOR_PASSCODE`), signed httpOnly session cookie, in-memory rate limit on login
+- [x] T017 [P] Unit tests for auth in `tests/auth.test.ts` (wrong passcode rejected, rate limit, tampered cookie rejected, valid cookie accepted)
+- [x] T018 [P] Implement `src/lib/walletAuth.ts` (server-only): issue nonce message, verify `x-wallet` / `x-signature` with viem `verifyMessage`, nonce single-use and expiring
+- [x] T019 [P] Implement `src/lib/api.ts`: zod-validated request helper and error envelope `{ error, message }` per contracts/api.md
+- [x] T020 Implement `src/lib/wagmi.ts` (injected connector, chain 1874, fallback transport), `src/components/Providers.tsx` (wagmi + react-query) and wire into `src/app/layout.tsx`
+- [x] T021 [P] Build `src/components/WalletButton.tsx` and `src/components/NetworkGuard.tsx` (blocks actions and prompts a switch when the wallet is not on chain 1874; FR-001, FR-002)
+- [x] T022 [P] Build `src/components/StatusBadge.tsx`, `TxLink.tsx`, `AddressLink.tsx`, `SimulatedBadge.tsx`, `AmountText.tsx` (explorer links via `explorerTx`; SimulatedBadge text "simulated data")
+- [x] T023 [P] Implement `GET /api/config` in `src/app/api/config/route.ts` returning `{ chainId, registry, allowlist, finance, usdt, explorer, usdtDecimals: 6 }` and no secrets
 
 **Checkpoint**: foundation ready; `bun run typecheck` and `bun run test` pass.
 
@@ -70,25 +70,25 @@ Single Next.js app in `apps/web/` with `src/app/` (pages and `api/` routes), `sr
 
 ### Tests for User Story 1
 
-- [ ] T024 [P] [US1] Tests for CRE output parsing in `tests/cre.test.ts`: parses the "Workflow Simulation Result" JSON string; maps missing CLI, non-zero exit, timeout, garbage output, unknown verdict, malformed JSON to verdict `ERROR` (never ELIGIBLE)
-- [ ] T025 [P] [US1] Tests for verdict mapping in `tests/verdict.test.ts`: ELIGIBLE->3 Eligible, REJECTED->4 Rejected, MANUAL_REVIEW->2 UnderReview, ERROR->2 UnderReview; `verificationRef = keccak256(report_json)`; no input maps to Eligible except a parsed ELIGIBLE (constitution II)
+- [x] T024 [P] [US1] Tests for CRE output parsing in `tests/cre.test.ts`: parses the "Workflow Simulation Result" JSON string; maps missing CLI, non-zero exit, timeout, garbage output, unknown verdict, malformed JSON to verdict `ERROR` (never ELIGIBLE)
+- [x] T025 [P] [US1] Tests for verdict mapping in `tests/verdict.test.ts`: ELIGIBLE->3 Eligible, REJECTED->4 Rejected, MANUAL_REVIEW->2 UnderReview, ERROR->2 UnderReview; `verificationRef = keccak256(report_json)`; no input maps to Eligible except a parsed ELIGIBLE (constitution II)
 
 ### Implementation for User Story 1
 
-- [ ] T026 [P] [US1] Implement `src/lib/cre.ts` (server-only): spawn `cre workflow simulate invoice-verification -T staging-settings --non-interactive --trigger-index 0 --http-payload '{"invoiceId":..,"invoiceNumber":..}'` with cwd `<repo>/cre`, PATH including `~/.local/bin`, 60 s timeout; parse stdout; return `{ verdict, failedChecks, reviewReasons, externalReference, reportJson }` or `ERROR` with a reason code
-- [ ] T027 [P] [US1] Implement `src/lib/verdict.ts` (server-only): verdict-to-status mapping, `verificationRef`, and `recordVerdict(invoiceId, verdict, ref)` sending `recordVerification` with the verifier wallet (T015); waits for the receipt with a timeout
-- [ ] T028 [P] [US1] Implement `src/lib/repo.ts` (server-only) queries for invoices, documents, verification_runs, status_events (insert, get by id, list by issuer, latest run)
-- [ ] T029 [US1] Implement `POST /api/invoices` in `src/app/api/invoices/route.ts` (multipart per contracts/api.md): validate with zod (amount > 0; 0 < financing_amount < amount; due_date > now); recompute `keccak256(file)` and require equality with the onchain `documentHash`; require onchain issuer equals `x-wallet`; file type pdf/png/jpg and max 10 MB; store file under `apps/web/uploads/`; `409 duplicate_invoice` on repeat number or hash
-- [ ] T030 [P] [US1] Implement `GET /api/invoices` and `GET /api/invoices/[invoiceId]` in `src/app/api/invoices/route.ts` and `src/app/api/invoices/[invoiceId]/route.ts` (status read live from the chain; latest verification run; never returns document bytes)
-- [ ] T031 [P] [US1] Implement `GET /api/invoices/[invoiceId]/document` in `src/app/api/invoices/[invoiceId]/document/route.ts` (issuer via wallet-auth, or operator via session; `403` otherwise; FR-019)
-- [ ] T032 [US1] Implement `POST /api/invoices/[invoiceId]/verify` in `src/app/api/invoices/[invoiceId]/verify/route.ts`: re-read chain status and refuse unless Submitted or UnderReview (`409 not_verifiable`); run `cre.ts`; record via `verdict.ts`; store the run (`source_simulated = 1`) and a status event; response includes `recordedBy: "application-verifier-wallet"` and `simulated: true`
-- [ ] T033 [US1] Implement `POST /api/operator/login` in `src/app/api/operator/login/route.ts` using `src/lib/auth.ts`
-- [ ] T034 [US1] Implement `POST /api/operator/simulated-erp` in `src/app/api/operator/simulated-erp/route.ts` (operator session): scenarios `match | amount_mismatch | disputed | absent`; reads the onchain invoice and writes or deletes the record via the mock registry's `POST /admin/invoices` at `MOCK_REGISTRY_URL`; response labelled `simulated: true`
-- [ ] T035 [US1] Build `src/app/business/new/page.tsx`: form with invoice number, issuer and buyer details, amount, currency, invoice date, due date, requested financing amount, file; compute the document hash in the browser; wallet sends `submitInvoice` (T010 ABI), waits for receipt, then `POST /api/invoices`, then `POST .../verify`; show the duplicate message from T013
-- [ ] T036 [US1] Build `src/app/business/page.tsx`: the connected wallet's invoices with StatusBadge and explorer links (FR-021)
-- [ ] T037 [US1] Build `src/app/invoices/[invoiceId]/page.tsx` and `src/components/VerificationPanel.tsx`: terms, chain status, verdict, failed checks with plain-language text, external reference, SimulatedBadge, the line "recorded by the application's verifier wallet, not by the CRE network", explorer links
-- [ ] T038 [US1] Build minimal operator console `src/app/operator/page.tsx`: passcode login and the "Demo: simulate ERP record" control (labelled simulated)
-- [ ] T039 [US1] Validate quickstart scenarios 1, 2, 4, 7 against Whitechain testnet; append logs and explorer links to `evidence/cre-simulation-whitechain-testnet.md`
+- [x] T026 [P] [US1] Implement `src/lib/cre.ts` (server-only): spawn `cre workflow simulate invoice-verification -T staging-settings --non-interactive --trigger-index 0 --http-payload '{"invoiceId":..,"invoiceNumber":..}'` with cwd `<repo>/cre`, PATH including `~/.local/bin`, 60 s timeout; parse stdout; return `{ verdict, failedChecks, reviewReasons, externalReference, reportJson }` or `ERROR` with a reason code
+- [x] T027 [P] [US1] Implement `src/lib/verdict.ts` (server-only): verdict-to-status mapping, `verificationRef`, and `recordVerdict(invoiceId, verdict, ref)` sending `recordVerification` with the verifier wallet (T015); waits for the receipt with a timeout
+- [x] T028 [P] [US1] Implement `src/lib/repo.ts` (server-only) queries for invoices, documents, verification_runs, status_events (insert, get by id, list by issuer, latest run)
+- [x] T029 [US1] Implement `POST /api/invoices` in `src/app/api/invoices/route.ts` (multipart per contracts/api.md): validate with zod (amount > 0; 0 < financing_amount < amount; due_date > now); recompute `keccak256(file)` and require equality with the onchain `documentHash`; require onchain issuer equals `x-wallet`; file type pdf/png/jpg and max 10 MB; store file under `apps/web/uploads/`; `409 duplicate_invoice` on repeat number or hash
+- [x] T030 [P] [US1] Implement `GET /api/invoices` and `GET /api/invoices/[invoiceId]` in `src/app/api/invoices/route.ts` and `src/app/api/invoices/[invoiceId]/route.ts` (status read live from the chain; latest verification run; never returns document bytes)
+- [x] T031 [P] [US1] Implement `GET /api/invoices/[invoiceId]/document` in `src/app/api/invoices/[invoiceId]/document/route.ts` (issuer via wallet-auth, or operator via session; `403` otherwise; FR-019)
+- [x] T032 [US1] Implement `POST /api/invoices/[invoiceId]/verify` in `src/app/api/invoices/[invoiceId]/verify/route.ts`: re-read chain status and refuse unless Submitted or UnderReview (`409 not_verifiable`); run `cre.ts`; record via `verdict.ts`; store the run (`source_simulated = 1`) and a status event; response includes `recordedBy: "application-verifier-wallet"` and `simulated: true`
+- [x] T033 [US1] Implement `POST /api/operator/login` in `src/app/api/operator/login/route.ts` using `src/lib/auth.ts`
+- [x] T034 [US1] Implement `POST /api/operator/simulated-erp` in `src/app/api/operator/simulated-erp/route.ts` (operator session): scenarios `match | amount_mismatch | disputed | absent`; reads the onchain invoice and writes or deletes the record via the mock registry's `POST /admin/invoices` at `MOCK_REGISTRY_URL`; response labelled `simulated: true`
+- [x] T035 [US1] Build `src/app/business/new/page.tsx`: form with invoice number, issuer and buyer details, amount, currency, invoice date, due date, requested financing amount, file; compute the document hash in the browser; wallet sends `submitInvoice` (T010 ABI), waits for receipt, then `POST /api/invoices`, then `POST .../verify`; show the duplicate message from T013
+- [x] T036 [US1] Build `src/app/business/page.tsx`: the connected wallet's invoices with StatusBadge and explorer links (FR-021)
+- [x] T037 [US1] Build `src/app/invoices/[invoiceId]/page.tsx` and `src/components/VerificationPanel.tsx`: terms, chain status, verdict, failed checks with plain-language text, external reference, SimulatedBadge, the line "recorded by the application's verifier wallet, not by the CRE network", explorer links
+- [x] T038 [US1] Build minimal operator console `src/app/operator/page.tsx`: passcode login and the "Demo: simulate ERP record" control (labelled simulated)
+- [x] T039 [US1] Validate quickstart scenarios 1, 2, 4, 7 against Whitechain testnet; append logs and explorer links to `evidence/cre-simulation-whitechain-testnet.md`
 
 **Checkpoint**: US1 works alone; a business can submit and see a verified outcome (MVP).
 

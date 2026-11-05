@@ -3,6 +3,7 @@
 //   POST /admin/invoices  upserts a record (used by the demo seed script)
 //   GET  /health
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 type Rec = {
 	invoiceNumber: string
@@ -17,7 +18,7 @@ type Rec = {
 	reference: string
 }
 
-const FILE = new URL('./data.json', import.meta.url).pathname
+const FILE = fileURLToPath(new URL('./data.json', import.meta.url))
 const db: Record<string, Rec> = existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf-8')) : {}
 const save = () => writeFileSync(FILE, JSON.stringify(db, null, 2))
 const json = (b: unknown, status = 200) =>
@@ -33,6 +34,11 @@ Bun.serve({
 		if (req.method === 'GET' && url.pathname.startsWith('/invoices/')) {
 			const rec = db[decodeURIComponent(url.pathname.slice('/invoices/'.length))]
 			return rec ? json({ ...rec, simulated: true }) : json({ error: 'not_found' }, 404)
+		}
+		if (req.method === 'DELETE' && url.pathname.startsWith('/admin/invoices/')) {
+			delete db[decodeURIComponent(url.pathname.slice('/admin/invoices/'.length))]
+			save()
+			return json({ ok: true })
 		}
 		if (req.method === 'POST' && url.pathname === '/admin/invoices') {
 			const r = (await req.json()) as Rec
