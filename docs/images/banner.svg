@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="300" viewBox="0 0 1280 300" role="img" aria-labelledby="t d">
+  <title id="t">Credra</title>
+  <desc id="d">Credra wordmark with the tagline Trust-backed financing infrastructure</desc>
+  <rect width="1280" height="300" rx="16" fill="#F3F5F2"/>
+  <rect x="0.5" y="0.5" width="1279" height="299" rx="15.5" fill="none" stroke="#DCE2DD"/>
+  <rect x="455" y="96" width="34" height="34" rx="6" fill="#0D3B35"/>
+  <text x="505" y="132" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="64" font-weight="600" letter-spacing="-1.5" fill="#0F1A16">credra</text>
+  <text x="640" y="196" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" fill="#44544B">Trust-backed financing infrastructure</text>
+  <text x="640" y="238" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="15" letter-spacing="1.2" fill="#5C6B63">VERIFY  ·  FUND  ·  SETTLE  ON WHITECHAIN</text>
+</svg>
