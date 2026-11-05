@@ -45,6 +45,7 @@ White is the card layer on top of the canvas. Separate with hairlines before rea
 | Accent (links, verified marks, focus) | `accent` | `#0A6C63` | 5.7 / 6.3 |
 | Accent soft | `accent-soft` | `#E3F1EE` | surface only |
 | Primary button fill | `pine` | `#0D3B35` | white text 12.4 |
+| Primary button hover | `pine-hover` | `#092E29` | white text 14.9 |
 
 ### Status hues (invoice states only)
 
@@ -149,7 +150,7 @@ Plain, specific, active. Say what happened and what it means. Use "wallet" and "
 ## Do not
 
 - No gradients, glows, shadows beyond the light raised-panel shadow, or animated backgrounds.
-- No dark or saturated page sections; no pure white page background.
+- No dark or saturated page sections, with one exception: the closing call-to-action band on the marketing page may use `pine` (see Marketing site). No pure white page background.
 - No new font families, no inline hex colours: add or reuse a token.
 - No pills; no radii outside 6 / 8 / 12 / 16.
 - No colour-only meaning; every state has a text label.
@@ -159,9 +160,48 @@ Plain, specific, active. Say what happened and what it means. Use "wallet" and "
 
 Body text 7.3:1, support text 5.1:1, accent text 5.7:1 on the canvas; every status text colour is at least 4.5:1 on its own soft tint and on card. Control borders at least 3:1. 2px accent focus ring everywhere. Fully keyboard operable; dialogs trap focus and close on Escape. Status, errors and transaction progress are announced through live regions. Target size at least 36px. Respect `prefers-reduced-motion` and `prefers-color-scheme` is not used (light only).
 
+## Marketing site (landing page)
+
+Applies to the public page at `/`. The application under `/app/*` keeps the product rules above. Same tokens, palette, fonts and voice; only scale and layout differ. Screen content lives in `specs/001-credra-web-app/landing-brief.md`.
+
+**Positioning rules (design-level).** Lead with the financial outcome, not the technology. Blockchain is described as infrastructure. Never promise guaranteed returns, guaranteed financing or instant funding; never imply every invoice qualifies; never equate verification with legal enforceability or creditworthiness. Proof comes from the product itself: no invented customer numbers, logos, testimonials or live activity. Anything shown as verified, confirmed or repaid must reflect a real recorded result; otherwise it carries the "Illustrative demo data" tag. Say "recorded onchain by the verifier wallet", never "attestation".
+
+**Marketing type scale** (Geist Sans, Geist Mono for figures and hashes):
+
+| Element | Desktop | Mobile | Line height | Tracking |
+|---|---|---|---|---|
+| Hero H1 | 64px / 600 | 40px | 1.05 to 1.12 | -0.03em |
+| Section H2 | 44px / 600 | 32px | 1.1 to 1.2 | -0.02em |
+| Card heading | 22px / 600 | 20px | 1.25 | -0.01em |
+| Body large | 18px / 400 | 16px | 1.55 | 0 |
+| Body | 16px / 400 | 15 to 16px | 1.5 to 1.65 | 0 |
+| Supporting, nav, buttons | 14px | 14px | 1.4 | 0 |
+| Eyebrow | 11 to 12px mono uppercase | same | 1.4 | +0.06em |
+
+Keep paragraphs to about 50 to 70 characters per line. Body copy is never bold.
+
+**Layout and spacing.** 8px grid. Container 1200px; mobile padding 20px. Section spacing: 112px (wide), 88px (standard), 72px (tablet), 64px (mobile). Card padding 24px, card gap 24px. Section pattern: eyebrow, heading, one supporting paragraph, then content. Sections sit on the canvas; cards are white with a hairline.
+
+**Marketing components.**
+- *Navigation:* 72px tall, canvas background with no border at the top of the page, hairline border once scrolled; logo left, centred anchor links, one filled action ("Launch app", 44px). Mobile: logo, menu button, "Launch app" stays visible.
+- *Primary CTA:* 48px, 8px radius, `pine` fill, white 14px / 600 text, 18px horizontal padding, hover `pine-hover` in 150ms, visible focus ring. *Secondary CTA:* 44px, transparent or card fill, 1px `field` border, ink text.
+- *Cards:* white, 1px hairline, 12px radius, no shadow, icon at 20px in a thin outline, hover changes only the border colour.
+- *Inputs:* 44 to 48px, 8px radius, label above, inline validation text.
+- *Product composition (hero):* three connected panels (Invoice, Financing, Verification) built from the real application components, joined by 1px hairline connectors. Never a screenshot of invented activity.
+- *Process timeline:* five numbered steps, horizontal on desktop, vertical on mobile; each step has a number, a thin icon, a heading and one short sentence.
+- *Product showcase:* alternating text and product visual rows; avoid repeating the same card layout three times.
+- *Closing band (the one dark section):* full-width `pine` background, white text, content max width 760px, 16px radius container, 48px primary CTA (white fill with pine text on this band, since pine on pine would vanish) and a secondary text link.
+- *Footer:* canvas, hairline top rule, brand line, link groups that point only to real destinations, and the risk and demo disclaimer in 13px `ink-2`.
+
+**Responsive.** Desktop 1200px and up: 12-column grid, two-column hero, four-column feature row, horizontal timeline. Tablet 768 to 1199px: 8 columns, hero H1 48px, two-column feature row, compact menu from about 900px. Mobile below 768px: single column, H1 40px, stacked CTAs, vertical timeline, product panels stacked, no horizontal overflow, 44px minimum touch targets. Verify at 375, 390, 430, 768, 1024, 1280 and 1440px.
+
+**Motion.** CSS transitions only: 150ms for navigation background, borders and buttons; the hero panels may fade up once on load; process steps reveal once as they enter view. No looping animation, no scaling, no parallax. All of it off under `prefers-reduced-motion`.
+
+**Quality bar.** Semantic HTML with one H1 and a logical H2 order; descriptive image alt text; WCAG AA contrast; keyboard-operable menus; `font-display: swap`, preload only the fonts in use; lazy-load below-the-fold imagery; no autoplay video. Performance and accessibility figures are targets to measure, never claims to publish. Every visible call to action must resolve to a working destination; unbuilt destinations are hidden, not dead.
+
 ## Implementation notes
 
-- Tokens live once, in `apps/web/src/app/globals.css` under Tailwind v4 `@theme` (`--color-canvas`, `--color-card`, `--color-inset`, `--color-hair`, `--color-field`, `--color-ink`, `--color-ink-2`, `--color-ink-3`, `--color-accent`, `--color-accent-soft`, `--color-pine`, `--color-s-*` with `-soft` variants, radii `--radius-chip` 6px, `--radius-ctl` 8px, `--radius-card` 12px, `--radius-win` 16px).
+- Tokens live once, in `apps/web/src/app/globals.css` under Tailwind v4 `@theme` (`--color-canvas`, `--color-card`, `--color-inset`, `--color-hair`, `--color-field`, `--color-ink`, `--color-ink-2`, `--color-ink-3`, `--color-accent`, `--color-accent-soft`, `--color-pine`, `--color-pine-hover`, `--color-s-*` with `-soft` variants, radii `--radius-chip` 6px, `--radius-ctl` 8px, `--radius-card` 12px, `--radius-win` 16px).
 - Fonts: install the `geist` package and apply `GeistSans` and `GeistMono` in `layout.tsx`; remove the scaffold's Google font imports.
 - Shared components named in `tasks.md` (T021 and T022) implement: `StatusChip`, `ProvenanceStrip`, `SimulatedTag`, `Amount`, `HashLink`, `TxLink`, `StepRail`, `NetworkBanner`, `WalletButton`, `Timeline`, `EvidencePanel`.
 - A component or colour not defined here must be added to this file first.

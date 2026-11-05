@@ -171,7 +171,7 @@ Single Next.js app in `apps/web/` with `src/app/` (pages and `api/` routes), `sr
 
 **Independent Test**: load `/` at 375, 768, 1280 px; every visible CTA works; no invented figures; Verified status shown only when real.
 
-- [ ] T074 [P] [US6] Update `/Users/abby/Eth Mumbai/DESIGN.md`: add the marketing type scale, `pine-hover #092E29`, and the single pine CTA-band exception (needs approval, see landing-brief.md item 3)
+- [x] T074 [P] [US6] Update `/Users/abby/Eth Mumbai/DESIGN.md`: add the marketing type scale, `pine-hover #092E29`, and the single pine CTA-band exception (needs approval, see landing-brief.md item 3)
 - [ ] T075 [US6] Restructure routes: marketing at `src/app/(marketing)/page.tsx` (`/`), application under `/app/*` (route group `(app)` with an `app` segment); update links in ui-spec and API redirects
 - [ ] T076 [P] [US6] Build `src/components/marketing/Navbar.tsx` and `MobileMenu.tsx` (72px sticky, anchor links, Launch app only filled action; no Sign in)
 - [ ] T077 [US6] Build `HeroSection.tsx` and `ProductPreview.tsx` using the real `StatusChip`, `Amount`, `EvidencePanel` components; render INV-1001 from live data when available, otherwise labelled "Illustrative demo data"; never show a Verified status or transaction without a real recorded result
