@@ -1,4 +1,4 @@
-# Invoice Financing and Receivables Infrastructure
+# Credra: Trust-backed financing infrastructure (invoice financing and receivables)
 
 ETHGlobal Mumbai 2026 hackathon MVP. Targets: Whitechain "Tokenize: Real World Finance" + Chainlink "Best workflow with CRE". Solo build. Do not expand scope beyond the PRD (no CCIP, no cross-chain, no real credit scoring).
 
