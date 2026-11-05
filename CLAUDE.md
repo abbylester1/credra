@@ -49,5 +49,5 @@ Public: https://github.com/abbylester1/credra (MIT). Commit messages carry no AI
 - `cre/.env` is gitignored too.
 
 ## Status and next steps
-Done: contracts + tests, deploy + explorer verification, CRE workflow simulated against live testnet (ELIGIBLE / REJECTED / MANUAL_REVIEW / not-found), evidence committed.
-Pending: backend step that writes verdicts onchain, Next.js web app (business, investor, admin views), USDT funding + repayment on testnet (blocked on sponsor USDT for the investor wallet `0x195194047B45c06c946603ef1CD7cE22abc990D6`; business wallet also needs ~10,000 USDT to repay), README, WHITECHAIN_FEEDBACK.md, architecture docs, demo video.
+Done: contracts + tests, deploy + explorer verification, CRE workflow simulated against live testnet (ELIGIBLE / REJECTED / MANUAL_REVIEW / not-found), evidence committed, web app (business/investor/operator views), official-USDT funding and repayment executed on testnet (invoice E2E-mw3ziwws-match, 60/54/6 USDT, all 5 tx links in evidence/whitechain-transactions.md), README updated with explorer links.
+Pending: WHITECHAIN_FEEDBACK.md, demo video.

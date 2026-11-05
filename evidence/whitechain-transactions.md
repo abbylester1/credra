@@ -28,6 +28,18 @@ Current deployment (token `Credra Receivable` / `CRDR`). All contracts are sourc
 An earlier deployment with token name `Invoice Receivable` / `RCVBL` was replaced before any funding took place:
 InvoiceRegistry `0x37645b05895b66E4ed4a4578D3Ed1A091E9ab209`, InvestorAllowlist `0xf35310d844E50AECeA899CeB888965e9Be50a65A`, ReceivableFinance `0xdCc3464deb1779be5D8e59E8f2385b190E8C04f6`.
 
-## Funding / repayment (official USDT)
+## Funding and repayment (official USDT 0xcedfB56113143d55b2358b8CFbB0dEB5Ad2f55a7)
 
-_Pending: waiting for sponsor-provided test USDT._
+Invoice `E2E-mw3ziwws-match` — amount 60.00 USDT, financing 54.00 USDT, discount 6.00 USDT.
+
+USDT obtained by swapping ~1 WBT for 73.089 USDT through YetiTrade's SwapRouter02 (pool WWBT/USDT 0.3%, router `0xe208cC685cD95D56E8ec6DEC9816476567fc6962`). There is no public USDT faucet on Whitechain testnet.
+
+| # | Step | Tx |
+|---|---|---|
+| 1 | Investor approves USDT | [0x3a61aba2c978050cdaf87f2d592727d2cfafff85df5f43e8e0369557effc4f58](https://explorer.testnet.whitechain.io/tx/0x3a61aba2c978050cdaf87f2d592727d2cfafff85df5f43e8e0369557effc4f58) |
+| 2 | Investor funds the invoice (54.00 USDT to business, CRDR receivable minted) | [0xf350c714feee6e7e1a31b4a86de0320a44b51d0499d61b7d4dafa832603ea125](https://explorer.testnet.whitechain.io/tx/0xf350c714feee6e7e1a31b4a86de0320a44b51d0499d61b7d4dafa832603ea125) |
+| 3 | Investor sends 6.00 USDT to business (discount, so business can repay in full) | [0x367628394025003506a6499509a24d81b080a5947cff5b95940a47bf78942db2](https://explorer.testnet.whitechain.io/tx/0x367628394025003506a6499509a24d81b080a5947cff5b95940a47bf78942db2) |
+| 4 | Business approves USDT | [0x5013167b642172c31eebd9f423548d4093bcb5f390c68cb68944ac984c09031c](https://explorer.testnet.whitechain.io/tx/0x5013167b642172c31eebd9f423548d4093bcb5f390c68cb68944ac984c09031c) |
+| 5 | Business repays the full 60.00 USDT to the receivable holder | [0xa5ec21f89028eedc2bc83fac31f1f1dbaaba3a99073f19c2e661de19c7e7dbe0](https://explorer.testnet.whitechain.io/tx/0xa5ec21f89028eedc2bc83fac31f1f1dbaaba3a99073f19c2e661de19c7e7dbe0) |
+
+Final state: invoice status **Repaid** (6), receivable holder is the investor (`0x195194047B45c06c946603ef1CD7cE22abc990D6`), finance contract holds 0 USDT.

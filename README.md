@@ -54,7 +54,7 @@ An honest snapshot of what works today.
 | CRE workflow: reads Whitechain state, calls an external API, runs through the CRE CLI | Done |
 | Web app: submit invoice, verification, invoice pipeline, detail page, operator tools | Done |
 | Verdict recorded onchain; failures and outages fall back to manual review, never "eligible" | Done, tested on testnet |
-| Investor funding and repayment UI (approve USDT, then fund or repay; positions; default) | Built and typechecked. **The explorer-linked USDT payment is pending** until the wallets receive official test USDT |
+| Investor funding and repayment in official USDT, with explorer-linked transactions | Done — [funding tx](https://explorer.testnet.whitechain.io/tx/0xf350c714feee6e7e1a31b4a86de0320a44b51d0499d61b7d4dafa832603ea125), [repayment tx](https://explorer.testnet.whitechain.io/tx/0xa5ec21f89028eedc2bc83fac31f1f1dbaaba3a99073f19c2e661de19c7e7dbe0) |
 | Operator: approve or reject manual-review invoices, manage the investor allowlist | Done, tested on testnet |
 | Demo video, landing page | Pending |
 
@@ -139,7 +139,13 @@ Whitechain Sepolia, chain id 1874, all source-verified.
 | ReceivableFinance | [`0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6`](https://explorer.testnet.whitechain.io/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6) |
 | Official USDT (not ours) | [`0xcedfB56113143d55b2358b8CFbB0dEB5Ad2f55a7`](https://explorer.testnet.whitechain.io/address/0xcedfB56113143d55b2358b8CFbB0dEB5Ad2f55a7) |
 
-Transactions and end-to-end results: [`evidence/whitechain-transactions.md`](evidence/whitechain-transactions.md) and [`evidence/e2e-mvp-testnet.md`](evidence/e2e-mvp-testnet.md). USDT funding and repayment transaction links will be added here once recorded.
+Transactions and end-to-end results: [`evidence/whitechain-transactions.md`](evidence/whitechain-transactions.md) and [`evidence/e2e-mvp-testnet.md`](evidence/e2e-mvp-testnet.md).
+
+**Official USDT payment (invoice E2E-mw3ziwws-match, 60 / 54 / 6 USDT):**
+- Investor funds → [0xf350c7…](https://explorer.testnet.whitechain.io/tx/0xf350c714feee6e7e1a31b4a86de0320a44b51d0499d61b7d4dafa832603ea125) (54 USDT to business, CRDR receivable minted)
+- Business repays → [0xa5ec21…](https://explorer.testnet.whitechain.io/tx/0xa5ec21f89028eedc2bc83fac31f1f1dbaaba3a99073f19c2e661de19c7e7dbe0) (60 USDT to holder)
+
+USDT was obtained by swapping WBT through YetiTrade (no public USDT faucet exists on Whitechain testnet). The demo uses a 60 USDT invoice to keep the testnet amounts small; the contracts work at any scale.
 
 ## Repository structure
 
@@ -187,7 +193,7 @@ Static analysis ([Slither](evidence/slither.md)) found 5 low-severity items and 
 - One investor per invoice. No secondary market, KYC, credit scoring or automatic detection of the buyer's payment; repayment is an explicit transaction.
 - Operator access is a demo passcode. Wallet authentication is signature based with a 10-minute window and no nonce store.
 - Both public RPCs are intermittently slow, so the app reads through a fallback transport.
-- No funding or repayment has been executed on testnet yet because the wallets hold no official test USDT. The demo video and landing page are not finished at the time of writing.
+- The demo video and landing page are not finished at the time of writing.
 
 ## Roadmap
 
@@ -196,7 +202,7 @@ Static analysis ([Slither](evidence/slither.md)) found 5 low-severity items and 
 - [x] Invoice submission and verification in the app
 - [x] Investor funding and repayment screens, positions and default
 - [x] Operator review of manual-review invoices and allowlist management
-- [ ] Record the official-USDT funding and repayment transactions on testnet (needs test USDT)
+- [x] Record the official-USDT funding and repayment transactions on testnet
 - [ ] Transactions and verification pages
 - [ ] Landing page and demo video
 
