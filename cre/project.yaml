@@ -40,7 +40,7 @@ staging-settings:
   # Reads work in simulation; the forwarder is a placeholder because we never write via CRE.
   experimental-chains:
     - chain-selector: 1874
-      rpc-url: http://127.0.0.1:8545   # local Anvil (chain id 1874); swap to Ankr for testnet
+      rpc-url: https://rpc.testnet.whitechain.io   # Whitechain Sepolia (chain id 1874)
       forwarder: "0x0000000000000000000000000000000000000001"
 
 # ==========================================================================
