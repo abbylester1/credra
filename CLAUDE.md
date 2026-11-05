@@ -5,6 +5,9 @@ ETHGlobal Mumbai 2026 hackathon MVP. Targets: Whitechain "Tokenize: Real World F
 ## Architecture in one paragraph
 Business submits an invoice onchain (`InvoiceRegistry`). A Chainlink CRE workflow reads that record from Whitechain, calls an external verification API, applies eligibility rules, and returns ELIGIBLE / REJECTED / MANUAL_REVIEW. The backend then writes the verdict onchain (VERIFIER_ROLE). An allowlisted investor funds an Eligible invoice in official USDT via `ReceivableFinance`, which mints an allowlist-gated ERC-721 receivable. Repayment pays the full invoice amount to the current token holder.
 
+## Repository
+Public: https://github.com/abbylester1/credra (MIT). Commit messages carry no AI-attribution trailers (owner preference); AI use is disclosed in the README.
+
 ## Layout
 - `contracts/` Foundry project (Solidity 0.8.24, OpenZeppelin v5.1.0, forge-std as git submodules in `contracts/lib`). Contracts: `InvoiceRegistry`, `InvestorAllowlist`, `ReceivableFinance` (funding + settlement merged; no separate SettlementManager).
 - `cre/` CRE project. Workflow in `cre/invoice-verification/` (`main.ts` = CRE I/O, `rules.ts` = pure eligibility rules, `rules.test.ts` = bun tests).
