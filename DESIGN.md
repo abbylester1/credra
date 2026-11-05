@@ -45,7 +45,7 @@ White is the card layer on top of the canvas. Separate with hairlines before rea
 | Accent (links, verified marks, focus) | `accent` | `#0A6C63` | 5.7 / 6.3 |
 | Accent soft | `accent-soft` | `#E3F1EE` | surface only |
 | Primary button fill | `pine` | `#0D3B35` | white text 12.4 |
-| Primary button hover | `pine-hover` | `#092E29` | white text 14.9 |
+| Primary button hover | `pine-hover` | `#092E29` | white text 14.6 |
 
 ### Status hues (invoice states only)
 
