@@ -23,8 +23,9 @@ async function authHeaders() {
 }
 
 async function submit(number: string, scenario: string, reuseHash?: Uint8Array) {
-	const amount = 10_000_000_000n
-	const financing = 9_000_000_000n
+	// Amounts in whole USDT (6 decimals); override for small demo invoices: AMOUNT_USDT=60 FINANCING_USDT=54
+	const amount = BigInt(Math.round(Number(process.env.AMOUNT_USDT ?? 10000) * 1e6))
+	const financing = BigInt(Math.round(Number(process.env.FINANCING_USDT ?? 9000) * 1e6))
 	const due = Math.floor(Date.now() / 1000) + 30 * 86400
 	const bytes = reuseHash ?? new TextEncoder().encode(`%PDF-1.4 demo invoice ${number} ${Math.random()}`)
 	const docHash = keccak256(bytes)

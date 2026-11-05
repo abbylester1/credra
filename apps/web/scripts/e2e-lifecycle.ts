@@ -44,7 +44,7 @@ async function send(label: string, kind: 'fund' | 'repay' | null, id: `0x${strin
 	if (kind) await fetch(`${BASE}/api/invoices/${id}/sync`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ txHash: hash, kind }) }).catch(() => {})
 }
 
-const number = process.argv.find((a) => !a.startsWith('-') && !a.includes('/') && a !== 'bun' && !a.endsWith('.ts')) ?? 'E2E-mw3wtxpn-match'
+const number = process.argv.find((a) => !a.startsWith('-') && !a.includes('/') && a !== 'bun' && !a.endsWith('.ts')) ?? 'E2E-mw3ziwws-match'
 const dry = process.argv.includes('--dry')
 const id = keccak256(stringToBytes(number))
 const inv = await pub.readContract({ address: REGISTRY, abi: registry, functionName: 'getInvoice', args: [id] })

@@ -20,3 +20,7 @@ A disputed invoice (status Under review) was approved by the operator with a wri
 ## Funding and repayment
 
 Not yet recorded. The app's fund and repay flow (approve USDT, then fund or repay) is implemented and the contracts are covered by 29 Foundry tests, but the investor and business wallets hold no official test USDT yet, so no explorer-linked USDT payment exists. This file will be updated with the transaction links once recorded.
+
+## Small demo invoice sized to testnet USDT liquidity
+
+Official-USDT supply is limited, so a second invoice was created with small amounts: invoice 60 USDT, financing 54 USDT, investor return 6 USDT (`E2E-mw3ziwws-match`). It was verified by the real CRE workflow and recorded as Eligible: [0xceb85353...1ce5](https://explorer.testnet.whitechain.io/tx/0xceb853532c1cfd4feff7e615bcb5f18147b673b598434b8aa905a6eb11e31ce5). The funding and repayment transactions will be added here once recorded.
