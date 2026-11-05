@@ -11,3 +11,4 @@ uploads
 apps/mock-registry/data.json
 cre/.env
 .cre_build_tmp.js
+.claude/settings.local.json
