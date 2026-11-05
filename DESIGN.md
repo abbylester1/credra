@@ -15,6 +15,14 @@ A calm financial ledger. Credra moves money and makes trust claims, so the inter
 4. **One next action.** Each screen has one primary action. Blocked actions say why and what would unblock them.
 5. **Calm by default.** No gradients, glow, parallax or animated backgrounds. Motion only confirms a state change.
 
+## Design direction (v1.1, 2026-11-06)
+
+Two references, for different reasons: **Mercury for feel** (calm, premium, generous whitespace, few competing elements, easy-to-scan numbers) and **Ramp for structure** (workflow-led navigation, operational tables, contextual actions per state, flat bordered surfaces). We borrow patterns, not colours, fonts or button styles: Credra keeps its own pine palette and Geist. We do not adopt Mercury's pill buttons or indigo, or Ramp's yellow. Numeric details reported for those products come from third-party analyses, not official specs, so they are treated as ranges and direction only.
+
+Rule of thumb: Mercury's calmness, Ramp's operational precision, Credra's trust infrastructure. Blockchain detail is shown when a user needs evidence (provenance strip, transaction links), not everywhere; the main surfaces speak in invoices, verification and funding.
+
+Full screen-by-screen behaviour lives in `specs/001-credra-web-app/ui-spec.md`.
+
 ## Surfaces
 
 | Level | Name | Token | Value | Use |
@@ -75,14 +83,14 @@ Status hues never appear on links, buttons or decoration. Accent is the only col
 
 ## Shape, spacing, depth
 
-- **Radius scale (the only one):** 6px controls and chips, 10px cards and panels, 14px dialogs and large windows, 50% for dots only. No pills.
-- **Spacing:** 4px base. Card padding 20px (dense) or 24px. Page gutter 24px (16px on narrow screens). Content max width 1120px; reading width 720px for forms.
+- **Radius scale (the only one):** 6px chips and tags, 8px controls (buttons, inputs, menus), 12px cards and panels, 16px dialogs and large windows, 50% for dots only. No pills.
+- **Spacing:** 8px grid (4px for tight internal gaps). Card padding 20px (dense) or 24px. Page gutter 32px on wide screens, 16px on narrow. Content max width 1120px; reading width 720px for forms.
 - **Depth:** 1px `hair` border. At most a very light shadow (`0 1px 2px rgba(15,26,22,0.05)`) on raised panels such as menus and dialogs. No coloured shadows.
 - **Focus:** 2px `accent` ring with 2px offset on every interactive element, drawn inset when the element touches a clipped edge.
 
 ## Components
 
-**Buttons.** Primary: `pine` fill, white text, 6px, weight 500, 40px tall (36px dense). Secondary: card fill, `field` border, ink text. Text button: `accent`, underline on hover. Danger: card fill, `s-reject` text and border. One primary per group. A disabled button always shows the reason beneath or beside it.
+**Buttons.** Primary: `pine` fill, white text, 8px, weight 500, 44px tall. Secondary: card fill, `field` border, ink text, 40px tall. Dense (tables, operator console): 32px. Text button: `accent`, underline on hover. Danger: card fill, `s-reject` text and border. One primary per group. A disabled button always shows the reason beneath or beside it.
 
 **Status chip.** 6px radius, soft tint background, status text colour, 12px weight 500, with a 6px square mark to the left (not a circle). Label text only, never colour alone.
 
@@ -122,10 +130,8 @@ Thin monoline icons (1.5px stroke) at 16 and 20px, used only to support a label.
 
 ## Page patterns
 
-- **Header:** wordmark left, role-aware nav, wallet button right, network banner below when needed.
-- **Business:** "My invoices" table, "New invoice" primary action; invoice page with a key-figure row (amount, financing, due date), status chip, verification record, timeline.
-- **Investor:** marketplace table of Eligible invoices with implied return as a key figure; detail page ends with the step rail.
-- **Operator:** two columns on wide screens: review queue and allowlist, then a boxed "Demo tools" card.
+- **Shell:** a compact left sidebar (232px, icons-only at 64px under 1024px) with role-aware navigation; the connected network and wallet sit at the bottom of the sidebar; a slim top bar holds the page title and the one primary action. The network banner appears under the top bar when needed. Details in `ui-spec.md`.
+- **Stages are separate screens:** discovery, verification, financing decision, funding and repayment each get their own screen or panel; no screen shows every action at once.
 - **About / trust model page:** plain prose at reading width stating who signs what, what is simulated and what the system cannot guarantee.
 
 ## Voice and copy
@@ -145,7 +151,7 @@ Plain, specific, active. Say what happened and what it means. Use "wallet" and "
 - No gradients, glows, shadows beyond the light raised-panel shadow, or animated backgrounds.
 - No dark or saturated page sections; no pure white page background.
 - No new font families, no inline hex colours: add or reuse a token.
-- No pills; no radii outside 6 / 10 / 14.
+- No pills; no radii outside 6 / 8 / 12 / 16.
 - No colour-only meaning; every state has a text label.
 - No claim that implies a DON-signed write or a real external registry.
 
@@ -155,7 +161,7 @@ Body text 7.3:1, support text 5.1:1, accent text 5.7:1 on the canvas; every stat
 
 ## Implementation notes
 
-- Tokens live once, in `apps/web/src/app/globals.css` under Tailwind v4 `@theme` (`--color-canvas`, `--color-card`, `--color-inset`, `--color-hair`, `--color-field`, `--color-ink`, `--color-ink-2`, `--color-ink-3`, `--color-accent`, `--color-accent-soft`, `--color-pine`, `--color-s-*` with `-soft` variants, radii `--radius-ctl` 6px, `--radius-card` 10px, `--radius-win` 14px).
+- Tokens live once, in `apps/web/src/app/globals.css` under Tailwind v4 `@theme` (`--color-canvas`, `--color-card`, `--color-inset`, `--color-hair`, `--color-field`, `--color-ink`, `--color-ink-2`, `--color-ink-3`, `--color-accent`, `--color-accent-soft`, `--color-pine`, `--color-s-*` with `-soft` variants, radii `--radius-chip` 6px, `--radius-ctl` 8px, `--radius-card` 12px, `--radius-win` 16px).
 - Fonts: install the `geist` package and apply `GeistSans` and `GeistMono` in `layout.tsx`; remove the scaffold's Google font imports.
 - Shared components named in `tasks.md` (T021 and T022) implement: `StatusChip`, `ProvenanceStrip`, `SimulatedTag`, `Amount`, `HashLink`, `TxLink`, `StepRail`, `NetworkBanner`, `WalletButton`, `Timeline`, `EvidencePanel`.
 - A component or colour not defined here must be added to this file first.
