@@ -85,7 +85,7 @@ export function StepRail({ steps }: { steps: { label: string; state: StepState; 
 							s.state === 'done' ? 'bg-accent-soft text-accent' : s.state === 'failed' ? 'bg-s-reject-soft text-s-reject' : s.state === 'active' ? 'bg-pine text-white' : 'bg-inset text-ink-2'
 						}`}
 					>
-						{s.state === 'done' ? '✓' : s.state === 'failed' ? '✕' : i + 1}
+						{s.state === 'done' ? '✓' : s.state === 'failed' ? '✕' : s.state === 'active' ? <span aria-hidden className="animate-spin-fast inline-block h-3 w-3 rounded-full border-2 border-white border-t-transparent" /> : i + 1}
 					</span>
 					<div>
 						<div className="text-[14px] font-medium">{s.label}</div>

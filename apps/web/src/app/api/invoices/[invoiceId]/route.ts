@@ -1,6 +1,6 @@
 import { fail, isBytes32, json } from '@/lib/api'
 import { readHolder, readInvoice, readPosition } from '@/lib/chain'
-import { eventsFor, getInvoiceRow, latestDecision, latestRun } from '@/lib/repo'
+import { eventsFor, getInvoiceRow, latestDecision, latestRun, walletLabels } from '@/lib/repo'
 import { Status } from '@/lib/status'
 import { parseRun, summarize } from '@/lib/summary'
 
@@ -42,6 +42,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ invoiceId: str
 		timeline: eventsFor(invoiceId).map((e) => ({ status: e.status, txHash: e.tx_hash, source: e.source, actor: e.actor, at: e.created_at })),
 		position,
 		holder,
+		labels: walletLabels([row.issuer_wallet, holder ?? '', position?.originalInvestor ?? ''].filter(Boolean)),
 		decision: (() => { const d = latestDecision(invoiceId); return d ? { decision: d.decision, reason: d.reason, txHash: d.tx_hash, at: d.created_at } : null })(),
 	})
 }

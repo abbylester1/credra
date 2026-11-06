@@ -123,3 +123,23 @@ export const latestDecision = (invoiceId: string) =>
 	getDb().prepare('SELECT * FROM operator_decisions WHERE invoice_id = ? ORDER BY id DESC LIMIT 1').get(invoiceId.toLowerCase()) as
 		| { decision: string; reason: string; tx_hash: string; created_at: number }
 		| undefined
+
+/** Human-readable names for wallets. Issuers are named from their invoices; investors are named by the operator. */
+export type WalletLabel = { name: string; role: 'Business' | 'Investor' }
+
+export function setWalletLabel(wallet: string, name: string, role: WalletLabel['role']) {
+	getDb()
+		.prepare('INSERT INTO wallet_labels (wallet, name, role) VALUES (?,?,?) ON CONFLICT(wallet) DO UPDATE SET name = excluded.name, role = excluded.role')
+		.run(wallet.toLowerCase(), name.trim().slice(0, 60), role)
+}
+
+export function walletLabels(wallets: string[]): Record<string, WalletLabel> {
+	const out: Record<string, WalletLabel> = {}
+	for (const w of new Set(wallets.map((x) => x.toLowerCase()))) {
+		const l = getDb().prepare('SELECT name, role FROM wallet_labels WHERE wallet = ?').get(w) as WalletLabel | undefined
+		if (l) { out[w] = l; continue }
+		const b = getDb().prepare('SELECT issuer_name FROM invoices WHERE issuer_wallet = ? ORDER BY created_at DESC LIMIT 1').get(w) as { issuer_name: string } | undefined
+		if (b) out[w] = { name: b.issuer_name, role: 'Business' }
+	}
+	return out
+}

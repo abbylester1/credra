@@ -163,7 +163,7 @@ function Form({ headers }: { headers: Record<string, string> }) {
 					</fieldset>
 					{err && <InlineNotice tone="error">{err}</InlineNotice>}
 					<div>
-						<Button type="submit" variant="primary" disabled={!ready || busy}>{busy ? 'Working' : 'Submit invoice'}</Button>
+						<Button type="submit" variant="primary" disabled={!ready} loading={busy}>{busy ? 'Working' : 'Submit invoice'}</Button>
 						{!ready && !busy && reason && <p className="mt-2 text-[12px] text-ink-3">{reason}</p>}
 					</div>
 				</form>

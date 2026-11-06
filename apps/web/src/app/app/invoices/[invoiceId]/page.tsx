@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { use, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { EvidencePanel, type Verification } from '@/components/Evidence'
-import { Amount, Button, Card, Dl, fmtDate, InlineNotice, ProvenanceStrip, relativeDue, StatusChip, TxLink, AddressLink } from '@/components/ui'
+import { Amount, Button, Card, DetailSkeleton, Dl, fmtDate, InlineNotice, ProvenanceStrip, relativeDue, StatusChip, TxLink, AddressLink, WalletTag } from '@/components/ui'
 import { apiJson, useWalletHeaders } from '@/lib/client'
 import { friendlyError } from '@/lib/errors'
 import { shorten } from '@/lib/config'
@@ -16,6 +16,7 @@ import { GRACE_PERIOD_SECONDS } from '@/lib/config'
 import type { InvoiceSummary } from '@/lib/useInvoices'
 
 type Detail = {
+	labels: Record<string, { name: string; role: string }>
 	invoice: InvoiceSummary
 	verification: Verification | null
 	timeline: { status: string; txHash: string | null; source: string; actor: string | null; at: number }[]
@@ -37,10 +38,11 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 	const [msg, setMsg] = useState<{ tone: 'error' | 'ok'; text: string } | null>(null)
 
 	const q = useQuery({ queryKey: ['invoice', invoiceId], queryFn: () => apiJson<Detail>(`/api/invoices/${invoiceId}`), refetchInterval: 15_000 })
-	if (q.isLoading) return <p className="text-[14px] text-ink-3">Loading invoice</p>
+	if (q.isLoading) return <DetailSkeleton />
 	if (q.error || !q.data) return <InlineNotice tone="error">{(q.error as Error)?.message ?? 'Invoice not found.'} Nothing was changed.</InlineNotice>
 
-	const { invoice: i, verification: v, timeline, position, holder, decision } = q.data
+	const { invoice: i, verification: v, timeline, position, holder, decision, labels } = q.data
+	const tag = (w: string) => <WalletTag address={w} label={labels?.[w.toLowerCase()]} />
 	const isIssuer = !!address && address.toLowerCase() === i.issuerWallet.toLowerCase()
 	const canManage = isIssuer || role === 'operator'
 	const due = relativeDue(i.dueDate)
@@ -85,7 +87,7 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 					<p className="mt-1 text-[14px] text-ink-3"><span className="num">{i.invoiceNumber}</span> {'·'} Due {fmtDate(i.dueDate)}, <span className={due.late ? 'text-s-reject' : ''}>{due.text}</span></p>
 				</div>
 				{canManage && (i.status === 1 || i.status === 2) && (
-					<Button variant="primary" disabled={busy} onClick={verify}>{busy ? 'Verifying' : i.status === 1 ? 'Run verification' : 'Verify again'}</Button>
+					<Button variant="primary" loading={busy} onClick={verify}>{busy ? 'Verifying' : i.status === 1 ? 'Run verification' : 'Verify again'}</Button>
 				)}
 			</header>
 			{msg && <div className="mb-4"><InlineNotice tone={msg.tone}>{msg.text}</InlineNotice></div>}
@@ -182,9 +184,9 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 					<Card>
 						<h2 className="mb-1 text-[16px] font-semibold">Parties</h2>
 						<Dl rows={[
-							['Issuer wallet', <AddressLink key="a" address={i.issuerWallet} />],
+							['Issuer', tag(i.issuerWallet)],
 							['Registration', <TxLink key="b" hash={i.submitTx} />],
-							...(position && position.fundedAt ? ([['Original investor', <AddressLink key="c" address={position.originalInvestor} />], ['Receivable holder', holder ? <AddressLink key="h" address={holder} /> : 'Unknown']] as [string, React.ReactNode][]) : []),
+							...(position && position.fundedAt ? ([['Original investor', tag(position.originalInvestor)], ['Receivable holder', holder ? tag(holder) : 'Unknown']] as [string, React.ReactNode][]) : []),
 						]} />
 						<ProvenanceStrip tx={i.submitTx} recordedBy="business wallet" />
 					</Card>

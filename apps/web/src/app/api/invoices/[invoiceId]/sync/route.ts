@@ -3,11 +3,14 @@ import { fail, isBytes32, json } from '@/lib/api'
 import { publicClient, readHolder, readInvoice } from '@/lib/chain'
 import { ADDRESSES } from '@/lib/config'
 import { eventExistsForTx, getInvoiceRow, insertEvent } from '@/lib/repo'
-import { statusLabel } from '@/lib/status'
 
 export const dynamic = 'force-dynamic'
 
 const ACTOR: Record<string, string> = { fund: 'investor wallet', repay: 'repayer wallet', default: 'any wallet' }
+// The event is labelled by what the transaction did, not by the invoice's status when the sync runs.
+const LABEL: Record<string, string> = { fund: 'Funded', repay: 'Repaid', default: 'Defaulted' }
+// Lowest InvoiceRegistry.Status each action implies (Funded 5, Repaid 6, Defaulted 7).
+const MIN_STATUS: Record<string, number> = { fund: 5, repay: 6, default: 7 }
 
 /**
  * After a wallet-signed fund / repay / default transaction, record it in the timeline.
@@ -34,6 +37,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ invoiceId: str
 
 	const chain = await readInvoice(invoiceId)
 	const holder = await readHolder(invoiceId)
-	insertEvent({ invoice_id: invoiceId, status: statusLabel(chain.status), tx_hash: txHash, source: kind, actor: ACTOR[kind] })
+	if (chain.status < MIN_STATUS[kind]) return fail(409, 'status_mismatch', 'The invoice has not reached that state onchain yet.')
+	insertEvent({ invoice_id: invoiceId, status: LABEL[kind], tx_hash: txHash, source: kind, actor: ACTOR[kind] })
 	return json({ recorded: true, status: chain.status, holder })
 }

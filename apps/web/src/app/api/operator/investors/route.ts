@@ -5,6 +5,7 @@ import { publicClient } from '@/lib/chain'
 import { allowlistAbi } from '@/lib/abi'
 import { ADDRESSES } from '@/lib/config'
 import { isOperator } from '@/lib/session'
+import { setWalletLabel, walletLabels } from '@/lib/repo'
 import { setInvestor } from '@/lib/signer'
 
 export const dynamic = 'force-dynamic'
@@ -30,7 +31,9 @@ export async function GET() {
 				allowed: await publicClient.readContract({ address: ADDRESSES.allowlist, abi: allowlistAbi, functionName: 'isAllowed', args: [a as `0x${string}`] }),
 			})),
 		)
-		return json(checked.filter((c) => c.allowed))
+		const live = checked.filter((c) => c.allowed)
+		const names = walletLabels(live.map((c) => c.address))
+		return json(live.map((c) => ({ ...c, name: names[c.address]?.name ?? null })))
 	} catch {
 		return fail(502, 'chain_unavailable', 'Could not read the allowlist right now. Nothing was changed.')
 	}
@@ -38,10 +41,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
 	if (!(await isOperator())) return fail(403, 'operator_only', 'Operator access required.')
-	const body = z.object({ address: z.string(), action: z.enum(['add', 'remove']) }).safeParse(await req.json().catch(() => null))
+	const body = z.object({ address: z.string(), action: z.enum(['add', 'remove']), name: z.string().max(60).optional() }).safeParse(await req.json().catch(() => null))
 	if (!body.success || !isAddress(body.data.address)) return fail(400, 'invalid_fields', 'Enter a valid wallet address.')
 	try {
 		const tx = await setInvestor(body.data.address, body.data.action)
+		if (body.data.action === 'add' && body.data.name?.trim()) setWalletLabel(body.data.address, body.data.name, 'Investor')
 		return json({ txHash: tx })
 	} catch {
 		return fail(502, 'tx_failed', 'The change could not be recorded onchain. Nothing was changed.')

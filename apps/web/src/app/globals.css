@@ -79,6 +79,8 @@ body {
 @keyframes flow { to { stroke-dashoffset: -28; } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 @keyframes fillbar { from { transform: scaleX(0); } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+@keyframes spin { to { transform: rotate(360deg); } }
 @keyframes blink { 50% { opacity: 0; } }
 
 .animate-marquee { animation: marquee 48s linear infinite; }
@@ -90,6 +92,8 @@ body {
 .animate-flow { animation: flow 1.2s linear infinite; }
 .animate-shake { animation: shake 0.4s ease-in-out both; }
 .animate-fillbar { transform-origin: left; animation: fillbar 1s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.animate-spin-fast { animation: spin 0.7s linear infinite; }
+.skeleton { border-radius: 8px; background: linear-gradient(90deg, var(--color-inset) 25%, #F6F8F5 50%, var(--color-inset) 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
 .animate-blink { animation: blink 1s steps(1) infinite; }
 .pause-on-hover:hover .animate-marquee { animation-play-state: paused; }
 

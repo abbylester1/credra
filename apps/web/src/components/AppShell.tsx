@@ -6,11 +6,12 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
 import { useWalletChainId } from '@/lib/useWalletChain'
+import { useWalletLabels } from '@/lib/useWalletLabels'
 import { AuthScreen } from './AuthScreen'
 import { useConnectMode } from './Providers'
 import { CHAIN_ID, EXPLORER, shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
-import { Button } from './ui'
+import { Button, Skeleton } from './ui'
 
 type Item = { href: string; label: string; icon: string; roles?: string[] }
 const NAV: { group: string; items: Item[] }[] = [
@@ -35,6 +36,7 @@ function WalletCard() {
 	const chainId = useWalletChainId()
 	const { role, loading } = useRole()
 	const ok = isConnected && chainId === CHAIN_ID
+	const mine = useWalletLabels([address]).data?.[address?.toLowerCase() ?? '']
 
 	if (!isConnected) {
 		const inj = connectors[0]
@@ -55,7 +57,8 @@ function WalletCard() {
 	}
 	return (
 		<div className="rounded-card border border-hair bg-card p-3">
-			<div className="label">{loading ? 'Checking' : ROLE_LABEL[role]}</div>
+			<div className="label">{loading ? <Skeleton className="h-3 w-16" /> : ROLE_LABEL[role]}</div>
+			{mine && <div className="mt-1 text-[14px] font-medium text-ink">{mine.name}</div>}
 			<div className="num mt-1 text-[13px]" title={address}>{address && shorten(address, 6, 4)}</div>
 			<div className="mt-2 flex items-center justify-between gap-2">
 				<span className="flex items-center gap-1.5 text-[12px] text-ink-3">

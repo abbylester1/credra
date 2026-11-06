@@ -105,9 +105,9 @@ export function PayPanel({ invoiceId, required, kind, requireAllowlist }: { invo
 			{blocked && blocked !== 'shortfall' && <InlineNotice tone="warn">{blocked}</InlineNotice>}
 			{err && <InlineNotice tone="error">{err}</InlineNotice>}
 			{needsApprove ? (
-				<Button variant="primary" className="w-full" disabled={primaryDisabled} onClick={runApprove}>{approve === 'active' ? 'Waiting for approval' : 'Approve USDT'}</Button>
+				<Button variant="primary" className="w-full" loading={approve === 'active'} disabled={primaryDisabled} onClick={runApprove}>{approve === 'active' ? 'Waiting for approval' : 'Approve USDT'}</Button>
 			) : (
-				<Button variant="primary" className="w-full" disabled={primaryDisabled} onClick={runAct}>{act === 'active' ? 'Waiting for confirmation' : `${verb} invoice`}</Button>
+				<Button variant="primary" className="w-full" loading={act === 'active'} disabled={primaryDisabled} onClick={runAct}>{act === 'active' ? 'Waiting for confirmation' : `${verb} invoice`}</Button>
 			)}
 		</div>
 	)

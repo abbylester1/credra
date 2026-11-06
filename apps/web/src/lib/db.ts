@@ -64,6 +64,11 @@ export function getDb(): DatabaseSync {
 			actor TEXT,
 			created_at INTEGER NOT NULL
 		);
+		CREATE TABLE IF NOT EXISTS wallet_labels (
+			wallet TEXT PRIMARY KEY,
+			name TEXT NOT NULL,
+			role TEXT NOT NULL
+		);
 		CREATE INDEX IF NOT EXISTS idx_events_invoice ON status_events (invoice_id);
 		CREATE INDEX IF NOT EXISTS idx_runs_invoice ON verification_runs (invoice_id);
 	`)

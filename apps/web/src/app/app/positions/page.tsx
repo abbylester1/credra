@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useAccount } from 'wagmi'
-import { Amount, Card, EmptyState, fmtDate, InlineNotice, PageHeader, relativeDue, StatusChip } from '@/components/ui'
+import { Amount, Card, EmptyState, fmtDate, InlineNotice, PageHeader, relativeDue, StatusChip, TableSkeleton } from '@/components/ui'
 import { apiJson } from '@/lib/client'
 import type { InvoiceSummary } from '@/lib/useInvoices'
 
@@ -25,7 +25,7 @@ export default function PositionsPage() {
 			{!address ? (
 				<InlineNotice tone="warn">Connect your wallet to see your positions.</InlineNotice>
 			) : q.isLoading ? (
-				<p className="text-[14px] text-ink-3">Loading positions</p>
+				<TableSkeleton rows={3} />
 			) : q.error ? (
 				<InlineNotice tone="error">We could not load positions. Nothing was changed.</InlineNotice>
 			) : items.length === 0 ? (

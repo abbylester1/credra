@@ -8,8 +8,15 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(' ')
 
 /* ---------- Buttons ---------- */
-type BtnProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'text' | 'danger'; dense?: boolean }
-export function Button({ variant = 'secondary', dense, className, ...p }: BtnProps) {
+type BtnProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary' | 'text' | 'danger'; dense?: boolean; loading?: boolean }
+export function Spinner({ className }: { className?: string }) {
+	return <span aria-hidden className={cx('animate-spin-fast inline-block h-3.5 w-3.5 rounded-full border-2 border-current border-t-transparent', className)} />
+}
+/** Shimmering placeholder shown while data loads. */
+export function Skeleton({ className }: { className?: string }) {
+	return <div aria-hidden className={cx('skeleton', className)} />
+}
+export function Button({ variant = 'secondary', dense, loading, className, children, ...p }: BtnProps) {
 	const base = 'inline-flex items-center justify-center gap-2 rounded-ctl text-[14px] font-medium transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50'
 	const size = dense ? 'h-8 px-3' : variant === 'primary' ? 'h-11 px-[18px]' : 'h-10 px-4'
 	const look =
@@ -20,7 +27,12 @@ export function Button({ variant = 'secondary', dense, className, ...p }: BtnPro
 				: variant === 'text'
 					? 'text-accent hover:underline px-0'
 					: 'border border-field bg-card text-ink hover:bg-inset'
-	return <button {...p} className={cx(base, size, look, className)} />
+	return (
+		<button {...p} aria-busy={loading || undefined} disabled={p.disabled || loading} className={cx(base, size, look, 'active:scale-[0.98]', className)}>
+			{loading && <Spinner />}
+			{children}
+		</button>
+	)
 }
 
 /* ---------- Status ---------- */
@@ -36,7 +48,7 @@ const STATUS_STYLE: Record<number, { fg: string; bg: string }> = {
 export function StatusChip({ status }: { status: number }) {
 	const s = STATUS_STYLE[status] ?? STATUS_STYLE[1]
 	return (
-		<span className={cx('inline-flex items-center gap-1.5 rounded-chip px-2.5 py-1 text-[12px] font-medium', s.fg, s.bg)}>
+		<span key={status} className={cx('animate-popin inline-flex items-center gap-1.5 rounded-chip px-2.5 py-1 text-[12px] font-medium', s.fg, s.bg)}>
 			<span className="h-1.5 w-1.5 bg-current" aria-hidden />
 			{statusLabel(status)}
 		</span>
@@ -52,7 +64,7 @@ const VERDICT: Record<string, { label: string; fg: string; bg: string }> = {
 export function VerdictChip({ verdict }: { verdict: string | null }) {
 	if (!verdict) return <span className="text-[13px] text-ink-3">Not run</span>
 	const v = VERDICT[verdict] ?? VERDICT.ERROR
-	return <span className={cx('inline-flex rounded-chip px-2.5 py-1 text-[12px] font-medium', v.fg, v.bg)}>{v.label}</span>
+	return <span key={verdict} className={cx('animate-popin inline-flex rounded-chip px-2.5 py-1 text-[12px] font-medium', v.fg, v.bg)}>{v.label}</span>
 }
 
 /* ---------- Data ---------- */
@@ -81,6 +93,19 @@ export function AddressLink({ address }: { address: string }) {
 		<a href={explorerAddress(address)} target="_blank" rel="noreferrer" className="num text-[12px] text-accent hover:underline" title={address}>
 			{shorten(address, 6, 4)}
 		</a>
+	)
+}
+
+/** A wallet shown as a person: name and role first, short address as the verifiable detail. */
+export function WalletTag({ address, label }: { address: string; label?: { name: string; role: string } | null }) {
+	if (!label) return <AddressLink address={address} />
+	const tone = label.role === 'Investor' ? 'bg-s-funded-soft text-s-funded' : 'bg-accent-soft text-accent'
+	return (
+		<span className="inline-flex flex-wrap items-center justify-end gap-x-2 gap-y-1">
+			<span className="text-[14px] font-medium text-ink">{label.name}</span>
+			<span className={cx('rounded-chip px-1.5 py-px text-[11px] font-medium', tone)}>{label.role}</span>
+			<AddressLink address={address} />
+		</span>
 	)
 }
 
@@ -179,4 +204,33 @@ export function relativeDue(sec: number, nowMs = Date.now()): { text: string; la
 	if (days < 0) return { text: `${-days} day${-days === 1 ? '' : 's'} overdue`, late: true }
 	if (days === 0) return { text: 'due today', late: false }
 	return { text: `in ${days} day${days === 1 ? '' : 's'}`, late: false }
+}
+
+export function MetricsSkeleton() {
+	return (
+		<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Loading">
+			{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-[132px] !rounded-[20px]" />)}
+		</div>
+	)
+}
+export function TableSkeleton({ rows = 5 }: { rows?: number }) {
+	return (
+		<div className="overflow-hidden rounded-[16px] border border-hair bg-card" aria-label="Loading">
+			{Array.from({ length: rows }).map((_, i) => (
+				<div key={i} className="flex items-center gap-4 border-b border-hair px-4 py-3.5 last:border-0">
+					<Skeleton className="h-8 w-8 !rounded-full" />
+					<div className="flex-1 space-y-2"><Skeleton className="h-3 w-1/3" /><Skeleton className="h-2.5 w-1/5" /></div>
+					<Skeleton className="h-3 w-20" /><Skeleton className="h-6 w-20" />
+				</div>
+			))}
+		</div>
+	)
+}
+export function DetailSkeleton() {
+	return (
+		<div className="space-y-6" aria-label="Loading">
+			<Skeleton className="h-9 w-72" /><Skeleton className="h-[92px] w-full !rounded-[16px]" /><Skeleton className="h-[110px] w-full !rounded-[16px]" />
+			<div className="grid gap-6 lg:grid-cols-[2fr_1fr]"><Skeleton className="h-[320px] !rounded-[16px]" /><Skeleton className="h-[320px] !rounded-[16px]" /></div>
+		</div>
+	)
 }

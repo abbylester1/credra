@@ -4,13 +4,13 @@ import Link from 'next/link'
 import { InvoiceTable } from '@/components/InvoiceTable'
 import { Pipeline } from '@/components/OverviewExtras'
 import { SignInGate } from '@/components/SignInGate'
-import { Button, EmptyState, InlineNotice, PageHeader } from '@/components/ui'
+import { Button, EmptyState, InlineNotice, PageHeader, TableSkeleton } from '@/components/ui'
 import { useInvoices, type Scope } from '@/lib/useInvoices'
 import { useRole } from '@/lib/useRole'
 
 function List({ scope, headers }: { scope: Scope; headers?: Record<string, string> }) {
 	const q = useInvoices(scope, headers)
-	if (q.isLoading) return <p className="text-[14px] text-ink-3">Loading invoices</p>
+	if (q.isLoading) return <TableSkeleton />
 	if (q.error) return <InlineNotice tone="error">We could not load invoices. Nothing was changed. {(q.error as Error).message}</InlineNotice>
 	return (
 		<div className="space-y-6">
@@ -31,7 +31,7 @@ export default function InvoicesPage() {
 				actions={action}
 			/>
 			{loading ? (
-				<p className="text-[14px] text-ink-3">Checking your wallet</p>
+				<TableSkeleton />
 			) : role === 'operator' ? (
 				<List scope="all" />
 			) : role === 'investor' ? (

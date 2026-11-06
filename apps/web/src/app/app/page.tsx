@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { SignInGate } from '@/components/SignInGate'
 import { Activity, GettingStarted, Pipeline, Protocol, Welcome } from '@/components/OverviewExtras'
-import { Amount, Button, Card, fmtDate, InlineNotice, PageHeader } from '@/components/ui'
+import { Amount, Button, Card, fmtDate, InlineNotice, MetricsSkeleton, PageHeader } from '@/components/ui'
 import { useInvoices, type InvoiceSummary, type Scope } from '@/lib/useInvoices'
 import { useRole } from '@/lib/useRole'
 
@@ -25,7 +25,7 @@ const Count = ({ n }: { n: number }) => <span className="num text-[32px] font-me
 
 function Overview({ scope, role, headers }: { scope: Scope; role: string; headers?: Record<string, string> }) {
 	const q = useInvoices(scope, headers)
-	if (q.isLoading) return <p className="text-[14px] text-ink-3">Loading</p>
+	if (q.isLoading) return <MetricsSkeleton />
 	if (q.error) return <InlineNotice tone="error">We could not load your activity. Nothing was changed.</InlineNotice>
 	const items: InvoiceSummary[] = q.data ?? []
 	const sum = (f: (i: InvoiceSummary) => boolean, pick: (i: InvoiceSummary) => string) => items.filter(f).reduce((s, i) => s + BigInt(pick(i)), 0n)
@@ -75,7 +75,7 @@ export default function OverviewPage() {
 			/>
 			<Welcome role={role} />
 			{loading ? (
-				<p className="text-[14px] text-ink-3">Checking your wallet</p>
+				<MetricsSkeleton />
 			) : role === 'operator' ? (
 				<Overview scope="all" role="operator" />
 			) : role === 'investor' ? (

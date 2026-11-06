@@ -43,3 +43,20 @@ USDT obtained by swapping ~1 WBT for 73.089 USDT through YetiTrade's SwapRouter0
 | 5 | Business repays the full 60.00 USDT to the receivable holder | [0xa5ec21f89028eedc2bc83fac31f1f1dbaaba3a99073f19c2e661de19c7e7dbe0](https://explorer.testnet.whitechain.io/tx/0xa5ec21f89028eedc2bc83fac31f1f1dbaaba3a99073f19c2e661de19c7e7dbe0) |
 
 Final state: invoice status **Repaid** (6), receivable holder is the investor (`0x195194047B45c06c946603ef1CD7cE22abc990D6`), finance contract holds 0 USDT.
+
+## Web app run through Privy embedded wallets (official USDT)
+
+Invoice `INV-4HABX5` (Demo Exports Ltd to Acme Corp), amount 20.00 USDT, financing 18.00 USDT, discount 2.00 USDT. Every step below was done from the web app with Privy email sign-in and embedded wallets. The business wallet is `0x2db88d68C80B1353Bc7ea4f845992FE3535f495a` and the investor wallet is `0x0b0eE5F3F7aD62CeF2BADe1AB285323C59529Ca6` (allowlisted by the operator).
+
+The investor wallet also repaid, so it was the payer and the receivable holder. The earlier run above has the business repaying.
+
+| # | Step | Tx |
+|---|---|---|
+| 1 | Business registers the invoice (INV-4HABX5, 20.00 USDT, financing 18.00) | [0x6f5de9d9b75b44dd568371012c4e6c40803491fdc75293c27b95f8df0f024f30](https://explorer.testnet.whitechain.io/tx/0x6f5de9d9b75b44dd568371012c4e6c40803491fdc75293c27b95f8df0f024f30) |
+| 2 | Verifier wallet records the CRE verdict (Eligible) | [0xe29b71a2ba2422dcb3a09ab3292f2e907619de82419285b793a73d3995f81263](https://explorer.testnet.whitechain.io/tx/0xe29b71a2ba2422dcb3a09ab3292f2e907619de82419285b793a73d3995f81263) |
+| 3 | Investor approves 18.00 USDT | [0x7efed026f39db7d78ddb60289acd4a0b044c30f04a246025f9de016c6f534535](https://explorer.testnet.whitechain.io/tx/0x7efed026f39db7d78ddb60289acd4a0b044c30f04a246025f9de016c6f534535) |
+| 4 | Investor funds the invoice (18.00 USDT to the business, CRDR receivable minted) | [0xc58516d40c1f9f4e103ea680f8c095beb8ced1538fcdcfcccabe8900dfa9b12d](https://explorer.testnet.whitechain.io/tx/0xc58516d40c1f9f4e103ea680f8c095beb8ced1538fcdcfcccabe8900dfa9b12d) |
+| 5 | Investor wallet approves 20.00 USDT for repayment | [0x11ba6d124e93c0c0ee63210d7f05ed980654786c2e97f6376cf69431b744ea4a](https://explorer.testnet.whitechain.io/tx/0x11ba6d124e93c0c0ee63210d7f05ed980654786c2e97f6376cf69431b744ea4a) |
+| 6 | Repayment of the full 20.00 USDT to the receivable holder | [0x485b75ce9f2eb377fd6a7b147a821270942efdffc87d350eba6e9792904b0772](https://explorer.testnet.whitechain.io/tx/0x485b75ce9f2eb377fd6a7b147a821270942efdffc87d350eba6e9792904b0772) |
+
+Final state: invoice status **Repaid** (6). Testnet only, no real funds.
