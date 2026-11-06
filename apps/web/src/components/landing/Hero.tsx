@@ -33,7 +33,7 @@ function AppWindow() {
 
 	return (
 		<div className="relative">
-			<div className="overflow-hidden rounded-[14px] border border-hair bg-card shadow-[0_24px_60px_-24px_rgba(15,26,22,0.35)]">
+			<div className="overflow-hidden rounded-[14px] border border-hair bg-card shadow-[0_24px_60px_-24px_rgba(18,17,15,0.35)]">
 				{/* window chrome */}
 				<div className="flex items-center gap-2 border-b border-hair bg-canvas px-4 py-2.5">
 					<span className="h-2.5 w-2.5 rounded-full bg-hair" /><span className="h-2.5 w-2.5 rounded-full bg-hair" /><span className="h-2.5 w-2.5 rounded-full bg-hair" />
@@ -90,7 +90,7 @@ function AppWindow() {
 							{[['Financing', '9,000.00'], ['Discount', '1,000.00'], ['Return', '11.1%']].map(([k, v], i) => (
 								<div key={k} className="rounded-ctl bg-canvas px-3 py-2.5">
 									<p className="text-[11px] text-ink-3">{k}</p>
-									<p className={`font-mono text-[15px] font-medium ${i === 2 ? 'text-accent' : 'text-ink'}`}>{v}</p>
+									<p className={`font-mono text-[15px] font-medium ${i === 2 ? 'text-verified' : 'text-ink'}`}>{v}</p>
 								</div>
 							))}
 						</div>
@@ -104,16 +104,16 @@ function AppWindow() {
 
 			{/* floating toasts */}
 			{toast && (
-				<div key="t1" className="animate-popin absolute bottom-full right-0 z-10 mb-3 hidden w-[250px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block">
+				<div key="t1" className="animate-popin absolute bottom-full right-0 z-10 mb-3 hidden w-[250px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(18,17,15,0.35)] md:block">
 					<div className="flex items-center gap-2">
-						<span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent-soft text-accent"><Tick on className="!h-[18px] !w-[18px]" /></span>
+						<span className="flex h-6 w-6 items-center justify-center rounded-full bg-verified-soft text-verified"><Tick on className="!h-[18px] !w-[18px]" /></span>
 						<p className="text-[13px] font-medium text-ink">Verdict recorded onchain</p>
 					</div>
 					<p className="mt-1 font-mono text-[11px] text-ink-3">tx {short(TX.role)} ↗</p>
 				</div>
 			)}
 			{funded && (
-				<div key="t2" className="animate-popin absolute left-0 top-full z-10 mt-3 hidden w-[270px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block">
+				<div key="t2" className="animate-popin absolute left-0 top-full z-10 mt-3 hidden w-[270px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(18,17,15,0.35)] md:block">
 					<div className="flex items-center gap-2.5">
 						<UsdtMark size={24} />
 						<div>
@@ -181,7 +181,7 @@ export function Hero() {
 				<div className="mb-6 flex flex-wrap items-center gap-3">
 					<span className="font-mono text-[11px] uppercase tracking-[0.06em] text-ink-3">Live on Whitechain Sepolia</span>
 					<span className="inline-flex items-center gap-2 rounded-chip bg-card px-2.5 py-1 font-mono text-[12px] text-ink ring-1 ring-hair">
-						<span className="animate-pulse-ring h-2 w-2 rounded-full bg-accent" />
+						<span className="animate-pulse-ring h-2 w-2 rounded-full bg-verified" />
 						block {block ? block.toLocaleString('en-US') : '···'}
 					</span>
 				</div>
@@ -245,7 +245,7 @@ export function Ticker() {
 	return (
 		<div className="pause-on-hover flex items-stretch border-y border-hair bg-card">
 			<div className="hidden shrink-0 items-center gap-2.5 border-r border-hair bg-canvas px-6 sm:flex">
-				<span className="animate-pulse-ring h-2 w-2 rounded-full bg-accent" />
+				<span className="animate-pulse-ring h-2 w-2 rounded-full bg-verified" />
 				<span className="font-mono text-[11px] font-medium uppercase tracking-[0.06em] text-ink">Credra in numbers</span>
 				<span className="rounded-chip border border-dashed border-s-review px-1.5 py-px font-mono text-[10px] uppercase text-s-review">Testnet data</span>
 			</div>
@@ -257,7 +257,7 @@ export function Ticker() {
 						{row.map((f, i) => {
 							const inner = (
 								<>
-									<span className="rounded-[8px] bg-pine px-2.5 py-1 font-mono text-[14px] font-semibold leading-none text-white shadow-[0_4px_10px_-4px_rgba(13,59,53,0.6)]">{f.v}</span>
+									<span className="rounded-[8px] bg-ink px-2.5 py-1 font-mono text-[14px] font-semibold leading-none text-white">{f.v}</span>
 									<span className="text-[14px] font-medium text-ink">{f.k}</span>
 									{f.d && <span className="text-[13px] text-ink-3">{f.d}</span>}
 								</>

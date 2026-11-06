@@ -29,12 +29,12 @@ export function Lifecycle({ status }: { status: number }) {
 					<li key={label} className="relative flex flex-col items-center text-center">
 						{i > 0 && (
 							<span className="absolute right-1/2 top-[13px] h-[2px] w-full bg-hair" aria-hidden>
-								<span className={`animate-fillbar block h-full ${failed ? 'bg-s-reject' : 'bg-accent'}`} style={{ transform: connectorOn || failed ? undefined : 'scaleX(0)', animationDelay: `${i * 120}ms` }} />
+								<span className={`animate-fillbar block h-full ${failed ? 'bg-s-reject' : 'bg-verified'}`} style={{ transform: connectorOn || failed ? undefined : 'scaleX(0)', animationDelay: `${i * 120}ms` }} />
 							</span>
 						)}
 						<span
 							className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-semibold transition-colors ${
-								failed ? 'bg-s-reject text-white' : complete ? 'bg-accent text-white' : current ? 'animate-pulse-ring border-2 border-accent bg-card text-accent' : 'bg-inset text-ink-3'
+								failed ? 'bg-s-reject text-white' : complete ? 'bg-verified text-white' : current ? 'animate-pulse-ring border-2 border-accent bg-card text-accent' : 'bg-inset text-ink-3'
 							}`}
 						>
 							{failed ? '✕' : complete ? '✓' : i + 1}

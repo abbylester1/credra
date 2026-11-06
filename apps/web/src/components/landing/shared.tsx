@@ -68,7 +68,7 @@ export function CountUp({ to, className = '' }: { to: number; className?: string
 /* ─── type ─── */
 
 export function Eyebrow({ children }: { children: React.ReactNode }) {
-	return <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.06em] text-accent">{children}</p>
+	return <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.06em] text-ink-3">{children}</p>
 }
 
 /** Ramp-style two-tone heading: ink first half, grey second half. */
@@ -102,7 +102,7 @@ export function Tick({ on, className = '' }: { on: boolean; className?: string }
 	return (
 		<span
 			aria-hidden
-			className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-all duration-300 ${on ? 'scale-100 bg-accent text-white' : 'scale-90 bg-inset text-transparent'} ${className}`}
+			className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-all duration-300 ${on ? 'scale-100 bg-verified text-white' : 'scale-90 bg-inset text-transparent'} ${className}`}
 		>
 			<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 5.2l2 2 4-4.4" /></svg>
 		</span>
@@ -111,7 +111,7 @@ export function Tick({ on, className = '' }: { on: boolean; className?: string }
 
 export function Chip({ tone, children }: { tone: 'accent' | 'review' | 'reject' | 'funded' | 'repaid' | 'neutral'; children: React.ReactNode }) {
 	const t = {
-		accent: 'bg-accent-soft text-accent',
+		accent: 'bg-verified-soft text-verified',
 		review: 'bg-s-review-soft text-s-review',
 		reject: 'bg-s-reject-soft text-s-reject',
 		funded: 'bg-s-funded-soft text-s-funded',

@@ -84,7 +84,7 @@ function VerificationRecord() {
 	const pct = useTween(seen ? 1 : 0, 1400, seen)
 	const C = 2 * Math.PI * 26
 	return (
-		<div ref={ref} className="rounded-card border border-hair bg-card shadow-[0_20px_50px_-30px_rgba(15,26,22,0.4)]">
+		<div ref={ref} className="rounded-card border border-hair bg-card shadow-[0_20px_50px_-30px_rgba(18,17,15,0.4)]">
 			<div className="flex items-center justify-between gap-4 border-b border-hair p-5">
 				<div className="flex items-center gap-4">
 					<div className="relative h-14 w-14">
@@ -144,7 +144,7 @@ function Economics() {
 	const apr = ret * (365 / days)
 	const tf = useTween(financing, 500), td = useTween(discount, 500), tr = useTween(ret, 500), ta = useTween(apr, 500)
 	return (
-		<div className="rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-30px_rgba(15,26,22,0.4)] md:p-6">
+		<div className="rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-30px_rgba(18,17,15,0.4)] md:p-6">
 			<div className="flex items-center justify-between">
 				<p className="text-[15px] font-semibold text-ink">Financing terms</p>
 				<span className="rounded-chip border border-dashed border-s-review px-1.5 py-px font-mono text-[10px] uppercase text-s-review">Demo</span>
@@ -160,15 +160,15 @@ function Economics() {
 			<div className="mt-6">
 				<div className="flex h-9 overflow-hidden rounded-ctl">
 					<div className="flex items-center overflow-hidden whitespace-nowrap bg-pine px-3 font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${100 - disc}%` }}><span className="truncate">Business receives now</span></div>
-					<div className="flex items-center justify-center overflow-hidden whitespace-nowrap bg-accent px-1 font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${disc}%` }}><span className="truncate">{disc >= 16 ? 'Discount' : ''}</span></div>
+					<div className="flex items-center justify-center overflow-hidden whitespace-nowrap bg-verified px-1 font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${disc}%` }}><span className="truncate">{disc >= 16 ? 'Discount' : ''}</span></div>
 				</div>
-				<div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 font-mono text-[11px] text-ink-3"><span className="flex items-center gap-3"><span className="flex items-center gap-1.5"><span className="h-2 w-2 bg-pine" />Paid now</span><span className="flex items-center gap-1.5"><span className="h-2 w-2 bg-accent" />Discount</span></span><span>{fmt(amount)} USDT repaid in full</span></div>
+				<div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 font-mono text-[11px] text-ink-3"><span className="flex items-center gap-3"><span className="flex items-center gap-1.5"><span className="h-2 w-2 bg-pine" />Paid now</span><span className="flex items-center gap-1.5"><span className="h-2 w-2 bg-verified" />Discount</span></span><span>{fmt(amount)} USDT repaid in full</span></div>
 			</div>
 
 			<div className="mt-5 grid grid-cols-2 gap-3">
 				{[
 					['Investor pays business', `${fmt(tf)}`, 'text-ink', true],
-					['Discount (investor yield)', `${fmt(td)}`, 'text-accent', true],
+					['Discount (investor yield)', `${fmt(td)}`, 'text-verified', true],
 					['Return on financing', `${tr.toFixed(1)}%`, 'text-ink', false],
 					['Annualised', `${ta.toFixed(1)}%`, 'text-ink', false],
 				].map(([k, v, c, usdt]) => (
@@ -192,13 +192,13 @@ function Timeline() {
 		['Repaid', 'Business wallet', '60.00 USDT to holder', 'repaid', TX.repay],
 	]
 	return (
-		<div ref={ref} className="rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-30px_rgba(15,26,22,0.4)] md:p-6">
+		<div ref={ref} className="rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-30px_rgba(18,17,15,0.4)] md:p-6">
 			<div className="mb-4 flex items-center justify-between"><p className="text-[15px] font-semibold text-ink">Invoice timeline</p><Chip tone="repaid">Repaid</Chip></div>
 			<ol>
 				{ev.map(([s, who, d, tone, tx], i) => (
 					<li key={s} className="relative flex gap-4 pb-6 last:pb-0">
-						{i < ev.length - 1 && <span className="absolute left-[7px] top-4 h-full w-px bg-hair"><span className="block w-full origin-top bg-accent transition-transform ease-out" style={{ height: '100%', transform: seen ? 'scaleY(1)' : 'scaleY(0)', transitionDuration: '700ms', transitionDelay: `${i * 600}ms` }} /></span>}
-						<span className={`relative z-10 mt-1 h-[15px] w-[15px] shrink-0 rounded-full border-2 border-card transition-all duration-500 ${seen ? 'scale-100 bg-accent' : 'scale-50 bg-hair'}`} style={{ transitionDelay: `${i * 600}ms` }} />
+						{i < ev.length - 1 && <span className="absolute left-[7px] top-4 h-full w-px bg-hair"><span className="block w-full origin-top bg-verified transition-transform ease-out" style={{ height: '100%', transform: seen ? 'scaleY(1)' : 'scaleY(0)', transitionDuration: '700ms', transitionDelay: `${i * 600}ms` }} /></span>}
+						<span className={`relative z-10 mt-1 h-[15px] w-[15px] shrink-0 rounded-full border-2 border-card transition-all duration-500 ${seen ? 'scale-100 bg-verified' : 'scale-50 bg-hair'}`} style={{ transitionDelay: `${i * 600}ms` }} />
 						<div className={`flex-1 transition-all duration-500 ${seen ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`} style={{ transitionDelay: `${i * 600}ms` }}>
 							<div className="flex flex-wrap items-center gap-2"><Chip tone={tone}>{s}</Chip><span className="text-[12px] text-ink-3">{who}</span></div>
 							<p className="mt-1.5 text-[13px] text-ink-2">{d}</p>
@@ -245,7 +245,7 @@ export function Audiences() {
 			<div className="mx-auto grid max-w-[1200px] gap-5 px-5 md:grid-cols-2 md:px-8">
 				{cards.map((c, i) => (
 					<Reveal key={c.id} delay={i * 100}>
-						<div id={c.id} className="scroll-mt-[96px] flex h-full flex-col rounded-[20px] border border-hair bg-card p-8 transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(15,26,22,0.3)] md:p-10">
+						<div id={c.id} className="scroll-mt-[96px] flex h-full flex-col rounded-[20px] border border-hair bg-card p-8 transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(18,17,15,0.3)] md:p-10">
 							<Eyebrow>{c.eyebrow}</Eyebrow>
 							<h3 className="text-[28px] font-semibold leading-[1.12] tracking-[-0.02em] text-ink md:text-[34px]">{c.title} <span className="text-ink-3">{c.rest}</span></h3>
 							<p className="mt-3 max-w-[440px] text-[15px] leading-[1.6] text-ink-2">{c.body}</p>
@@ -281,7 +281,7 @@ export function Trust() {
 				<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 					{items.map((t, i) => (
 						<Reveal key={t.t} delay={i * 80}>
-							<div className="group h-full rounded-card border border-hair bg-canvas p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-card hover:shadow-[0_18px_40px_-24px_rgba(15,26,22,0.3)]">
+							<div className="group h-full rounded-card border border-hair bg-canvas p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-card hover:shadow-[0_18px_40px_-24px_rgba(18,17,15,0.3)]">
 								<span className="mb-5 flex h-10 w-10 items-center justify-center rounded-ctl bg-accent-soft text-accent transition-colors group-hover:bg-pine group-hover:text-white"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={t.icon} /></svg></span>
 								<h3 className="text-[16px] font-semibold text-ink">{t.t}</h3>
 								<p className="mt-2 text-[14px] leading-[1.6] text-ink-2">{t.d}</p>

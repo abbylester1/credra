@@ -34,7 +34,7 @@ export function AuthScreen() {
 			<div className="flex flex-col justify-center px-6 py-12 sm:px-14">
 				<div className="mx-auto w-full max-w-[420px]">
 					<Link href="/" className="mb-10 block lg:hidden"><Image src="/logo.png" alt="Credra" width={113} height={22} className="h-[22px] w-auto object-contain" /></Link>
-					<p className="mb-3 font-mono text-[11px] uppercase tracking-[0.06em] text-accent">Credra app</p>
+					<p className="mb-3 font-mono text-[11px] uppercase tracking-[0.06em] text-ink-3">Credra app</p>
 					<h2 className="text-[34px] font-semibold leading-[1.08] tracking-[-0.03em]">Sign in <span className="text-ink-3">to continue.</span></h2>
 					<ol className="mt-6 space-y-3">
 						{steps.map((s, i) => (

@@ -105,11 +105,11 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 				<div className="mb-3 flex items-baseline justify-between"><h2 className="text-[16px] font-semibold">Where the money goes</h2><span className="num text-[12px] text-ink-3">Advance rate {((Number(i.financingAmount) / Number(i.amount)) * 100).toFixed(1)}%</span></div>
 				<div className="flex h-3 overflow-hidden rounded-full bg-inset">
 					<div className="animate-fillbar h-full bg-pine" style={{ width: `${(Number(i.financingAmount) / Number(i.amount)) * 100}%` }} />
-					<div className="animate-fillbar h-full bg-accent" style={{ width: `${(Number(returnAmt) / Number(i.amount)) * 100}%`, animationDelay: '400ms' }} />
+					<div className="animate-fillbar h-full bg-verified" style={{ width: `${(Number(returnAmt) / Number(i.amount)) * 100}%`, animationDelay: '400ms' }} />
 				</div>
 				<div className="mt-3 grid gap-3 text-[13px] sm:grid-cols-2">
 					<div className="flex items-center gap-2 text-ink-2"><span className="h-2 w-2 bg-pine" />Investor pays the business <Amount value={i.financingAmount} /> at funding</div>
-					<div className="flex items-center gap-2 text-ink-2"><span className="h-2 w-2 bg-accent" />Payer repays <Amount value={i.amount} /> to the holder, a discount of <Amount value={returnAmt} tone="accent" /></div>
+					<div className="flex items-center gap-2 text-ink-2"><span className="h-2 w-2 bg-verified" />Payer repays <Amount value={i.amount} /> to the holder, a discount of <Amount value={returnAmt} tone="accent" /></div>
 				</div>
 			</div>
 

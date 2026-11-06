@@ -20,7 +20,7 @@ function useSteps(total: number, ms: number) {
 function Card({ href, title, rest, className = '', children }: { href: string; title: string; rest: string; className?: string; children: React.ReactNode }) {
 	const external = href.startsWith('http')
 	return (
-		<article className={`group relative flex flex-col overflow-hidden rounded-[20px] border border-hair bg-inset transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(15,26,22,0.35)] ${className}`}>
+		<article className={`group relative flex flex-col overflow-hidden rounded-[20px] border border-hair bg-inset transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(18,17,15,0.35)] ${className}`}>
 			<div className="flex items-start justify-between gap-4 p-7 pb-0">
 				<h3 className="max-w-[360px] text-[22px] font-semibold leading-[1.2] tracking-[-0.02em] text-ink md:text-[24px]">
 					{title} <span className="text-ink-3">{rest}</span>
@@ -50,7 +50,7 @@ const ROWS: [string, string, string][] = [
 function VerifyIllustration() {
 	const [ref, n] = useSteps(ROWS.length + 1, 650)
 	return (
-		<div ref={ref} className="absolute inset-x-7 top-0 rounded-t-[14px] border border-b-0 border-hair bg-card p-5 shadow-[0_-8px_30px_-20px_rgba(15,26,22,0.3)]">
+		<div ref={ref} className="absolute inset-x-7 top-0 rounded-t-[14px] border border-b-0 border-hair bg-card p-5 shadow-[0_-8px_30px_-20px_rgba(18,17,15,0.3)]">
 			<div className="mb-3 flex items-center justify-between">
 				<div>
 					<p className="label">Verification</p>
@@ -131,7 +131,7 @@ const Wallet = ({ label }: { label: string }) => (
 const Pipe = ({ label }: { label: string }) => (
 	<div className="flex flex-1 flex-col items-center gap-1">
 		<span className="flex items-center gap-1 font-mono text-[11px] text-ink"><UsdtMark size={14} />{label}</span>
-		<svg viewBox="0 0 100 8" className="h-2 w-full text-accent" preserveAspectRatio="none"><line x1="0" y1="4" x2="96" y2="4" stroke="currentColor" strokeWidth="1.6" strokeDasharray="5 4" className="animate-flow" /><path d="M92 1l5 3-5 3" fill="none" stroke="currentColor" strokeWidth="1.6" /></svg>
+		<svg viewBox="0 0 100 8" className="h-2 w-full text-ink-3" preserveAspectRatio="none"><line x1="0" y1="4" x2="96" y2="4" stroke="currentColor" strokeWidth="1.6" strokeDasharray="5 4" className="animate-flow" /><path d="M92 1l5 3-5 3" fill="none" stroke="currentColor" strokeWidth="1.6" /></svg>
 	</div>
 )
 
@@ -166,7 +166,7 @@ function FailSafeIllustration() {
 		['verdict', 'MANUAL_REVIEW  (never ELIGIBLE)', 'text-accent'],
 	]
 	return (
-		<div ref={ref} className="absolute inset-x-7 top-0 rounded-card bg-pine p-4 font-mono text-[11px] text-white/80">
+		<div ref={ref} className="absolute inset-x-7 top-0 rounded-card bg-ink p-4 font-mono text-[11px] text-white/80">
 			<div className="mb-2 flex gap-1.5"><span className="h-2 w-2 rounded-full bg-white/20" /><span className="h-2 w-2 rounded-full bg-white/20" /><span className="h-2 w-2 rounded-full bg-white/20" /></div>
 			{lines.map(([k, v, c], i) => (
 				<p key={k} className={`py-0.5 transition-all duration-500 ${i < n ? 'opacity-100' : 'opacity-0'}`}>

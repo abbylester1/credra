@@ -15,18 +15,12 @@ export function Welcome({ role, name }: { role: 'business' | 'investor' | 'opera
 		operator: { title: 'Run the verification desk.', body: 'Seed the simulated registry, review flagged invoices and manage the investor allowlist.', cta: ['Open console', '/app/operator'] as const },
 	}[role]
 	return (
-		<div className="relative mb-6 overflow-hidden rounded-[20px] bg-pine p-7 text-white md:p-9">
-			<div className="linegrid absolute inset-0 opacity-70 [mask-image:linear-gradient(90deg,transparent,#000_70%)]" />
-			<div className="animate-floaty absolute right-8 top-1/2 hidden h-[120px] w-[190px] -translate-y-1/2 overflow-hidden rounded-[12px] border border-white/15 bg-white/10 p-3.5 backdrop-blur-sm xl:block">
-				<p className="font-mono text-[10px] uppercase tracking-[0.06em] text-white/60">Receivable · CRDR</p>
-				<p className="mt-9 font-mono text-[16px]">USDT, direct</p>
-				<p className="font-mono text-[10px] text-white/60">no custody</p>
-			</div>
-			<div className="relative max-w-[520px]">
-				<p className="font-mono text-[11px] uppercase tracking-[0.06em] text-white/60">{name ? `${name} · ` : ''}{role}</p>
-				<h2 className="mt-2 text-[28px] font-semibold leading-[1.1] tracking-[-0.025em] md:text-[34px]">{copy.title}</h2>
-				<p className="mt-2 text-[15px] leading-[1.55] text-white/70">{copy.body}</p>
-				<Link href={copy.cta[1]} className="mt-5 inline-flex h-11 items-center gap-2 rounded-ctl bg-white px-5 text-[14px] font-semibold text-pine transition-colors hover:bg-white/90">{copy.cta[0]} <span aria-hidden>→</span></Link>
+		<div className="mb-6 rounded-[20px] border border-hair bg-card p-7 md:p-9">
+			<div className="max-w-[520px]">
+				<p className="font-mono text-[11px] uppercase tracking-[0.06em] text-ink-3">{name ? `${name} · ` : ''}{role}</p>
+				<h2 className="mt-2 text-[28px] font-semibold leading-[1.1] tracking-[-0.025em] text-ink md:text-[34px]">{copy.title}</h2>
+				<p className="mt-2 text-[15px] leading-[1.55] text-ink-2">{copy.body}</p>
+				<Link href={copy.cta[1]} className="mt-5 inline-flex h-11 items-center gap-2 rounded-ctl bg-pine px-5 text-[14px] font-semibold text-white transition-colors hover:bg-pine-hover">{copy.cta[0]} <span aria-hidden>→</span></Link>
 			</div>
 		</div>
 	)
@@ -36,7 +30,7 @@ export function Welcome({ role, name }: { role: 'business' | 'investor' | 'opera
 const STAGES: [number[], string, string][] = [
 	[[1], 'Submitted', 'bg-s-neutral'],
 	[[2], 'Under review', 'bg-s-review'],
-	[[3], 'Eligible', 'bg-accent'],
+	[[3], 'Eligible', 'bg-verified'],
 	[[5], 'Funded', 'bg-s-funded'],
 	[[6], 'Repaid', 'bg-s-repaid'],
 	[[4, 7], 'Rejected or defaulted', 'bg-s-reject'],

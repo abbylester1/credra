@@ -1,5 +1,5 @@
 # Credra Style Reference
-> Quiet paper, deep ink, one pine green. Every number shows where it came from.
+> Warm paper, deep ink, pine green kept rare. Every number shows where it came from.
 
 **Theme:** light. This is the source of truth for the Credra web app (`apps/web`). Defined from scratch for this project on 2026-11-05. Read it before changing any screen. If a rule here is wrong, fix the rule and the tokens together. Governed by the constitution: the design must never hide who signed what or which data is simulated (principle I).
 
@@ -23,15 +23,26 @@ Rule of thumb: calm to look at, precise to operate, and clear about trust. Block
 
 Full screen-by-screen behaviour lives in `specs/001-credra-web-app/ui-spec.md`.
 
+## Colour discipline (v1.2, 2026-11-06)
+
+Modelled on Ramp, measured on ramp.com: about 99% of the page is neutral (white, warm grey, near-black) and the single accent covers roughly 0.3% of the area, on the primary button. Credra follows the same ratio.
+
+- **Neutrals are warm, never tinted green.** Canvas, wells, borders and text greys all use the warm values in the tables below.
+- **Ink is the interactive colour.** Links are ink with a quiet underline; eyebrow labels are grey. The `accent` token is ink, and `accent-soft` is the neutral well.
+- **Pine stays rare:** the logo, primary buttons, and at most one dark band per screen (CTA band, sign-in panel) plus small product artifacts such as the receivable card.
+- **`verified` is the only green** (`#0A6C63`, soft `#E3F1EE`): Eligible and Passed chips, tick circles, progress done-states, positive returns and the live dot. Never on links, buttons, labels or icon tiles.
+- **Status hues** are unchanged and live only inside product UI.
+- Gate: measure area by colour family before shipping a visual change. Neutral must stay above 90%.
+
 ## Surfaces
 
 | Level | Name | Token | Value | Use |
 |---|---|---|---|---|
-| 1 | Canvas | `canvas` | `#F3F5F2` | Page background on every screen |
+| 1 | Canvas | `canvas` | `#F6F5F2` | Page background on every screen |
 | 2 | Card | `card` | `#FFFFFF` | Panels, tables, forms, dialogs |
-| 3 | Inset | `inset` | `#EAEEEA` | Quiet wells inside cards (code, hashes, empty states) |
-| - | Hairline | `hair` | `#DCE2DD` | 1px rules and card borders |
-| - | Field | `field` | `#74807A` | Input and control borders (3.75:1 on canvas) |
+| 3 | Inset | `inset` | `#EFEDE9` | Quiet wells inside cards (code, hashes, empty states) |
+| - | Hairline | `hair` | `#E2DFDA` | 1px rules and card borders |
+| - | Field | `field` | `#7D7973` | Input and control borders (3.75:1 on canvas) |
 
 White is the card layer on top of the canvas. Separate with hairlines before reaching for a shadow. Page background is never pure white.
 
@@ -39,9 +50,9 @@ White is the card layer on top of the canvas. Separate with hairlines before rea
 
 | Role | Token | Value | Contrast on canvas / card |
 |---|---|---|---|
-| Ink | `ink` | `#0F1A16` | 16.2 / 17.8 |
-| Body text | `ink-2` | `#44544B` | 7.3 / 8.0 |
-| Support text | `ink-3` | `#5C6B63` | 5.1 / 5.6 |
+| Ink | `ink` | `#12110F` | 16.2 / 17.8 |
+| Body text | `ink-2` | `#4B4843` | 7.3 / 8.0 |
+| Support text | `ink-3` | `#66625B` | 5.1 / 5.6 |
 | Accent (links, verified marks, focus) | `accent` | `#0A6C63` | 5.7 / 6.3 |
 | Accent soft | `accent-soft` | `#E3F1EE` | surface only |
 | Primary button fill | `pine` | `#0D3B35` | white text 12.4 |
@@ -53,7 +64,7 @@ Each hue has a soft tint for chip backgrounds. Text on its own soft tint is at l
 
 | State | Chip label | Token | Text | Soft tint |
 |---|---|---|---|---|
-| Submitted | Submitted | `s-neutral` | `#5C6B63` | `#EAEEEA` |
+| Submitted | Submitted | `s-neutral` | `#66625B` | `#EFEDE9` |
 | Under review | Under review | `s-review` | `#8F5200` | `#FBEFD9` |
 | Eligible | Eligible | `accent` | `#0A6C63` | `#E3F1EE` |
 | Rejected | Rejected | `s-reject` | `#B03A2E` | `#FBE6E3` |

@@ -61,7 +61,7 @@ function WalletCard() {
 			<div className="mt-1"><WalletTag align="left" address={address!} label={mine ?? null} fallbackName="Your wallet" showRole={false} /></div>
 			<div className="mt-2 flex items-center justify-between gap-2">
 				<span className="flex items-center gap-1.5 text-[12px] text-ink-3">
-					<span className={`h-1.5 w-1.5 rounded-full ${ok ? 'bg-accent' : 'bg-s-review'}`} aria-hidden />
+					<span className={`h-1.5 w-1.5 rounded-full ${ok ? 'bg-verified' : 'bg-s-review'}`} aria-hidden />
 					{ok ? 'Whitechain Sepolia' : 'Wrong network'}
 				</span>
 				<button className="text-[12px] text-accent hover:underline" onClick={() => { disconnect(); void mode.logout?.() }}>Disconnect</button>
@@ -134,7 +134,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 										key={i.href}
 										href={i.href}
 										aria-current={active(i.href) ? 'page' : undefined}
-										className={`group flex h-10 items-center gap-2.5 rounded-ctl px-2.5 text-[14px] transition-colors ${active(i.href) ? 'border border-hair bg-card font-medium text-ink shadow-[0_1px_2px_rgba(15,26,22,0.05)]' : 'text-ink-2 hover:bg-inset'}`}
+										className={`group flex h-10 items-center gap-2.5 rounded-ctl px-2.5 text-[14px] transition-colors ${active(i.href) ? 'border border-hair bg-card font-medium text-ink shadow-[0_1px_2px_rgba(18,17,15,0.05)]' : 'text-ink-2 hover:bg-inset'}`}
 									>
 										<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className={active(i.href) ? 'text-accent' : 'text-ink-3 group-hover:text-ink-2'} aria-hidden><path d={i.icon} /></svg>
 										{i.label}
@@ -147,7 +147,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 						<WalletCard />
 						<a href={EXPLORER} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-2 px-1 text-[12px] text-ink-3 transition-colors hover:text-ink">
 							<span className="flex items-center gap-2"><Image src="/whitechain.svg" alt="" width={14} height={14} unoptimized />Whitechain Sepolia</span>
-							<span className="flex items-center gap-1.5"><span className="animate-pulse-ring h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />Explorer</span>
+							<span className="flex items-center gap-1.5"><span className="animate-pulse-ring h-1.5 w-1.5 rounded-full bg-verified" aria-hidden />Explorer</span>
 						</a>
 					</div>
 				</div>

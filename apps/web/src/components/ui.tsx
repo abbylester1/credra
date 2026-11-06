@@ -39,7 +39,7 @@ export function Button({ variant = 'secondary', dense, loading, className, child
 const STATUS_STYLE: Record<number, { fg: string; bg: string }> = {
 	1: { fg: 'text-s-neutral', bg: 'bg-s-neutral-soft' },
 	2: { fg: 'text-s-review', bg: 'bg-s-review-soft' },
-	3: { fg: 'text-accent', bg: 'bg-accent-soft' },
+	3: { fg: 'text-verified', bg: 'bg-verified-soft' },
 	4: { fg: 'text-s-reject', bg: 'bg-s-reject-soft' },
 	5: { fg: 'text-s-funded', bg: 'bg-s-funded-soft' },
 	6: { fg: 'text-s-repaid', bg: 'bg-s-repaid-soft' },
@@ -56,7 +56,7 @@ export function StatusChip({ status }: { status: number }) {
 }
 
 const VERDICT: Record<string, { label: string; fg: string; bg: string }> = {
-	ELIGIBLE: { label: 'Passed', fg: 'text-accent', bg: 'bg-accent-soft' },
+	ELIGIBLE: { label: 'Passed', fg: 'text-verified', bg: 'bg-verified-soft' },
 	REJECTED: { label: 'Failed', fg: 'text-s-reject', bg: 'bg-s-reject-soft' },
 	MANUAL_REVIEW: { label: 'Needs review', fg: 'text-s-review', bg: 'bg-s-review-soft' },
 	ERROR: { label: 'Could not complete', fg: 'text-s-review', bg: 'bg-s-review-soft' },
@@ -73,7 +73,7 @@ export function Amount({ value, unit = 'USDT', figure, tone }: { value: string |
 	const [w, f = ''] = text.split('.')
 	const shown = `${Number(w).toLocaleString('en-US')}.${f.padEnd(2, '0')}`
 	return (
-		<span className={cx('num', figure ? 'text-[28px] font-medium leading-none' : 'text-[14px]', tone === 'accent' && 'text-accent', tone === 'danger' && 'text-s-reject')}>
+		<span className={cx('num', figure ? 'text-[28px] font-medium leading-none' : 'text-[14px]', tone === 'accent' && 'text-verified', tone === 'danger' && 'text-s-reject')}>
 			{shown}
 			<span className={cx('ml-1 text-ink-3', figure ? 'text-[12px]' : 'text-[11px]')}>{unit}</span>
 		</span>
@@ -181,7 +181,7 @@ export function InlineNotice({ tone = 'info', children }: { tone?: 'info' | 'war
 		info: 'bg-inset text-ink-2',
 		warn: 'bg-s-review-soft text-s-review',
 		error: 'bg-s-reject-soft text-s-reject',
-		ok: 'bg-accent-soft text-accent',
+		ok: 'bg-verified-soft text-verified',
 	}[tone]
 	return (
 		<div role={tone === 'error' ? 'alert' : 'status'} className={cx('rounded-ctl px-3 py-2 text-[14px]', t)}>
@@ -261,7 +261,7 @@ const METRIC_ICONS = ['M4 4h12v12H4zM8 8h4M8 12h4', 'M4 10l4 4 8-8', 'M10 3v14M6
 export function MetricCard({ label, children, i = 0 }: { label: string; children: ReactNode; i?: number }) {
 	return (
 		<div className="animate-popin" style={{ animationDelay: `${i * 70}ms` }}>
-			<div className="rounded-[20px] border border-hair bg-inset p-5 transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(15,26,22,0.35)]">
+			<div className="rounded-[20px] border border-hair bg-inset p-5 transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(18,17,15,0.35)]">
 				<span className="flex h-9 w-9 items-center justify-center rounded-ctl border border-hair bg-card text-accent">
 					<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={METRIC_ICONS[i % METRIC_ICONS.length]} /></svg>
 				</span>

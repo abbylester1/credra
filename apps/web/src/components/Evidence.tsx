@@ -20,7 +20,7 @@ export type Verification = {
 const Mark = ({ kind }: { kind: 'pass' | 'fail' | 'attn' }) => (
 	<span
 		aria-hidden
-		className={`mt-px w-4 text-center text-[14px] font-semibold ${kind === 'pass' ? 'text-accent' : kind === 'fail' ? 'text-s-reject' : 'text-s-review'}`}
+		className={`mt-px w-4 text-center text-[14px] font-semibold ${kind === 'pass' ? 'text-verified' : kind === 'fail' ? 'text-s-reject' : 'text-s-review'}`}
 	>
 		{kind === 'pass' ? '✓' : kind === 'fail' ? '✕' : '!'}
 	</span>
@@ -82,7 +82,7 @@ export function StepRail({ steps }: { steps: { label: string; state: StepState; 
 				<li key={s.label} className="flex gap-3">
 					<span
 						className={`flex h-6 w-6 flex-none items-center justify-center rounded-chip text-[12px] font-semibold ${
-							s.state === 'done' ? 'bg-accent-soft text-accent' : s.state === 'failed' ? 'bg-s-reject-soft text-s-reject' : s.state === 'active' ? 'bg-pine text-white' : 'bg-inset text-ink-2'
+							s.state === 'done' ? 'bg-verified-soft text-verified' : s.state === 'failed' ? 'bg-s-reject-soft text-s-reject' : s.state === 'active' ? 'bg-pine text-white' : 'bg-inset text-ink-2'
 						}`}
 					>
 						{s.state === 'done' ? '✓' : s.state === 'failed' ? '✕' : s.state === 'active' ? <span aria-hidden className="animate-spin-fast inline-block h-3 w-3 rounded-full border-2 border-white border-t-transparent" /> : i + 1}

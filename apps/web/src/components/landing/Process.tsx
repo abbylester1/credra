@@ -22,7 +22,7 @@ function Field({ k, v, delay = 0 }: { k: string; v: string; delay?: number }) {
 }
 function Shell({ title, children }: { title: string; children: React.ReactNode }) {
 	return (
-		<div className="animate-popin w-full max-w-[460px] rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-28px_rgba(15,26,22,0.4)]">
+		<div className="animate-popin w-full max-w-[460px] rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-28px_rgba(18,17,15,0.4)]">
 			<p className="label mb-3">{title}</p>
 			{children}
 		</div>
@@ -53,7 +53,7 @@ function Verify() {
 		['done', 'verdict ELIGIBLE'],
 	]
 	return (
-		<div className="animate-popin w-full max-w-[460px] overflow-hidden rounded-card bg-pine p-5 font-mono text-[12px] text-white/80 shadow-[0_20px_50px_-28px_rgba(9,46,41,0.8)]">
+		<div className="animate-popin w-full max-w-[460px] overflow-hidden rounded-card bg-ink p-5 font-mono text-[12px] text-white/80 shadow-[0_20px_50px_-28px_rgba(9,46,41,0.8)]">
 			<div className="mb-3 flex items-center gap-2 text-white"><ChainlinkMark size={16} /><span className="text-[12px]">cre workflow simulate invoice-verification</span></div>
 			{lines.map(([k, v], i) => (
 				<p key={v} className="animate-slidein py-1" style={{ animationDelay: `${i * 450}ms` }}>
@@ -74,7 +74,7 @@ function Decide() {
 		<Shell title="Verdict written onchain">
 			<div className="space-y-2.5">
 				{outcomes.map(([l, tone, d, on], i) => (
-					<div key={l} className={`animate-slidein flex items-center justify-between rounded-card border p-3.5 ${on ? 'border-accent bg-accent-soft/50' : 'border-hair opacity-60'}`} style={{ animationDelay: `${i * 140}ms` }}>
+					<div key={l} className={`animate-slidein flex items-center justify-between rounded-card border p-3.5 ${on ? 'border-verified bg-verified-soft/50' : 'border-hair opacity-60'}`} style={{ animationDelay: `${i * 140}ms` }}>
 						<div><Chip tone={tone}>{l}</Chip><p className="mt-1.5 text-[12px] text-ink-3">{d}</p></div>
 						{on && <Tick on />}
 					</div>
@@ -107,9 +107,9 @@ function Settle() {
 			<p className="mt-1 text-[12px] text-ink-3">paid to the current receivable holder</p>
 			<div className="mt-4 flex h-3 overflow-hidden rounded-full bg-inset">
 				<div className="animate-fillbar h-full bg-pine" style={{ width: '90%' }} />
-				<div className="animate-fillbar h-full bg-accent" style={{ width: '10%', animationDelay: '500ms' }} />
+				<div className="animate-fillbar h-full bg-verified" style={{ width: '10%', animationDelay: '500ms' }} />
 			</div>
-			<div className="mt-2 flex justify-between text-[11px]"><span className="text-ink-2">Principal 9,000.00</span><span className="text-accent">Discount 1,000.00</span></div>
+			<div className="mt-2 flex justify-between text-[11px]"><span className="text-ink-2">Principal 9,000.00</span><span className="text-verified">Discount 1,000.00</span></div>
 			<div className="mt-4"><Chip tone="repaid">Repaid</Chip></div>
 		</Shell>
 	)
