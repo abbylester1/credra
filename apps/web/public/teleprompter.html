@@ -51,7 +51,7 @@
 <header>
 	<label>Cut
 		<select id="cut">
-			<option value="full">Submission cut, 2:35</option>
+			<option value="full">Submission cut, 2:49</option>
 			<option value="walk">Walkthrough cut, 3:30</option>
 			<option value="teaser">Teaser, 0:35</option>
 		</select>
@@ -65,7 +65,7 @@
 	<button id="next">Next &rarr;</button>
 	<button id="reset">Reset</button>
 	<button id="start" class="primary">Start (space)</button>
-	<div class="clock" id="clock">0:00 <small>/ 2:35</small></div>
+	<div class="clock" id="clock">0:00 <small>/ 2:49</small></div>
 </header>
 <div class="bar"><div id="prog"></div></div>
 <main>
@@ -89,18 +89,19 @@
 
 <script>
 const CUTS = {
-full: { total:155, segs:[
- {s:0,e:15,clip:'A',cue:'Landing hero, then the stats strip',text:`Businesses wait weeks for buyers to pay their invoices. Credra turns a verified invoice into instant USDT financing, with every step onchain on Whitechain. The numbers on this page are live testnet totals.`},
- {s:15,e:30,clip:'B',cue:'The four Approach cards (or one slide, four bullets max)',text:`Four ideas drive the design. Verify before funding. Duplicates are blocked onchain. Money moves wallet to wallet, never through us. And every step leaves an audit trail.`},
- {s:30,e:55,clip:'C',cue:'Business: already signed in. Use sample invoice, Submit, approve the Privy prompt',text:`A business signs in with just an email, and we create a wallet for it. It submits an invoice with the document, and the document's fingerprint is registered on Whitechain. Testnet amounts are small, so this invoice is scaled down.`},
- {s:55,e:85,clip:'D',cue:'Terminal: run the CRE command, point at the verdict line',text:`Now verification. This is a Chainlink CRE workflow, run with the CRE CLI. It reads the invoice from Whitechain, asks an external API for the matching record, compares issuer, buyer, amount, due date and document hash, and returns a verdict. Here is a fifty-thousand USDT invoice: eligible. If anything fails it is rejected, and if the API is down it goes to manual review, never to eligible.`},
- {s:85,e:105,clip:'E',cue:'App: Eligible verification record, keep the "Simulated" label visible',text:`Back in the app, the same check is shown field by field. The source is a simulated registry, and it is labelled that way. The verdict is recorded onchain by our verifier wallet, not by the Chainlink network.`},
- {s:105,e:130,clip:'F',cue:'Investor: Approve USDT, Fund invoice, then the explorer transaction',text:`An approved investor funds the invoice in official Tether USDT. The business is paid directly, and the contract holds nothing. Here is the transaction on the Whitechain explorer.`},
- {s:130,e:145,clip:'G',cue:'Repay as the business user, then the timeline; click a name to reveal the address',text:`At the due date the payer repays the full amount to whoever holds the receivable token. The timeline names every actor, and every step links to the explorer.`},
- {s:145,e:155,clip:'H',cue:'End card: logo, 0% platform fee, repo URL',text:`Zero platform fees. Built on Whitechain and Chainlink CRE. Code on GitHub.`}
+full: { total:169, segs:[
+ {s:0,e:14,clip:'I',cue:'You on camera (or your voice over the landing hero)',text:`Hi, I'm Abhinav, and I built Credra solo here at ETHGlobal Mumbai. Small businesses deliver their work and then wait thirty to ninety days to get paid — and that cash gap is one of the biggest reasons otherwise healthy businesses run out of money.`},
+ {s:14,e:32,clip:'A',cue:'Landing hero, then the stats strip',text:`Invoice financing can bridge that gap, but today it is slow and opaque: you hand both your invoice and your money to a middleman you have to trust. Credra replaces that trust with proof. A business tokenizes a verified invoice, an investor funds it instantly in USDT, and every step — verification, funding, repayment — runs onchain on Whitechain. The numbers on this page are live testnet totals.`},
+ {s:32,e:44,clip:'B',cue:'The four Approach cards (or one slide, four bullets max)',text:`Four ideas drive the design: verify before funding, duplicates blocked onchain, money moving wallet to wallet instead of through us, and an audit trail on every step. Here is how it works.`},
+ {s:44,e:69,clip:'C',cue:'Business: already signed in. Use sample invoice, Submit, approve the Privy prompt',text:`A business signs in with just an email, and we create a wallet for it. It submits an invoice with the document, and the document's fingerprint is registered on Whitechain. Testnet amounts are small, so this invoice is scaled down.`},
+ {s:69,e:99,clip:'D',cue:'Terminal: run the CRE command, point at the verdict line',text:`Now verification. This is a Chainlink CRE workflow, run with the CRE CLI. It reads the invoice from Whitechain, asks an external API for the matching record, compares issuer, buyer, amount, due date and document hash, and returns a verdict. Here is a fifty-thousand USDT invoice: eligible. If anything fails it is rejected, and if the API is down it goes to manual review, never to eligible.`},
+ {s:99,e:119,clip:'E',cue:'App: Eligible verification record, keep the "Simulated" label visible',text:`Back in the app, the same check is shown field by field. The source is a simulated registry, and it is labelled that way. The verdict is recorded onchain by our verifier wallet, not by the Chainlink network.`},
+ {s:119,e:144,clip:'F',cue:'Investor: Approve USDT, Fund invoice, then the explorer transaction',text:`An approved investor funds the invoice in official Tether USDT. The business is paid directly, and the contract holds nothing. Here is the transaction on the Whitechain explorer.`},
+ {s:144,e:159,clip:'G',cue:'Repay as the business user, then the timeline; click a name to reveal the address',text:`At the due date the payer repays the full amount to whoever holds the receivable token. The timeline names every actor, and every step links to the explorer.`},
+ {s:159,e:169,clip:'H',cue:'End card: logo, 0% platform fee, repo URL',text:`Zero platform fees. Built on Whitechain and Chainlink CRE. Code on GitHub.`}
 ]},
 walk: { total:210, segs:[
- {s:0,e:15,clip:'Intro',cue:'You on the landing hero',text:`Hi, I'm [name], and this is Credra: verified invoice financing in USDT, built on Whitechain with a Chainlink CRE workflow doing the verification.`},
+ {s:0,e:15,clip:'Intro',cue:'You on the landing hero',text:`Hi, I'm Abhinav, and this is Credra: verified invoice financing in USDT, built on Whitechain with a Chainlink CRE workflow doing the verification.`},
  {s:15,e:40,clip:'Concept',cue:'Landing: the calculator at 50,000 USDT, 4% discount',text:`Here's the problem. A business ships goods, sends an invoice, and then waits thirty days or more to be paid. With Credra, an investor pays most of that invoice today, and gets the full amount back when the buyer pays. On a fifty-thousand USDT invoice at four percent, the business gets forty-eight thousand now, and the investor earns two thousand. The platform fee is zero.`},
  {s:40,e:60,clip:'How it works',cue:'Landing: the five-step stepper',text:`The hard part is trust: why would an investor fund an invoice they can't check? So nothing opens for funding until a Chainlink CRE workflow verifies it against an external record, and every step is recorded onchain.`},
  {s:60,e:85,clip:'Demo 1',cue:'App: email sign-in (already done), Use sample invoice, Submit, approve Privy prompt',text:`Let me show you. I sign in with just an email, and the app creates a wallet for me. I submit an invoice with its document. Testnet amounts are small, so this one is scaled down. The document's fingerprint is registered on Whitechain.`},

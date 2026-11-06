@@ -1,6 +1,6 @@
 # Demo video script
 
-Two cuts from one recording session: a **2:30 submission video** (ETHGlobal accepts 2 to 4 minutes and rejects anything outside that) and a **35-second teaser** for the landing page and social posts.
+Two cuts from one recording session: a **~2:45 submission video** that opens with a short personal intro (who you are, the problem, what Credra is), then shows the live flow — ETHGlobal accepts 2 to 4 minutes and rejects anything outside that — and a **35-second teaser** for the landing page and social posts.
 
 Rules to respect: never speed up footage (jump-cut waits instead), voice only with no music over text, record at 1080p on a desktop screen recorder, slides with at most four bullets.
 
@@ -38,6 +38,7 @@ Open `apps/web/public/teleprompter.html` (double-click the file, or visit `/tele
 
 | Clip | Capture | Raw length |
 |---|---|---|
+| I | You on camera: your name, the problem (businesses wait to get paid), and what Credra is. Talking head, or use as voiceover over clip A. | 30s |
 | A | Landing hero, then the stats strip | 10s |
 | B | The four Approach cards (or one slide, four bullets max) | 12s |
 | C | Business: sign in already done, Use sample invoice, Submit, approve the Privy prompt | 25s |
@@ -47,18 +48,23 @@ Open `apps/web/public/teleprompter.html` (double-click the file, or visit `/tele
 | G | Repay, then the timeline with names, click one name to reveal the address, open one explorer link | 20s |
 | H | End card: logo, "0% platform fee", repo URL | 6s |
 
-## Cut 1: submission video, about 2:30
+## Cut 1: submission video, about 2:45
+
+Open with you: the first two segments can be a talking-head intro (clip I) or your voice over the landing page. Introduce yourself, state the problem, say what Credra is — then move into the live demo.
 
 | Time | Clip | Voiceover |
 |---|---|---|
-| 0:00–0:15 | A | Businesses wait weeks for buyers to pay their invoices. Credra turns a verified invoice into instant USDT financing, with every step onchain on Whitechain. The numbers on this page are live testnet totals. |
-| 0:15–0:30 | B | Four ideas drive the design. Verify before funding. Duplicates are blocked onchain. Money moves wallet to wallet, never through us. And every step leaves an audit trail. |
-| 0:30–0:55 | C | A business signs in with just an email, and we create a wallet for it. It submits an invoice with the document, and the document's fingerprint is registered on Whitechain. Testnet amounts are small, so this invoice is scaled down. |
-| 0:55–1:25 | D | Now verification. This is a Chainlink CRE workflow, run with the CRE CLI. It reads the invoice from Whitechain, asks an external API for the matching record, compares issuer, buyer, amount, due date and document hash, and returns a verdict. Here is a fifty-thousand USDT invoice: eligible. If anything fails it is rejected, and if the API is down it goes to manual review, never to eligible. |
-| 1:25–1:45 | E | Back in the app, the same check is shown field by field. The source is a simulated registry, and it is labelled that way. The verdict is recorded onchain by our verifier wallet, not by the Chainlink network. |
-| 1:45–2:10 | F | An approved investor funds the invoice in official Tether USDT. The business is paid directly, and the contract holds nothing. Here is the transaction on the Whitechain explorer. |
-| 2:10–2:25 | G | At the due date the payer repays the full amount to whoever holds the receivable token. The timeline names every actor, and every step links to the explorer. |
-| 2:25–2:35 | H | Zero platform fees. Built on Whitechain and Chainlink CRE. Code on GitHub. |
+| 0:00–0:14 | I (you on camera) or A | Hi, I'm Abhinav, and I built Credra solo here at ETHGlobal Mumbai. Small businesses deliver their work and then wait thirty to ninety days to get paid — and that cash gap is one of the biggest reasons otherwise healthy businesses run out of money. |
+| 0:14–0:32 | A | Invoice financing can bridge that gap, but today it is slow and opaque: you hand both your invoice and your money to a middleman you have to trust. Credra replaces that trust with proof. A business tokenizes a verified invoice, an investor funds it instantly in USDT, and every step — verification, funding, repayment — runs onchain on Whitechain. The numbers on this page are live testnet totals. |
+| 0:32–0:44 | B | Four ideas drive the design: verify before funding, duplicates blocked onchain, money moving wallet to wallet instead of through us, and an audit trail on every step. Here is how it works. |
+| 0:44–1:09 | C | A business signs in with just an email, and we create a wallet for it. It submits an invoice with the document, and the document's fingerprint is registered on Whitechain. Testnet amounts are small, so this invoice is scaled down. |
+| 1:09–1:39 | D | Now verification. This is a Chainlink CRE workflow, run with the CRE CLI. It reads the invoice from Whitechain, asks an external API for the matching record, compares issuer, buyer, amount, due date and document hash, and returns a verdict. Here is a fifty-thousand USDT invoice: eligible. If anything fails it is rejected, and if the API is down it goes to manual review, never to eligible. |
+| 1:39–1:59 | E | Back in the app, the same check is shown field by field. The source is a simulated registry, and it is labelled that way. The verdict is recorded onchain by our verifier wallet, not by the Chainlink network. |
+| 1:59–2:24 | F | An approved investor funds the invoice in official Tether USDT. The business is paid directly, and the contract holds nothing. Here is the transaction on the Whitechain explorer. |
+| 2:24–2:39 | G | At the due date the payer repays the full amount to whoever holds the receivable token. The timeline names every actor, and every step links to the explorer. |
+| 2:39–2:49 | H | Zero platform fees. Built on Whitechain and Chainlink CRE. Code on GitHub. |
+
+Optional: after "solo here at ETHGlobal Mumbai," add one line about yourself — what you build, or why this problem matters to you. Keep the whole intro (clips I + A) under about 30 seconds so the demo starts before the half-minute mark.
 
 Whitechain note to include if time allows: chain 1874, all three contracts source-verified on the explorer, official USDT `0xcedf…55a7`.
 
