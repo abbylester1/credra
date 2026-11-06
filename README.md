@@ -25,6 +25,12 @@ Credra lets a business finance an invoice it is still waiting to be paid on. The
 Built at **ETHGlobal Mumbai 2026** for the Whitechain *Tokenize: Real World Finance* and Chainlink *Best workflow with CRE* tracks. **This is testnet software.** Tokens have no value, the external verification source is simulated, and it is not a live lending product.
 
 <p align="center">
+  <img src="docs/images/demo.gif" alt="Credra demo: the landing hero with a live verification record, the onchain checks and direct settlement, a full audit trail with transaction links, the economics calculator, and live testnet figures" width="820" />
+  <br />
+  <sub>A short tour: verified invoices, direct USDT settlement with no custody, a full audit trail, and live testnet figures. Looping screen capture — see <a href="#how-it-works">How it works</a> for the real flow.</sub>
+</p>
+
+<p align="center">
   <img src="docs/images/invoice-detail.png" alt="Credra invoice page: terms, a passed verification record with provenance, and a timeline with transaction links" width="760" />
   <br />
   <sub>An eligible invoice on Whitechain Sepolia: terms, verification record, who recorded it, and explorer links for each step.</sub>
