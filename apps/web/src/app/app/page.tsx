@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { SignInGate } from '@/components/SignInGate'
-import { Activity, GettingStarted, Pipeline, Protocol, Welcome } from '@/components/OverviewExtras'
+import { Activity, GettingStarted, Pipeline, Protocol } from '@/components/OverviewExtras'
 import { Amount, Button, fmtDate, InlineNotice, MetricCard, MetricsSkeleton, PageHeader } from '@/components/ui'
 import { useInvoices, type InvoiceSummary, type Scope } from '@/lib/useInvoices'
 import { useRole } from '@/lib/useRole'
@@ -60,7 +60,6 @@ export default function OverviewPage() {
 				title="Overview"
 				description="Your financing activity, the pipeline and where to go next."
 			/>
-			<Welcome role={role} />
 			{loading ? (
 				<MetricsSkeleton />
 			) : role === 'operator' ? (
