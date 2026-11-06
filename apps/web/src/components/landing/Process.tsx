@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react'
 import { Chip, Eyebrow, Heading, Mono, Reveal, Tick, UsdtMark, ChainlinkMark } from './shared'
 
 const STEPS = [
-	{ title: 'Submit', who: 'Business', desc: 'Register the invoice onchain with its amount, due date, buyer and a fingerprint of the document.' },
-	{ title: 'Verify', who: 'Chainlink CRE', desc: 'A CRE workflow reads the record, asks an external source and applies the eligibility rules.' },
-	{ title: 'Decide', who: 'Verifier wallet', desc: 'The verdict is written onchain. Any failure or outage falls to manual review, never to eligible.' },
-	{ title: 'Fund', who: 'Investor', desc: 'An approved investor pays the business directly in USDT and receives the receivable token.' },
-	{ title: 'Settle', who: 'Payer', desc: 'The full invoice amount is repaid to whoever holds the receivable. Funds never sit in a contract.' },
+	{ title: 'Submit', who: 'Business', desc: 'Register amount, due date, buyer and a document hash onchain.' },
+	{ title: 'Verify', who: 'Chainlink CRE', desc: 'A CRE workflow checks the record against an external source.' },
+	{ title: 'Decide', who: 'Verifier wallet', desc: 'Verdict goes onchain. Any failure means manual review.' },
+	{ title: 'Fund', who: 'Investor', desc: 'An approved investor pays the business in USDT and gets the receivable.' },
+	{ title: 'Settle', who: 'Payer', desc: 'Full amount goes to the receivable holder. No contract holds funds.' },
 ]
 const DURATION = 6500
 
@@ -134,7 +134,7 @@ export function Process() {
 				<Reveal>
 					<Eyebrow>How it works</Eyebrow>
 					<Heading lead="From invoice to settlement" rest="in five steps." className="max-w-[760px]" />
-					<p className="mb-12 mt-5 max-w-[560px] text-[17px] leading-[1.55] text-ink-2">Each step is a transaction anyone can open on the explorer. Select a step to see it.</p>
+					<p className="mb-12 mt-5 max-w-[480px] text-[17px] leading-[1.55] text-ink-2">Every step is a transaction you can open on the explorer.</p>
 				</Reveal>
 				<div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-14" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
 					<ol className="space-y-2">

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { RPC_PRIMARY } from '@/lib/config'
 import { ChainlinkMark, Chip, ExternalArrow, Mono, Tick, UsdtMark, WhitechainLogo, short, TX, EXPLORER } from './shared'
 
 const CHECKS = [
@@ -105,7 +106,7 @@ function AppWindow() {
 
 			{/* floating toasts */}
 			{toast && (
-				<div key="t1" className="animate-popin absolute -top-4 right-3 z-10 hidden w-[250px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block lg:-right-6">
+				<div key="t1" className="animate-popin absolute -top-9 right-4 z-10 hidden w-[250px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block lg:-right-6">
 					<div className="flex items-center gap-2">
 						<span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent-soft text-accent"><Tick on className="!h-[18px] !w-[18px]" /></span>
 						<p className="text-[13px] font-medium text-ink">Verdict recorded onchain</p>
@@ -114,7 +115,7 @@ function AppWindow() {
 				</div>
 			)}
 			{funded && (
-				<div key="t2" className="animate-popin absolute -bottom-5 left-4 z-10 hidden w-[270px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block lg:-left-8">
+				<div key="t2" className="animate-popin absolute -bottom-12 left-6 z-10 hidden w-[270px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block lg:-left-8">
 					<div className="flex items-center gap-2.5">
 						<UsdtMark size={24} />
 						<div>
@@ -126,7 +127,7 @@ function AppWindow() {
 			)}
 
 			{/* receivable token card (Ramp-style physical card, but a CRDR receivable) */}
-			<div className="animate-floaty absolute -bottom-[72px] right-4 z-[5] hidden h-[132px] w-[210px] overflow-hidden rounded-[14px] bg-pine p-4 text-white shadow-[0_20px_40px_-16px_rgba(9,46,41,0.7)] lg:block">
+			<div className="animate-floaty absolute -bottom-[100px] right-4 z-[5] hidden h-[132px] w-[210px] overflow-hidden rounded-[14px] bg-pine p-4 text-white shadow-[0_20px_40px_-16px_rgba(9,46,41,0.7)] lg:block">
 				<div className="linegrid absolute inset-0 opacity-60" />
 				<div className="relative flex h-full flex-col justify-between">
 					<div className="flex items-center justify-between">
@@ -143,22 +144,54 @@ function AppWindow() {
 	)
 }
 
-export function Hero() {
+/** Latest Whitechain Sepolia block, polled from the public RPC. Shows a dash until it answers. */
+function useBlock() {
+	const [b, setB] = useState<number | null>(null)
+	useEffect(() => {
+		let on = true
+		const load = async () => {
+			try {
+				const r = await fetch(RPC_PRIMARY, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_blockNumber', params: [] }) })
+				const j = await r.json()
+				if (on && j.result) setB(parseInt(j.result, 16))
+			} catch { /* RPC is flaky; keep the last value */ }
+		}
+		load()
+		const id = setInterval(load, 8000)
+		return () => { on = false; clearInterval(id) }
+	}, [])
+	return b
+}
+
+export function Announcement() {
+	const [open, setOpen] = useState(true)
+	if (!open) return null
 	return (
-		<section className="pt-[72px]">
+		<div className="relative bg-ink px-10 py-2 text-center text-[13px] text-white">
+			Invoice funded and repaid with official USDT on testnet.{' '}
+			<a href={`${EXPLORER}/tx/${TX.repay}`} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-white/80">View the transaction</a>
+			<button aria-label="Dismiss" onClick={() => setOpen(false)} className="absolute right-3 top-1/2 -translate-y-1/2 px-1 text-white/60 hover:text-white">✕</button>
+		</div>
+	)
+}
+
+export function Hero() {
+	const block = useBlock()
+	return (
+		<section>
 			<div className="mx-auto max-w-[1200px] px-5 pb-6 pt-14 md:px-8 md:pt-20">
 				<div className="mb-6 flex flex-wrap items-center gap-3">
 					<span className="font-mono text-[11px] uppercase tracking-[0.06em] text-ink-3">Live on Whitechain Sepolia</span>
 					<span className="inline-flex items-center gap-2 rounded-chip bg-card px-2.5 py-1 font-mono text-[12px] text-ink ring-1 ring-hair">
 						<span className="animate-pulse-ring h-2 w-2 rounded-full bg-accent" />
-						chain 1874
+						block {block ? block.toLocaleString('en-US') : '···'}
 					</span>
 				</div>
 				<h1 className="max-w-[900px] text-[44px] font-semibold leading-[1.02] tracking-[-0.035em] text-ink md:text-[76px]">
 					Verified invoices.<br className="hidden md:block" /> <span className="text-ink-3">Instant capital.</span>
 				</h1>
 				<p className="mt-6 max-w-[560px] text-[17px] leading-[1.55] text-ink-2 md:text-[19px]">
-					Submit, verify and fund invoices in official USDT, with every step recorded onchain and open to audit.
+					Submit, verify and fund invoices in USDT. Every step onchain.
 				</p>
 				<div className="mt-8 flex flex-wrap items-center gap-3">
 					<Link href="/app" className="group inline-flex h-12 items-center gap-2 rounded-ctl bg-pine px-5 text-[14px] font-semibold text-white transition-colors hover:bg-pine-hover">
@@ -176,8 +209,8 @@ export function Hero() {
 
 			{/* stage */}
 			<div className="mx-auto max-w-[1200px] px-5 pb-10 md:px-8 md:pb-16">
-				<div className="dotgrid relative overflow-hidden rounded-[20px] border border-hair bg-inset px-4 pb-14 pt-10 md:px-14 md:pb-28 md:pt-14">
-					<div className="absolute right-4 top-4 z-10">
+				<div className="dotgrid relative overflow-hidden rounded-[20px] border border-hair bg-inset px-4 pb-14 pt-12 md:px-14 md:pb-32 md:pt-16">
+					<div className="absolute left-4 top-4 z-10">
 						<span className="rounded-chip border border-dashed border-s-review bg-canvas/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.06em] text-s-review">Illustrative demo data</span>
 					</div>
 					<div className="mx-auto max-w-[920px]"><AppWindow /></div>

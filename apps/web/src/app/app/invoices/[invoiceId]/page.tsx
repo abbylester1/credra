@@ -11,6 +11,7 @@ import { friendlyError } from '@/lib/errors'
 import { shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
 import { PayPanel, DefaultButton } from '@/components/PayPanels'
+import { Lifecycle } from '@/components/Lifecycle'
 import { GRACE_PERIOD_SECONDS } from '@/lib/config'
 import type { InvoiceSummary } from '@/lib/useInvoices'
 
@@ -74,11 +75,11 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 
 	return (
 		<>
-			<Link href="/app/invoices" className="text-[13px] text-accent hover:underline">{'‹'} Invoices</Link>
+			<Link href="/app/invoices" className="inline-flex items-center gap-1 text-[13px] text-ink-3 transition-colors hover:text-ink">{'‹'} Back to invoices</Link>
 			<header className="mb-6 mt-3 flex flex-wrap items-start justify-between gap-4">
 				<div>
 					<div className="flex flex-wrap items-center gap-3">
-						<h1 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em]">{i.issuerName}</h1>
+						<h1 className="text-[34px] font-semibold leading-[1.1] tracking-[-0.03em]">{i.issuerName}</h1>
 						<StatusChip status={i.status} />
 					</div>
 					<p className="mt-1 text-[14px] text-ink-3"><span className="num">{i.invoiceNumber}</span> {'·'} Due {fmtDate(i.dueDate)}, <span className={due.late ? 'text-s-reject' : ''}>{due.text}</span></p>
@@ -89,11 +90,25 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 			</header>
 			{msg && <div className="mb-4"><InlineNotice tone={msg.tone}>{msg.text}</InlineNotice></div>}
 
+			<Lifecycle status={i.status} />
+
 			<div className="mb-6 grid grid-cols-2 gap-4 rounded-card border border-hair bg-card p-6 sm:grid-cols-4">
 				<div><div className="text-[13px] text-ink-3">Invoice amount</div><Amount value={i.amount} figure /></div>
 				<div><div className="text-[13px] text-ink-3">Financing</div><Amount value={i.financingAmount} figure /></div>
 				<div><div className="text-[13px] text-ink-3">Investor return</div><Amount value={returnAmt} figure tone="accent" /><div className="num text-[12px] text-ink-3">{pct}%</div></div>
 				<div><div className="text-[13px] text-ink-3">Due date</div><div className="num text-[20px] font-medium">{fmtDate(i.dueDate)}</div></div>
+			</div>
+
+			<div className="mb-6 rounded-card border border-hair bg-card p-6">
+				<div className="mb-3 flex items-baseline justify-between"><h2 className="text-[16px] font-semibold">Where the money goes</h2><span className="num text-[12px] text-ink-3">Advance rate {((Number(i.financingAmount) / Number(i.amount)) * 100).toFixed(1)}%</span></div>
+				<div className="flex h-3 overflow-hidden rounded-full bg-inset">
+					<div className="animate-fillbar h-full bg-pine" style={{ width: `${(Number(i.financingAmount) / Number(i.amount)) * 100}%` }} />
+					<div className="animate-fillbar h-full bg-accent" style={{ width: `${(Number(returnAmt) / Number(i.amount)) * 100}%`, animationDelay: '400ms' }} />
+				</div>
+				<div className="mt-3 grid gap-3 text-[13px] sm:grid-cols-2">
+					<div className="flex items-center gap-2 text-ink-2"><span className="h-2 w-2 bg-pine" />Investor pays the business <Amount value={i.financingAmount} /> at funding</div>
+					<div className="flex items-center gap-2 text-ink-2"><span className="h-2 w-2 bg-accent" />Payer repays <Amount value={i.amount} /> to the holder, a discount of <Amount value={returnAmt} tone="accent" /></div>
+				</div>
 			</div>
 
 			<div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">

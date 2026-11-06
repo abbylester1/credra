@@ -33,9 +33,9 @@ export default function PositionsPage() {
 			) : (
 				<>
 					<div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-						<Card><div className="text-[13px] text-ink-3">Capital deployed</div><div className="mt-2"><Amount value={sum((p) => p.fundedAmount)} figure /></div></Card>
-						<Card><div className="text-[13px] text-ink-3">Expected repayment</div><div className="mt-2"><Amount value={sum((p) => p.amount, (p) => p.status === 5)} figure /></div></Card>
-						<Card><div className="text-[13px] text-ink-3">Repaid to date</div><div className="mt-2"><Amount value={sum((p) => p.repaidAmount)} figure tone="accent" /></div></Card>
+						<Card className="animate-popin"><div className="text-[13px] text-ink-3">Capital deployed</div><div className="mt-2"><Amount value={sum((p) => p.fundedAmount)} figure /></div></Card>
+						<Card className="animate-popin [animation-delay:70ms]"><div className="text-[13px] text-ink-3">Expected repayment</div><div className="mt-2"><Amount value={sum((p) => p.amount, (p) => p.status === 5)} figure /></div></Card>
+						<Card className="animate-popin [animation-delay:140ms]"><div className="text-[13px] text-ink-3">Repaid to date</div><div className="mt-2"><Amount value={sum((p) => p.repaidAmount)} figure tone="accent" /></div></Card>
 					</div>
 					<div className="overflow-x-auto rounded-card border border-hair bg-card">
 						<table className="w-full min-w-[760px] border-collapse text-left text-[14px]">

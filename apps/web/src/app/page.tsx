@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { BuiltOn, Hero, Ticker } from '@/components/landing/Hero'
+import { Announcement, BuiltOn, Hero, Ticker } from '@/components/landing/Hero'
 import { Bento } from '@/components/landing/Bento'
 import { Process } from '@/components/landing/Process'
 import { Audiences, CtaBanner, Showcase, Stats, Trust } from '@/components/landing/Sections'
@@ -40,7 +40,7 @@ function Nav() {
 	]
 	return (
 		<nav
-			className={`fixed top-0 inset-x-0 z-50 h-[72px] flex items-center transition-all duration-150 ${scrolled ? 'bg-canvas/95 backdrop-blur-sm border-b border-hair' : 'bg-canvas'}`}
+			className={`sticky top-0 inset-x-0 z-50 h-[72px] flex items-center transition-all duration-150 ${scrolled ? 'bg-canvas/95 backdrop-blur-sm border-b border-hair' : 'bg-canvas'}`}
 		>
 			<div className="w-full max-w-[1200px] mx-auto px-5 md:px-8 flex items-center justify-between">
 				<Logo />
@@ -169,6 +169,7 @@ function Footer() {
 export default function LandingPage() {
 	return (
 		<div className="min-h-screen bg-canvas">
+			<Announcement />
 			<Nav />
 			<Hero />
 			<Ticker />

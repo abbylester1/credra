@@ -6,10 +6,10 @@ import { Chip, CountUp, EXPLORER, ExternalArrow, Eyebrow, Heading, Mono, Reveal,
 
 /* ─────────── Stats band ─────────── */
 const STATS = [
-	{ n: 3, label: 'Contracts verified', sub: 'Source-verified on the Whitechain Blockscout explorer.', href: `${EXPLORER}/address/0xc11162A72F388Efb6Ddd0B73Eea578598d733122`, cta: 'Open registry', icon: 'M5 4h10v12H5zM8 8h4M8 11h4' },
-	{ n: 40, label: 'Tests passing', sub: '29 Foundry contract tests and 11 eligibility rule tests.', href: 'https://github.com/abbylester1/credra', cta: 'Read the tests', icon: 'M4 10l4 4 8-8' },
-	{ n: 5, label: 'Fields cross-checked', sub: 'Amount, issuer, buyer, due date and document hash.', href: '#approach', cta: 'See the checks', icon: 'M4 6h12M4 10h12M4 14h8' },
-	{ n: 0, label: 'USDT held by contracts', sub: 'Funding and repayment move directly between wallets.', href: `${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6`, cta: 'Check the balance', icon: 'M10 3v14M6 7h8M6 13h8' },
+	{ n: 3, label: 'Contracts verified', sub: 'Source-verified on Blockscout.', href: `${EXPLORER}/address/0xc11162A72F388Efb6Ddd0B73Eea578598d733122`, cta: 'Open registry', icon: 'M5 4h10v12H5zM8 8h4M8 11h4' },
+	{ n: 40, label: 'Tests passing', sub: '29 contract, 11 rule tests.', href: 'https://github.com/abbylester1/credra', cta: 'Read the tests', icon: 'M4 10l4 4 8-8' },
+	{ n: 5, label: 'Fields cross-checked', sub: 'Amount, issuer, buyer, date, hash.', href: '#approach', cta: 'See the checks', icon: 'M4 6h12M4 10h12M4 14h8' },
+	{ n: 0, label: 'USDT held by contracts', sub: 'Money moves wallet to wallet.', href: `${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6`, cta: 'Check the balance', icon: 'M10 3v14M6 7h8M6 13h8' },
 ]
 export function Stats() {
 	return (
@@ -17,7 +17,7 @@ export function Stats() {
 			<div className="mx-auto max-w-[1200px] px-5 md:px-8">
 				<Reveal>
 					<Eyebrow>Built to be checked</Eyebrow>
-					<Heading lead="Numbers you can verify" rest="on the explorer and in the repo." className="max-w-[720px]" />
+					<Heading lead="Numbers you can verify" rest="on the explorer." className="max-w-[720px]" />
 				</Reveal>
 				<div className="mt-12 grid gap-px overflow-hidden rounded-[20px] border border-hair bg-hair sm:grid-cols-2 lg:grid-cols-4">
 					{STATS.map((s, i) => (
@@ -178,7 +178,7 @@ function Economics() {
 					</div>
 				))}
 			</div>
-			<p className="mt-4 text-[12px] leading-[1.55] text-ink-3">Today: investor pays the business directly. At the due date: the payer repays the full amount to the receivable holder. Terms are set per invoice onchain; no contract holds funds in between.</p>
+			<p className="mt-4 text-[12px] leading-[1.55] text-ink-3">Terms are set per invoice onchain. No contract holds funds.</p>
 		</div>
 	)
 }
@@ -218,17 +218,17 @@ export function Showcase() {
 			<div className="mx-auto max-w-[1200px] space-y-24 px-5 md:space-y-32 md:px-8">
 				<Row
 					id="investors" eyebrow="For investors" lead="Know exactly what" rest="you are funding."
-					body="Before you commit, open the verification record. It lists every check with the onchain and external value side by side, who recorded the verdict and the transaction."
-					bullets={['Field-by-field comparison, not a score', 'Simulated sources are always labelled', 'Verdict signer and tx link on every record']}
+					body="Every check, onchain and external value side by side, with the signer and transaction."
+					bullets={['Field-by-field, not a score', 'Simulated sources labelled', 'Signer and tx on every record']}
 				><VerificationRecord /></Row>
 				<Row
 					id="economics" flip eyebrow="Economics" lead="Clear economics," rest="no surprises."
-					body="Move the sliders to see how amount, discount and time to due date change what the business receives and what the investor earns. The same numbers are shown before anyone funds."
-					bullets={['Investor pays the business directly', 'Payer repays the full amount to the token holder', 'No admin withdrawal, no pooled funds']}
+					body="Move the sliders. See what the business gets and the investor earns."
+					bullets={['Investor pays the business directly', 'Full repayment to the holder', 'No admin withdrawal']}
 				><Economics /></Row>
 				<Row
 					id="transparency" eyebrow="Transparency" lead="Every step, every actor," rest="onchain."
-					body="Status changes, signers and transactions are public. The Funded and Repaid links on this timeline are real testnet transactions from an invoice settled with official USDT."
+					body="Statuses, signers and transactions are public. Funded and Repaid link to real testnet transactions."
 				><Timeline /></Row>
 			</div>
 		</section>
@@ -238,8 +238,8 @@ export function Showcase() {
 /* ─────────── Audience cards ─────────── */
 export function Audiences() {
 	const cards = [
-		{ id: 'businesses', eyebrow: 'For businesses', title: 'Get paid before', rest: 'the buyer pays.', body: 'Submit an invoice, get it verified and receive USDT financing without waiting for the due date.', cta: 'Submit an invoice', primary: true, steps: ['Connect a wallet', 'Submit invoice and document', 'Receive USDT once funded'] },
-		{ id: 'investors-cta', eyebrow: 'For investors', title: 'Fund verified', rest: 'receivables in USDT.', body: 'Browse eligible invoices, fund the ones you trust and track repayment from the receivable you hold.', cta: 'Browse invoices', primary: false, steps: ['Get approved onto the allowlist', 'Fund an eligible invoice', 'Receive repayment at the due date'] },
+		{ id: 'businesses', eyebrow: 'For businesses', title: 'Get paid before', rest: 'the buyer pays.', body: 'Submit, get verified, receive USDT before the due date.', cta: 'Submit an invoice', primary: true, steps: ['Connect a wallet', 'Submit invoice and document', 'Receive USDT'] },
+		{ id: 'investors-cta', eyebrow: 'For investors', title: 'Fund verified', rest: 'receivables in USDT.', body: 'Fund eligible invoices and track repayment onchain.', cta: 'Browse invoices', primary: false, steps: ['Get allowlisted', 'Fund an eligible invoice', 'Receive repayment'] },
 	]
 	return (
 		<section className="py-[72px] md:py-[104px]">
@@ -266,10 +266,10 @@ export function Audiences() {
 /* ─────────── Trust ─────────── */
 export function Trust() {
 	const items = [
-		{ t: 'Document fingerprints', d: 'A keccak256 hash proves the document has not changed since submission. Reusing it is rejected onchain.', icon: 'M6 3h6l4 4v10H6zM12 3v4h4' },
-		{ t: 'CRE verification', d: 'A Chainlink CRE workflow reads the onchain record, calls an external source and applies the eligibility rules.', icon: 'M10 2l7 4v8l-7 4-7-4V6z' },
-		{ t: 'Source-verified contracts', d: 'Whitechain Sepolia contracts enforce duplicate rejection, allowlist-gated receivables and direct settlement.', icon: 'M5 10l3 3 7-7' },
-		{ t: 'Provenance on every action', d: 'Each status change carries its actor, timestamp and explorer link, so no verdict is anonymous.', icon: 'M10 4a3 3 0 100 6 3 3 0 000-6zM4 17c0-3 3-5 6-5s6 2 6 5' },
+		{ t: 'Document fingerprints', d: 'A keccak256 hash locks the document. Reuse is rejected.', icon: 'M6 3h6l4 4v10H6zM12 3v4h4' },
+		{ t: 'CRE verification', d: 'Chainlink CRE checks the record against an external source.', icon: 'M10 2l7 4v8l-7 4-7-4V6z' },
+		{ t: 'Source-verified contracts', d: 'Contracts enforce duplicate rejection and direct settlement.', icon: 'M5 10l3 3 7-7' },
+		{ t: 'Provenance on every action', d: 'Every status change shows who, when and a tx link.', icon: 'M10 4a3 3 0 100 6 3 3 0 000-6zM4 17c0-3 3-5 6-5s6 2 6 5' },
 	]
 	return (
 		<section id="trust" className="scroll-mt-[72px] border-y border-hair bg-card py-[72px] md:py-[104px]">
@@ -277,7 +277,7 @@ export function Trust() {
 				<Reveal>
 					<Eyebrow>Trust and verification</Eyebrow>
 					<Heading lead="Trust backed by" rest="evidence, not promises." className="max-w-[720px]" />
-					<p className="mb-12 mt-5 max-w-[560px] text-[17px] leading-[1.55] text-ink-2">Every step is inspectable and there are no hidden intermediaries. Where something is simulated, we say so.</p>
+					<p className="mb-12 mt-5 max-w-[480px] text-[17px] leading-[1.55] text-ink-2">Inspectable end to end. Simulated parts are labelled.</p>
 				</Reveal>
 				<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 					{items.map((t, i) => (
@@ -302,18 +302,18 @@ export function CtaBanner() {
 			<Reveal>
 				<div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[28px] bg-pine px-6 py-16 text-center md:px-16 md:py-24">
 					<div className="linegrid absolute inset-0 opacity-70 [mask-image:radial-gradient(ellipse_at_center,#000_30%,transparent_75%)]" />
-					<div className="animate-floaty absolute left-[6%] top-[14%] hidden w-[210px] rounded-card bg-card p-3.5 text-left shadow-[0_20px_40px_-16px_rgba(0,0,0,0.5)] lg:block">
+					<div className="animate-floaty absolute left-[3%] top-[14%] hidden w-[210px] rounded-card bg-card p-3.5 text-left shadow-[0_20px_40px_-16px_rgba(0,0,0,0.5)] xl:block">
 						<div className="flex items-center justify-between"><span className="font-mono text-[11px] text-ink-2">INV-1001</span><Chip tone="accent">Eligible</Chip></div>
 						<p className="mt-2 font-mono text-[18px] font-medium text-ink">10,000.00</p>
 						<p className="text-[11px] text-ink-3">Acme Corp · USDT</p>
 					</div>
-					<div className="animate-floaty-slow absolute bottom-[14%] right-[6%] hidden w-[220px] rounded-card bg-card p-3.5 text-left shadow-[0_20px_40px_-16px_rgba(0,0,0,0.5)] lg:block">
+					<div className="animate-floaty-slow absolute bottom-[14%] right-[3%] hidden w-[220px] rounded-card bg-card p-3.5 text-left shadow-[0_20px_40px_-16px_rgba(0,0,0,0.5)] xl:block">
 						<div className="flex items-center gap-2"><UsdtMark size={22} /><div><p className="text-[12px] font-medium text-ink">Repaid in full</p><p className="font-mono text-[10px] text-ink-3">tx {short(TX.repay)}</p></div></div>
 					</div>
 					<div className="relative">
 						<p className="mb-4 font-mono text-[11px] uppercase tracking-[0.06em] text-white/60">Testnet demo</p>
 						<h2 className="mx-auto max-w-[720px] text-[36px] font-semibold leading-[1.04] tracking-[-0.03em] text-white md:text-[64px]">Invoice financing <span className="text-white/55">you can verify.</span></h2>
-						<p className="mx-auto mt-5 max-w-[480px] text-[16px] leading-[1.6] text-white/70">Submit, verify, fund and settle. Every step onchain, every claim checkable.</p>
+						<p className="mx-auto mt-5 max-w-[480px] text-[16px] leading-[1.6] text-white/70">Submit, verify, fund, settle. All onchain.</p>
 						<div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
 							<Link href="/app" className="group inline-flex h-12 items-center gap-2 rounded-ctl bg-white px-6 text-[14px] font-semibold text-pine transition-colors hover:bg-white/90">Launch app <span className="transition-transform group-hover:translate-x-0.5" aria-hidden>→</span></Link>
 							<a href="https://github.com/abbylester1/credra" target="_blank" rel="noreferrer" className="inline-flex h-12 items-center gap-1.5 rounded-ctl border border-white/25 px-6 text-[14px] font-medium text-white transition-colors hover:bg-white/10">View on GitHub <ExternalArrow /></a>

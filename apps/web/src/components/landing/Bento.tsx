@@ -185,19 +185,17 @@ export function Bento() {
 			<div className="mx-auto max-w-[1200px] px-5 md:px-8">
 				<Reveal>
 					<Eyebrow>Approach</Eyebrow>
-					<Heading lead="Evidence first." rest="Every claim is checked, then recorded." className="max-w-[760px]" />
-					<p className="mb-12 mt-5 max-w-[560px] text-[17px] leading-[1.55] text-ink-2">
-						Credra funds an invoice only after its onchain record matches an external one. The rules are in code, not in a policy document. Illustrations use demo values; the Funded and Repaid links are real testnet transactions.
-					</p>
+					<Heading lead="Evidence first." rest="Checked, then recorded." className="max-w-[760px]" />
+					<p className="mb-12 mt-5 max-w-[480px] text-[17px] leading-[1.55] text-ink-2">Rules live in code, not policy. Demo values shown; Funded and Repaid links are real.</p>
 				</Reveal>
 				<div className="grid gap-5 lg:grid-cols-2">
-					<Reveal><Card href="#process" title="Verified before funded" rest="so nothing opens until the record matches." className="h-[460px]"><VerifyIllustration /></Card></Reveal>
-					<Reveal delay={100}><Card href="https://github.com/abbylester1/credra/blob/main/contracts/src/InvoiceRegistry.sol" title="No double financing" rest="because duplicates revert onchain." className="h-[460px]"><DuplicateIllustration /></Card></Reveal>
+					<Reveal><Card href="#process" title="Verified before funded" rest="before anything opens." className="h-[460px]"><VerifyIllustration /></Card></Reveal>
+					<Reveal delay={100}><Card href="https://github.com/abbylester1/credra/blob/main/contracts/src/InvoiceRegistry.sol" title="No double financing" rest="duplicates revert." className="h-[460px]"><DuplicateIllustration /></Card></Reveal>
 				</div>
 				<div className="mt-5 grid gap-5 lg:grid-cols-3">
-					<Reveal><Card href="#economics" title="Direct settlement" rest="with no custody in between." className="h-[400px]"><FlowIllustration /></Card></Reveal>
-					<Reveal delay={100}><Card href="#transparency" title="A full audit trail" rest="with an explorer link per step." className="h-[400px]"><AuditIllustration /></Card></Reveal>
-					<Reveal delay={200}><Card href="#trust" title="Fails safe" rest="to manual review, never to eligible." className="h-[400px]"><FailSafeIllustration /></Card></Reveal>
+					<Reveal><Card href="#economics" title="Direct settlement" rest="no custody." className="h-[400px]"><FlowIllustration /></Card></Reveal>
+					<Reveal delay={100}><Card href="#transparency" title="A full audit trail" rest="link per step." className="h-[400px]"><AuditIllustration /></Card></Reveal>
+					<Reveal delay={200}><Card href="#trust" title="Fails safe" rest="to manual review." className="h-[400px]"><FailSafeIllustration /></Card></Reveal>
 				</div>
 			</div>
 		</section>

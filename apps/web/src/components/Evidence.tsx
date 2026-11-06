@@ -55,7 +55,7 @@ export function EvidencePanel({ v }: { v: Verification | null }) {
 				{comparisons
 					.filter((c) => !failed.has(c.code) && !(c.code !== 'invoice_not_found_in_external_registry' && failed.has('invoice_not_found_in_external_registry')))
 					.map((c) => (
-						<li key={c.code} className="flex gap-2.5 py-2 text-[14px] text-ink-2"><Mark kind="pass" /><span><span className="sr-only">Passed: </span>{c.label}</span></li>
+						<li key={c.code} className="animate-slidein flex gap-2.5 py-2 text-[14px] text-ink-2"><Mark kind="pass" /><span><span className="sr-only">Passed: </span>{c.label}</span></li>
 					))}
 			</ul>
 			<ProvenanceStrip simulated={v.simulated} recordedBy="application verifier wallet" tx={v.recordTx} />

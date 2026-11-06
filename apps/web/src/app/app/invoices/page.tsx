@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { InvoiceTable } from '@/components/InvoiceTable'
+import { Pipeline } from '@/components/OverviewExtras'
 import { SignInGate } from '@/components/SignInGate'
 import { Button, EmptyState, InlineNotice, PageHeader } from '@/components/ui'
 import { useInvoices, type Scope } from '@/lib/useInvoices'
@@ -11,7 +12,12 @@ function List({ scope, headers }: { scope: Scope; headers?: Record<string, strin
 	const q = useInvoices(scope, headers)
 	if (q.isLoading) return <p className="text-[14px] text-ink-3">Loading invoices</p>
 	if (q.error) return <InlineNotice tone="error">We could not load invoices. Nothing was changed. {(q.error as Error).message}</InlineNotice>
-	return <InvoiceTable items={q.data ?? []} />
+	return (
+		<div className="space-y-6">
+			<Pipeline items={q.data ?? []} />
+			<InvoiceTable items={q.data ?? []} />
+		</div>
+	)
 }
 
 export default function InvoicesPage() {

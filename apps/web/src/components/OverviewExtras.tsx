@@ -17,7 +17,7 @@ export function Welcome({ role, name }: { role: 'business' | 'investor' | 'opera
 	return (
 		<div className="relative mb-6 overflow-hidden rounded-[20px] bg-pine p-7 text-white md:p-9">
 			<div className="linegrid absolute inset-0 opacity-70 [mask-image:linear-gradient(90deg,transparent,#000_70%)]" />
-			<div className="animate-floaty absolute right-8 top-1/2 hidden h-[120px] w-[190px] -translate-y-1/2 overflow-hidden rounded-[12px] border border-white/15 bg-white/10 p-3.5 backdrop-blur-sm md:block">
+			<div className="animate-floaty absolute right-8 top-1/2 hidden h-[120px] w-[190px] -translate-y-1/2 overflow-hidden rounded-[12px] border border-white/15 bg-white/10 p-3.5 backdrop-blur-sm xl:block">
 				<p className="font-mono text-[10px] uppercase tracking-[0.06em] text-white/60">Receivable · CRDR</p>
 				<p className="mt-9 font-mono text-[16px]">USDT, direct</p>
 				<p className="font-mono text-[10px] text-white/60">no custody</p>
