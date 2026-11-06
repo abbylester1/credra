@@ -3,7 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAccount, useChainId, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
+import { useWalletChainId } from '@/lib/useWalletChain'
 import { CHAIN_ID, EXPLORER, shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
 import { Button } from './ui'
@@ -27,7 +28,7 @@ function WalletCard() {
 	const { address, isConnected } = useAccount()
 	const { connectors, connect, isPending, error } = useConnect()
 	const { disconnect } = useDisconnect()
-	const chainId = useChainId()
+	const chainId = useWalletChainId()
 	const { role, loading } = useRole()
 	const ok = isConnected && chainId === CHAIN_ID
 
@@ -89,7 +90,7 @@ function TopBar() {
 
 function NetworkBanner() {
 	const { isConnected } = useAccount()
-	const chainId = useChainId()
+	const chainId = useWalletChainId()
 	const { switchChain, isPending } = useSwitchChain()
 	if (!isConnected || chainId === CHAIN_ID) return null
 	return (

@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useAccount, useChainId, useConnect } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
+import { useWalletChainId } from '@/lib/useWalletChain'
 import { CHAIN_ID } from '@/lib/config'
 import { friendlyError } from '@/lib/errors'
 import { useWalletHeaders } from '@/lib/client'
@@ -11,7 +12,7 @@ import { Button, Card, InlineNotice } from './ui'
 export function SignInGate({ children }: { children: (headers: Record<string, string>) => React.ReactNode }) {
 	const { isConnected } = useAccount()
 	const { connectors, connect, isPending } = useConnect()
-	const chainId = useChainId()
+	const chainId = useWalletChainId()
 	const getHeaders = useWalletHeaders()
 	const [headers, setHeaders] = useState<Record<string, string> | null>(null)
 	const [err, setErr] = useState<string | null>(null)
@@ -50,6 +51,7 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 							try {
 								setHeaders(await getHeaders())
 							} catch (e) {
+								console.error('wallet sign-in failed', e)
 								setErr(friendlyError(e))
 							}
 						}}

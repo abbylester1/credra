@@ -2,7 +2,8 @@
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useAccount, useChainId, usePublicClient, useReadContract, useWriteContract } from 'wagmi'
+import { useAccount, usePublicClient, useReadContract, useWriteContract } from 'wagmi'
+import { useWalletChainId } from '@/lib/useWalletChain'
 import { allowlistAbi, erc20Abi, financeAbi } from '@/lib/abi'
 import { apiJson } from '@/lib/client'
 import { ADDRESSES, CHAIN_ID } from '@/lib/config'
@@ -17,7 +18,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 /** Approve USDT, then fund or repay. Each step is separate and reports failures without changing the invoice. */
 export function PayPanel({ invoiceId, required, kind, requireAllowlist }: { invoiceId: `0x${string}`; required: bigint; kind: Kind; requireAllowlist?: boolean }) {
 	const { address, isConnected } = useAccount()
-	const chainId = useChainId()
+	const chainId = useWalletChainId()
 	const publicClient = usePublicClient()
 	const { writeContractAsync } = useWriteContract()
 	const qc = useQueryClient()
@@ -115,7 +116,7 @@ export function PayPanel({ invoiceId, required, kind, requireAllowlist }: { invo
 /** Anyone may flag a funded invoice as defaulted once the due date plus the grace period has passed. */
 export function DefaultButton({ invoiceId }: { invoiceId: `0x${string}` }) {
 	const { address } = useAccount()
-	const chainId = useChainId()
+	const chainId = useWalletChainId()
 	const publicClient = usePublicClient()
 	const { writeContractAsync } = useWriteContract()
 	const qc = useQueryClient()
