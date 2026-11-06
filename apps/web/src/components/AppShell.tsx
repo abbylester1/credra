@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
 import { useWalletChainId } from '@/lib/useWalletChain'
+import { useConnectMode } from './Providers'
 import { CHAIN_ID, EXPLORER, shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
 import { Button } from './ui'
@@ -28,6 +29,7 @@ function WalletCard() {
 	const { address, isConnected } = useAccount()
 	const { connectors, connect, isPending, error } = useConnect()
 	const { disconnect } = useDisconnect()
+	const mode = useConnectMode()
 	const chainId = useWalletChainId()
 	const { role, loading } = useRole()
 	const ok = isConnected && chainId === CHAIN_ID
@@ -36,8 +38,8 @@ function WalletCard() {
 		const inj = connectors[0]
 		return (
 			<div className="space-y-2">
-				<Button variant="primary" className="w-full" disabled={!inj || isPending} onClick={() => inj && connect({ connector: inj })}>
-					{isPending ? 'Waiting for your wallet' : 'Connect wallet'}
+				<Button variant="primary" className="w-full" disabled={mode.login ? false : !inj || isPending} onClick={() => (mode.login ? mode.login() : inj && connect({ connector: inj }))}>
+					{isPending ? 'Waiting for your wallet' : mode.privy ? 'Sign in' : 'Connect wallet'}
 				</Button>
 				{error && (
 					<p className="text-[12px] text-s-reject">
@@ -58,7 +60,7 @@ function WalletCard() {
 					<span className={`h-1.5 w-1.5 rounded-full ${ok ? 'bg-accent' : 'bg-s-review'}`} aria-hidden />
 					{ok ? 'Whitechain Sepolia' : 'Wrong network'}
 				</span>
-				<button className="text-[12px] text-accent hover:underline" onClick={() => disconnect()}>Disconnect</button>
+				<button className="text-[12px] text-accent hover:underline" onClick={() => { disconnect(); void mode.logout?.() }}>Disconnect</button>
 			</div>
 		</div>
 	)

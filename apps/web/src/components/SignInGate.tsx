@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useAccount, useConnect } from 'wagmi'
 import { useWalletChainId } from '@/lib/useWalletChain'
+import { useConnectMode } from './Providers'
 import { CHAIN_ID } from '@/lib/config'
 import { friendlyError } from '@/lib/errors'
 import { useWalletHeaders } from '@/lib/client'
@@ -13,6 +14,7 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 	const { isConnected } = useAccount()
 	const { connectors, connect, isPending } = useConnect()
 	const chainId = useWalletChainId()
+	const mode = useConnectMode()
 	const getHeaders = useWalletHeaders()
 	const [headers, setHeaders] = useState<Record<string, string> | null>(null)
 	const [err, setErr] = useState<string | null>(null)
@@ -25,10 +27,10 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 		return (
 			<Card className="mx-auto max-w-[720px] text-center">
 				<h2 className="text-[20px] font-semibold">Connect your wallet</h2>
-				<p className="mx-auto mt-1 max-w-[52ch] text-[14px] text-ink-2">Credra uses your browser wallet to identify you. No account or password is needed.</p>
+				<p className="mx-auto mt-1 max-w-[52ch] text-[14px] text-ink-2">{mode.privy ? 'Sign in with email, Google or a wallet. An embedded wallet is created for you.' : 'Credra uses your browser wallet to identify you. No account or password is needed.'}</p>
 				<div className="mt-4 flex justify-center">
-					<Button variant="primary" disabled={!inj || isPending} onClick={() => inj && connect({ connector: inj })}>
-						{isPending ? 'Waiting for your wallet' : 'Connect wallet'}
+					<Button variant="primary" disabled={mode.login ? false : !inj || isPending} onClick={() => (mode.login ? mode.login() : inj && connect({ connector: inj }))}>
+						{isPending ? 'Waiting for your wallet' : mode.privy ? 'Sign in' : 'Connect wallet'}
 					</Button>
 				</div>
 			</Card>
