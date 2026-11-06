@@ -1,20 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Chip, EXPLORER, Eyebrow, ExternalArrow, Heading, Mono, Reveal, Tick, TX, UsdtMark, short, useInView } from './shared'
+import { Chip, EXPLORER, Eyebrow, ExternalArrow, Heading, Mono, Reveal, Tick, TX, short, useInView } from './shared'
 
-/** Sequence helper: returns how many steps have elapsed once the node is in view. */
-function useSteps(total: number, ms: number) {
-	const [ref, seen] = useInView<HTMLDivElement>(0.35)
-	const [n, setN] = useState(0)
-	useEffect(() => {
-		if (!seen) return
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setN(total); return }
-		let i = 0
-		const id = setInterval(() => { i += 1; setN(i); if (i >= total) clearInterval(id) }, ms)
-		return () => clearInterval(id)
-	}, [seen, total, ms])
-	return [ref, n] as const
+/** Static: the illustration rests in its final state, no stepping (the hero and cards no longer animate). */
+function useSteps(total: number, _ms: number) {
+	const [ref] = useInView<HTMLDivElement>(0.35)
+	return [ref, total] as const
 }
 
 function Card({ href, title, rest, className = '', children }: { href: string; title: string; rest: string; className?: string; children: React.ReactNode }) {
@@ -56,7 +47,7 @@ function VerifyIllustration() {
 					<p className="label">Verification</p>
 					<p className="font-mono text-[12px] text-ink-2">INV-1001 · demo values</p>
 				</div>
-				<span className="h-6">{n > ROWS.length ? <span className="animate-popin inline-block"><Chip tone="accent">Eligible</Chip></span> : <Chip tone="review">Checking</Chip>}</span>
+				<span className="h-6"><Chip tone={n > ROWS.length ? 'accent' : 'review'}>{n > ROWS.length ? 'Eligible' : 'Checking'}</Chip></span>
 			</div>
 			<div className="grid grid-cols-[1fr_1fr_1fr_20px] gap-x-3 border-b border-hair pb-1.5 text-[11px] text-ink-3"><span>Field</span><span>Onchain</span><span>External</span><span /></div>
 			{ROWS.map(([k, a, b], i) => (
@@ -83,14 +74,14 @@ function DuplicateIllustration() {
 				</div>
 				<p className="mt-1 font-mono text-[11px] text-ink-3">document hash 0x9a1f…c2e0</p>
 			</div>
-			<div className={`rounded-card border border-s-reject/40 bg-card p-4 ${n >= 2 ? 'animate-shake opacity-100' : 'opacity-0'}`}>
+			<div className={`rounded-card border border-s-reject/40 bg-card p-4 ${n >= 2 ? 'opacity-100' : 'opacity-0'}`}>
 				<div className="flex items-center justify-between">
 					<span className="font-mono text-[12px] text-ink">INV-1001 · submitted again</span>
 					<Chip tone="reject">Reverted</Chip>
 				</div>
 				<p className="mt-1 font-mono text-[11px] text-s-reject">DuplicateInvoice()</p>
 			</div>
-			<div className={`rounded-card border border-s-reject/40 bg-card p-4 ${n >= 3 ? 'animate-shake opacity-100' : 'opacity-0'}`}>
+			<div className={`rounded-card border border-s-reject/40 bg-card p-4 ${n >= 3 ? 'opacity-100' : 'opacity-0'}`}>
 				<div className="flex items-center justify-between">
 					<span className="font-mono text-[12px] text-ink">INV-2044 · same document</span>
 					<Chip tone="reject">Reverted</Chip>
@@ -101,37 +92,39 @@ function DuplicateIllustration() {
 	)
 }
 
-/* ── 3. Direct settlement ── */
+/* ── 3. Direct settlement ── Capped width so the flows never stretch; the "nothing held" fact is the hero. */
 function FlowIllustration() {
 	return (
 		<div className="absolute inset-x-7 top-0">
-			<div className="rounded-card border border-hair bg-card p-5">
-				<div className="flex items-center justify-between gap-2">
-					<Wallet label="Investor" />
-					<Pipe label="48,000.00" />
-					<Wallet label="Business" />
+			<div className="mx-auto max-w-[440px] rounded-card border border-hair bg-card p-5">
+				<FlowRow from="Investor" to="Business" amount="48,000.00" />
+				<div className="my-3.5 h-px bg-hair" />
+				<FlowRow from="Payer" to="Token holder" amount="50,000.00" />
+				<div className="mt-4 flex items-center justify-between rounded-ctl bg-inset px-3.5 py-2.5">
+					<span className="flex items-center gap-2 text-[12px] text-ink-2">
+						<span className="flex h-4 w-4 items-center justify-center rounded-full bg-verified text-white"><svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 5.2l2 2 4-4.4" /></svg></span>
+						Held by contracts
+					</span>
+					<span className="num-display text-[18px] text-ink">0.00 <span className="text-[12px] text-ink-3">USDT</span></span>
 				</div>
-				<div className="my-4 border-t border-dashed border-hair" />
-				<div className="flex items-center justify-between gap-2">
-					<Wallet label="Payer" />
-					<Pipe label="50,000.00" />
-					<Wallet label="Token holder" />
-				</div>
-				<p className="mt-4 rounded-ctl bg-inset px-3 py-2 text-center font-mono text-[11px] text-ink-2">Contract balance: 0.00 USDT</p>
 			</div>
 		</div>
 	)
 }
-const Wallet = ({ label }: { label: string }) => (
-	<div className="flex w-[78px] flex-col items-center gap-1.5">
-		<span className="flex h-9 w-9 items-center justify-center rounded-ctl border border-hair bg-canvas"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" className="text-ink-2"><rect x="1.5" y="3.5" width="13" height="9" rx="2" /><path d="M11 8h2" strokeLinecap="round" /></svg></span>
-		<span className="text-center text-[11px] text-ink-2">{label}</span>
+const FlowRow = ({ from, to, amount }: { from: string; to: string; amount: string }) => (
+	<div className="grid grid-cols-[auto_1fr_auto] items-center gap-2.5">
+		<Wallet label={from} />
+		<div className="flex flex-col items-center gap-1 px-1">
+			<span className="num-display text-[13px] text-ink">{amount}</span>
+			<svg viewBox="0 0 120 6" className="h-1.5 w-full text-hair" preserveAspectRatio="none" aria-hidden><line x1="0" y1="3" x2="112" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><path d="M110 0.5L116 3l-6 2.5" fill="none" stroke="var(--color-ink-3)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+		</div>
+		<Wallet label={to} />
 	</div>
 )
-const Pipe = ({ label }: { label: string }) => (
-	<div className="flex flex-1 flex-col items-center gap-1">
-		<span className="flex items-center gap-1 font-mono text-[11px] text-ink"><UsdtMark size={14} />{label}</span>
-		<svg viewBox="0 0 100 8" className="h-2 w-full text-ink-3" preserveAspectRatio="none"><line x1="0" y1="4" x2="96" y2="4" stroke="currentColor" strokeWidth="1.6" strokeDasharray="5 4" className="animate-flow" /><path d="M92 1l5 3-5 3" fill="none" stroke="currentColor" strokeWidth="1.6" /></svg>
+const Wallet = ({ label }: { label: string }) => (
+	<div className="flex w-[72px] flex-col items-center gap-1.5">
+		<span className="flex h-9 w-9 items-center justify-center rounded-ctl bg-inset text-ink-2"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="1.5" y="3.5" width="13" height="9" rx="2.5" /><path d="M11 8h2" strokeLinecap="round" /></svg></span>
+		<span className="text-center text-[11px] leading-tight text-ink-2">{label}</span>
 	</div>
 )
 
@@ -174,7 +167,7 @@ function FailSafeIllustration() {
 					<span className={i === 2 ? 'text-[#F4C77A]' : i === 3 ? 'text-[#7FE0C8]' : c === 'text-ink-2' ? 'text-white/80' : ''}>{v}</span>
 				</p>
 			))}
-			<span className="animate-blink inline-block h-3 w-1.5 bg-white/70" />
+			<span className="inline-block h-3 w-1.5 bg-white/70" />
 		</div>
 	)
 }

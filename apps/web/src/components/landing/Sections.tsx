@@ -2,43 +2,37 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Chip, CountUp, EXPLORER, ExternalArrow, Eyebrow, Heading, Mono, Reveal, Tick, TX, UsdtMark, short, useInView, useTween } from './shared'
+import { Chip, CountUp, EXPLORER, ExternalArrow, Eyebrow, Heading, Mono, Reveal, Tick, TX, short, useInView, useTween } from './shared'
 
-/* ─────────── Stats band ─────────── */
+/* ─────────── Proof: claims you can check yourself. Quiet, one row, whole item is the link. ─────────── */
 const STATS = [
-	{ n: 3, label: 'Contracts verified', sub: 'Source-verified on Blockscout.', href: `${EXPLORER}/address/0xc11162A72F388Efb6Ddd0B73Eea578598d733122`, cta: 'Open registry', icon: 'M5 4h10v12H5zM8 8h4M8 11h4' },
-	{ n: 40, label: 'Tests passing', sub: '29 contract, 11 rule tests.', href: 'https://github.com/abbylester1/credra', cta: 'Read the tests', icon: 'M4 10l4 4 8-8' },
-	{ n: 5, label: 'Fields cross-checked', sub: 'On every invoice.', href: '#approach', cta: 'See the checks', icon: 'M4 6h12M4 10h12M4 14h8' },
-	{ n: 0, label: 'USDT held by contracts', sub: 'Money moves wallet to wallet.', href: `${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6`, cta: 'Check the balance', icon: 'usdt' },
+	{ n: 3, label: 'Contracts verified', sub: 'Source-verified on Blockscout.', href: `${EXPLORER}/address/0xc11162A72F388Efb6Ddd0B73Eea578598d733122` },
+	{ n: 102, label: 'Tests passing', sub: '29 contract, 11 rule, 62 app tests.', href: 'https://github.com/abbylester1/credra' },
+	{ n: 5, label: 'Fields cross-checked', sub: 'On every invoice.', href: '#approach' },
+	{ n: 0, label: 'USDT held by contracts', sub: 'Money moves wallet to wallet.', href: `${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6` },
 ]
 export function Stats() {
 	return (
-		<section className="border-y border-hair bg-canvas py-[56px] md:py-[72px]">
+		<section className="bg-canvas py-10 md:py-12">
 			<div className="mx-auto max-w-[1200px] px-5 md:px-8">
 				<Reveal>
 					<Eyebrow>Proof</Eyebrow>
-					<Heading lead="Check it yourself." rest="Every claim links out." className="max-w-[900px] !text-[30px] md:!text-[40px]" />
+					<Heading lead="Check it yourself." rest="Every claim links out." className="max-w-[900px] !text-[24px] md:!text-[30px]" />
 				</Reveal>
-				<div className="mt-8 grid gap-px overflow-hidden rounded-[20px] border border-hair bg-hair sm:grid-cols-2 lg:grid-cols-4">
+				<div className="mt-7 grid grid-cols-2 gap-y-7 md:grid-cols-4">
 					{STATS.map((s, i) => (
-						<Reveal key={s.label} delay={i * 80} className="bg-card">
+						<Reveal key={s.label} delay={i * 60} className="md:border-l md:border-hair md:pl-6 md:first:border-l-0 md:first:pl-0">
 							<a
 								href={s.href}
 								{...(s.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
-								className="group relative flex h-full min-h-[200px] flex-col justify-between p-6 transition-colors hover:bg-canvas"
+								className="group block pr-4"
 							>
-								<div className="flex items-start justify-between">
-									<span className="flex h-8 w-8 items-center justify-center rounded-ctl bg-accent-soft text-accent">
-										{s.icon === 'usdt' ? <UsdtMark size={18} /> : <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={s.icon} /></svg>}
-									</span>
-									<span className="text-ink-3 opacity-0 transition-opacity group-hover:opacity-100"><ExternalArrow /></span>
-								</div>
-								<div>
-									<p className="font-mono text-[48px] font-medium leading-none tracking-[-0.04em] text-ink md:text-[56px]"><CountUp to={s.n} /></p>
-									<p className="mt-2 text-[15px] font-semibold text-ink">{s.label}</p>
-									<p className="mt-1 text-[13px] leading-[1.5] text-ink-3">{s.sub}</p>
-									<p className="mt-3 text-[13px] font-medium text-accent">{s.cta} <span aria-hidden className="inline-block transition-transform group-hover:translate-x-1">→</span></p>
-								</div>
+								<p className="num-display text-[32px] leading-[1.15] text-ink md:text-[40px] md:leading-[48px]"><CountUp to={s.n} /></p>
+								<p className="mt-1.5 flex items-center gap-1.5 text-[14px] font-medium leading-6 text-ink">
+									<span className="underline decoration-transparent decoration-1 underline-offset-[3px] transition-colors group-hover:decoration-ink/40">{s.label}</span>
+									{s.href.startsWith('http') && <span className="text-ink-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100"><ExternalArrow /></span>}
+								</p>
+								<p className="text-[13px] leading-5 text-ink-3">{s.sub}</p>
 							</a>
 						</Reveal>
 					))}
@@ -125,10 +119,10 @@ function Slider({ label, value, min, max, step, onChange, display }: { label: st
 	const pct = ((value - min) / (max - min)) * 100
 	return (
 		<label className="block">
-			<span className="mb-2 flex items-baseline justify-between"><span className="text-[13px] text-ink-2">{label}</span><Mono className="text-[14px] font-medium text-ink">{display}</Mono></span>
+			<span className="mb-2.5 flex items-baseline justify-between gap-2 whitespace-nowrap"><span className="text-[13px] text-ink-2">{label}</span><span className="num-display text-[15px] text-ink">{display}</span></span>
 			<input
 				type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))}
-				className="h-1.5 w-full cursor-pointer appearance-none rounded-full accent-[#0D3B35]"
+				className="credra-range h-1 w-full cursor-pointer appearance-none rounded-full"
 				style={{ background: `linear-gradient(90deg, var(--color-pine) ${pct}%, var(--color-hair) ${pct}%)` }}
 			/>
 		</label>
@@ -144,42 +138,46 @@ function Economics() {
 	const apr = ret * (365 / days)
 	const tf = useTween(financing, 500), td = useTween(discount, 500), tr = useTween(ret, 500), ta = useTween(apr, 500)
 	return (
-		<div className="rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-30px_rgba(18,17,15,0.4)] md:p-6">
+		<div className="rounded-win border border-hair bg-card p-5 md:p-6">
 			<div className="flex items-center justify-between">
 				<p className="text-[15px] font-semibold text-ink">Financing terms</p>
-				<span className="rounded-chip border border-dashed border-s-review px-1.5 py-px font-mono text-[10px] uppercase text-s-review">Demo</span>
+				<span className="rounded-chip bg-inset px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.04em] text-ink-3">Demo</span>
 			</div>
-			<div className="mt-5 grid gap-5">
-				<div className="flex gap-2">{[5000, 50000, 250000].map((v) => <button key={v} type="button" onClick={() => setAmount(v)} className={`rounded-chip border px-2.5 py-1 font-mono text-[11px] transition-colors ${amount === v ? 'border-ink bg-ink text-white' : 'border-hair text-ink-2 hover:border-field'}`}>{v >= 1000 ? `${v / 1000}k` : v}</button>)}</div>
+			<div className="mt-5 grid gap-4">
+				<div className="flex gap-1.5">{[5000, 50000, 250000].map((v) => <button key={v} type="button" onClick={() => setAmount(v)} className={`rounded-chip px-2.5 py-1 text-[12px] font-medium transition-colors ${amount === v ? 'bg-ink text-white' : 'bg-inset text-ink-2 hover:text-ink'}`}>{v >= 1000 ? `${v / 1000}k` : v}</button>)}</div>
 				<Slider label="Invoice amount" value={amount} min={1000} max={250000} step={1000} onChange={setAmount} display={`${fmt(amount)} USDT`} />
-				<div className="grid gap-5 sm:grid-cols-2">
+				<div className="grid grid-cols-2 gap-4">
 					<Slider label="Discount" value={disc} min={1} max={10} step={1} onChange={setDisc} display={`${disc}%`} />
-					<Slider label="Days to due" value={days} min={15} max={180} step={5} onChange={setDays} display={`${days} days`} />
+					<Slider label="Days to due" value={days} min={15} max={180} step={5} onChange={setDays} display={`${days}d`} />
 				</div>
 			</div>
 
-			<div className="mt-6">
-				<div className="flex h-9 overflow-hidden rounded-ctl">
-					<div className="flex items-center overflow-hidden whitespace-nowrap bg-pine px-3 font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${100 - disc}%` }}><span className="truncate">Business receives now</span></div>
-					<div className="flex items-center justify-center overflow-hidden whitespace-nowrap bg-verified px-1 font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${disc}%` }}><span className="truncate">{disc >= 16 ? 'Discount' : ''}</span></div>
+			<div className="mt-5 border-t border-hair pt-4">
+				<div className="flex items-end justify-between gap-4">
+					<div>
+						<p className="text-[13px] text-ink-3">Business receives now</p>
+						<p className="num-display mt-1 flex items-baseline gap-1.5 text-[28px] leading-none text-ink md:text-[32px]">{fmt(tf)}<span className="text-[14px] text-ink-3">USDT</span></p>
+					</div>
+					<div className="text-right">
+						<p className="text-[12px] text-ink-3">Investor discount</p>
+						<p className="num-display text-[18px] text-verified">{fmt(td)}</p>
+					</div>
 				</div>
-				<div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 font-mono text-[11px] text-ink-3"><span className="flex items-center gap-3"><span className="flex items-center gap-1.5"><span className="h-2 w-2 bg-pine" />Paid now</span><span className="flex items-center gap-1.5"><span className="h-2 w-2 bg-verified" />Discount</span></span><span>{fmt(amount)} USDT repaid in full</span></div>
+				<div className="mt-3 flex h-1.5 overflow-hidden rounded-full bg-inset" role="img" aria-label={`${100 - disc}% paid now, ${disc}% investor discount`}>
+					<div className="h-full bg-pine transition-[width] duration-500" style={{ width: `${100 - disc}%` }} />
+					<div className="h-full bg-verified transition-[width] duration-500" style={{ width: `${disc}%` }} />
+				</div>
 			</div>
 
-			<div className="mt-5 grid grid-cols-2 gap-3">
-				{[
-					['Investor pays business', `${fmt(tf)}`, 'text-ink', true],
-					['Discount (investor yield)', `${fmt(td)}`, 'text-verified', true],
-					['Return on financing', `${tr.toFixed(1)}%`, 'text-ink', false],
-					['Annualised', `${ta.toFixed(1)}%`, 'text-ink', false],
-				].map(([k, v, c, usdt]) => (
-					<div key={k as string} className="rounded-ctl bg-canvas p-3.5">
-						<p className="text-[11px] text-ink-3">{k}</p>
-						<p className={`mt-1 flex items-center gap-1.5 font-mono text-[19px] font-medium tracking-[-0.01em] ${c}`}>{v}{usdt && <UsdtMark size={14} />}</p>
+			<div className="mt-4 grid grid-cols-3 gap-4 border-t border-hair pt-4">
+				{([['Return on financing', `${tr.toFixed(1)}%`], ['Annualised', `${ta.toFixed(1)}%`], ['Repaid at due', fmt(amount)]] as const).map(([k, v]) => (
+					<div key={k}>
+						<p className="text-[12px] leading-tight text-ink-3">{k}</p>
+						<p className="num-display mt-1 text-[17px] text-ink">{v}</p>
 					</div>
 				))}
 			</div>
-			<div className="mt-3 flex items-center justify-between rounded-ctl border border-hair px-3.5 py-3"><span className="text-[13px] text-ink-2">Platform fee</span><span className="flex items-center gap-1.5 font-mono text-[15px] font-medium text-ink">0.00 <UsdtMark size={14} /></span></div>
+			<p className="mt-4 flex items-center justify-between border-t border-hair pt-3 text-[13px]"><span className="text-ink-2">Platform fee</span><span className="num-display text-ink">0.00 USDT</span></p>
 		</div>
 	)
 }
@@ -239,23 +237,22 @@ export function Showcase() {
 /* ─────────── Audience cards ─────────── */
 export function Audiences() {
 	const cards = [
-		{ id: 'businesses', eyebrow: 'For businesses', title: 'Get paid before', rest: 'the buyer pays.', body: 'Submit, get verified, receive USDT before the due date.', cta: 'Submit an invoice', primary: true, steps: ['Connect a wallet', 'Submit invoice and document', 'Receive USDT'] },
-		{ id: 'investors-cta', eyebrow: 'For investors', title: 'Fund verified', rest: 'receivables in USDT.', body: 'Fund eligible invoices and track repayment onchain.', cta: 'Browse invoices', primary: false, steps: ['Get allowlisted', 'Fund an eligible invoice', 'Receive repayment'] },
+		{ id: 'businesses', eyebrow: 'For businesses', title: 'Get paid before', rest: 'the buyer pays.', body: 'Submit, get verified, receive USDT before the due date.', cta: 'Submit an invoice', primary: true, tint: 'bg-s-repaid-soft', steps: ['Connect a wallet', 'Submit invoice and document', 'Receive USDT'] },
+		{ id: 'investors-cta', eyebrow: 'For investors', title: 'Fund verified', rest: 'receivables in USDT.', body: 'Fund eligible invoices and track repayment onchain.', cta: 'Browse invoices', primary: false, tint: 'bg-s-funded-soft', steps: ['Get allowlisted', 'Fund an eligible invoice', 'Receive repayment'] },
 	]
 	return (
-		<section className="py-[72px] md:py-[104px]">
-			<div className="mx-auto grid max-w-[1200px] gap-5 px-5 md:grid-cols-2 md:px-8">
+		<section className="bg-pine-wash py-[72px] md:py-[104px]">
+			<div className="mx-auto grid max-w-[1200px] items-start gap-5 px-5 md:grid-cols-2 md:px-8">
 				{cards.map((c, i) => (
 					<Reveal key={c.id} delay={i * 100}>
-						<div id={c.id} className="scroll-mt-[96px] flex h-full flex-col rounded-[20px] border border-hair bg-card p-8 transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(18,17,15,0.3)] md:p-10">
+						<div id={c.id} className={`scroll-mt-[96px] flex flex-col rounded-[20px] border border-hair/60 ${c.tint} p-7 md:p-9`}>
 							<Eyebrow>{c.eyebrow}</Eyebrow>
-							<h3 className="text-[28px] font-semibold leading-[1.12] tracking-[-0.02em] text-ink md:text-[34px]">{c.title} <span className="text-ink-3">{c.rest}</span></h3>
-							<p className="mt-3 max-w-[440px] text-[15px] leading-[1.6] text-ink-2">{c.body}</p>
-							<ol className="mt-6 space-y-3 border-t border-hair pt-6">
-								{c.steps.map((s, j) => <li key={s} className="flex items-center gap-3 text-[14px] text-ink-2"><span className="flex h-6 w-6 items-center justify-center rounded-chip bg-inset font-mono text-[11px] text-ink-3">{j + 1}</span>{s}</li>)}
-							</ol>
-							<div className="mt-8 flex-1" />
-							<Link href="/app" className={`inline-flex h-12 w-full items-center justify-center rounded-ctl text-[14px] font-semibold transition-colors sm:w-auto sm:self-start sm:px-6 ${c.primary ? 'bg-pine text-white hover:bg-pine-hover' : 'bg-inset text-ink hover:bg-hair'}`}>{c.cta}</Link>
+							<h3 className="mt-1 text-[24px] font-semibold leading-[1.15] tracking-[-0.02em] text-ink md:text-[28px]">{c.title} <span className="text-ink-3">{c.rest}</span></h3>
+							<p className="mt-2.5 max-w-[420px] text-[15px] leading-[1.55] text-ink-2">{c.body}</p>
+							<p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-ink/10 pt-4 text-[13px] text-ink-3">
+								{c.steps.map((s, j) => <span key={s} className="flex items-center gap-2">{j > 0 && <span aria-hidden className="text-ink/25">·</span>}{s}</span>)}
+							</p>
+							<Link href="/app" className={`mt-6 inline-flex h-11 w-full items-center justify-center rounded-ctl text-[14px] font-semibold transition-colors sm:w-auto sm:self-start sm:px-6 ${c.primary ? 'bg-pine text-white hover:bg-pine-hover' : 'bg-card text-ink ring-1 ring-ink/10 hover:bg-card/70'}`}>{c.cta}</Link>
 						</div>
 					</Reveal>
 				))}

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { RPC_PRIMARY } from '@/lib/config'
-import { ChainlinkMark, Chip, ExternalArrow, Mono, Tick, UsdtMark, WhitechainLogo, short, TX, EXPLORER } from './shared'
+import { ChainlinkMark, Chip, ExternalArrow, Mono, Tick, UsdtMark, WhitechainLogo, TX, EXPLORER } from './shared'
 
 const CHECKS = [
 	['Amount', '50,000.00', '50,000.00'],
@@ -14,21 +14,11 @@ const CHECKS = [
 ]
 const STEPS = CHECKS.length + 4 // 0 idle, checks, verdict, toast, funded toast, hold
 
-function useLoop(max: number, ms: number) {
-	const [n, setN] = useState(0)
-	useEffect(() => {
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setN(max); return }
-		const id = setInterval(() => setN((x) => (x >= max + 3 ? 0 : x + 1)), ms)
-		return () => clearInterval(id)
-	}, [max, ms])
-	return n
-}
-
 function AppWindow() {
-	const n = useLoop(STEPS, 750)
+	// Static: the hero shows the finished, funded state. No looping animation (Privy's hero is still).
+	const n = STEPS
 	const done = Math.min(n, CHECKS.length)
 	const verdict = n > CHECKS.length
-	const toast = n > CHECKS.length + 1
 	const funded = n > CHECKS.length + 2
 
 	return (
@@ -67,7 +57,7 @@ function AppWindow() {
 							</div>
 							<div className="h-6">
 								{verdict
-									? <span key="v" className="animate-popin inline-block"><Chip tone={funded ? 'funded' : 'accent'}>{funded ? 'Funded' : 'Eligible'}</Chip></span>
+									? <span key="v" className="inline-block"><Chip tone={funded ? 'funded' : 'accent'}>{funded ? 'Funded' : 'Eligible'}</Chip></span>
 									: <Chip tone="review">Verifying</Chip>}
 							</div>
 						</div>
@@ -102,42 +92,6 @@ function AppWindow() {
 				</div>
 			</div>
 
-			{/* floating toasts */}
-			{toast && (
-				<div key="t1" className="animate-popin absolute bottom-full right-0 z-10 mb-3 hidden w-[250px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(18,17,15,0.35)] md:block">
-					<div className="flex items-center gap-2">
-						<span className="flex h-6 w-6 items-center justify-center rounded-full bg-verified-soft text-verified"><Tick on className="!h-[18px] !w-[18px]" /></span>
-						<p className="text-[13px] font-medium text-ink">Verdict recorded onchain</p>
-					</div>
-					<p className="mt-1 font-mono text-[11px] text-ink-3">tx {short(TX.role)} ↗</p>
-				</div>
-			)}
-			{funded && (
-				<div key="t2" className="animate-popin absolute left-0 top-full z-10 mt-3 hidden w-[270px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(18,17,15,0.35)] md:block">
-					<div className="flex items-center gap-2.5">
-						<UsdtMark size={24} />
-						<div>
-							<p className="text-[13px] font-medium text-ink">48,000.00 USDT sent to Acme Corp</p>
-							<p className="font-mono text-[11px] text-ink-3">Receivable CRDR #1 minted</p>
-						</div>
-					</div>
-				</div>
-			)}
-
-			{/* receivable token card (Ramp-style physical card, but a CRDR receivable) */}
-			<div className="animate-floaty absolute right-0 top-full z-[5] mt-3 hidden h-[112px] w-[200px] overflow-hidden rounded-[14px] bg-pine p-4 text-white shadow-[0_20px_40px_-16px_rgba(9,46,41,0.7)] lg:block">
-				<div className="linegrid absolute inset-0 opacity-60" />
-				<div className="relative flex h-full flex-col justify-between">
-					<div className="flex items-center justify-between">
-						<span className="text-[15px] font-semibold tracking-[-0.02em]">credra</span>
-						<span className="font-mono text-[10px] text-white/60">CRDR · ERC-721</span>
-					</div>
-					<div>
-						<p className="font-mono text-[10px] uppercase tracking-[0.06em] text-white/60">Receivable #0001</p>
-						<p className="font-mono text-[16px] font-medium">50,000.00 USDT</p>
-					</div>
-				</div>
-			</div>
 		</div>
 	)
 }
@@ -181,18 +135,18 @@ export function Hero() {
 				<div className="mb-6 flex flex-wrap items-center gap-3">
 					<span className="font-mono text-[11px] uppercase tracking-[0.06em] text-ink-3">Live on Whitechain Sepolia</span>
 					<span className="inline-flex items-center gap-2 rounded-chip bg-card px-2.5 py-1 font-mono text-[12px] text-ink ring-1 ring-hair">
-						<span className="animate-pulse-ring h-2 w-2 rounded-full bg-verified" />
+						<span className="h-2 w-2 rounded-full bg-verified" />
 						block {block ? block.toLocaleString('en-US') : '···'}
 					</span>
 				</div>
-				<h1 className="max-w-[900px] text-[44px] font-semibold leading-[1.02] tracking-[-0.035em] text-ink md:text-[76px]">
+				<h1 className="max-w-[760px] text-[38px] font-medium leading-[1.08] tracking-[-0.03em] text-ink md:text-[56px]">
 					Verified invoices.<br className="hidden md:block" /> <span className="text-ink-3">Instant capital.</span>
 				</h1>
-				<p className="mt-6 max-w-[560px] text-[17px] leading-[1.55] text-ink-2 md:text-[19px]">
+				<p className="mt-5 max-w-[560px] text-[17px] leading-[1.55] text-ink-2 md:text-[20px]">
 					Submit, verify and fund invoices in USDT. Every step onchain.
 				</p>
 				<div className="mt-8 flex flex-wrap items-center gap-3">
-					<Link href="/app" className="group inline-flex h-12 items-center gap-2 rounded-ctl bg-pine px-5 text-[14px] font-semibold text-white transition-colors hover:bg-pine-hover">
+					<Link href="/app" className="group inline-flex h-12 items-center gap-2 whitespace-nowrap rounded-ctl bg-pine px-5 text-[14px] font-semibold text-white transition-colors hover:bg-pine-hover">
 						Launch app
 						<span className="transition-transform group-hover:translate-x-0.5" aria-hidden>→</span>
 					</Link>
@@ -205,96 +159,80 @@ export function Hero() {
 				</div>
 			</div>
 
-			{/* stage */}
+			{/* stage — on phones the window keeps its real proportions and bleeds off the right (Privy-style), rather than cramming the table into ~340px */}
 			<div className="mx-auto max-w-[1200px] px-5 pb-10 md:px-8 md:pb-16">
-				<div className="dotgrid relative overflow-hidden rounded-[20px] border border-hair bg-inset px-4 pb-14 pt-12 md:px-14 md:pb-36 md:pt-24">
-					<div className="absolute left-4 top-4 z-10">
-						<span className="rounded-chip border border-dashed border-s-review bg-canvas/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.06em] text-s-review">Illustrative demo data</span>
-					</div>
-					<div className="mx-auto max-w-[920px]"><AppWindow /></div>
+				<div className="dotgrid relative overflow-hidden rounded-[20px] border border-hair bg-inset px-4 pb-14 pt-10 md:px-14 md:pb-24 md:pt-16">
+					<div className="w-[540px] max-w-none md:mx-auto md:w-auto md:max-w-[920px]"><AppWindow /></div>
 				</div>
 			</div>
 		</section>
 	)
 }
 
-/* ─── Ticker strip: real testnet totals from /api/stats. Dark value chips make the numbers pop (Ramp's live counters). ─── */
-type Fact = { v: string; k: string; d?: string; href?: string }
+/* ─── Stats band: real testnet totals from /api/stats. Static on purpose: figures are read, not chased. ─── */
+type Fact = { v: string; k: string }
 type Stats = { financedCount: number; financedUsdt: number; repaidCount: number; defaultedCount: number; avgReturnPct: number | null }
 
 function toFacts(s: Stats): Fact[] {
-	const pct = (n: number, of: number) => (of ? `${Math.round((n / of) * 1000) / 10}%` : '0%')
 	const resolved = s.repaidCount + s.defaultedCount
+	const pct = (n: number) => `${Math.round(n * 10) / 10}%`
 	return [
-		{ v: String(s.financedCount), k: 'invoices financed', d: 'on testnet' },
-		{ v: s.financedUsdt.toLocaleString('en-US', { maximumFractionDigits: 2 }), k: 'USDT financed', d: 'paid straight to businesses', href: `${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6` },
-		{ v: resolved ? pct(s.repaidCount, resolved) : 'n/a', k: 'repaid in full', d: resolved ? `${s.repaidCount} of ${resolved} settled` : 'none settled yet' },
-		{ v: s.avgReturnPct === null ? 'n/a' : `${s.avgReturnPct}%`, k: 'avg investor return', d: 'per invoice' },
-		{ v: pct(s.defaultedCount, s.financedCount), k: 'default rate', d: `${s.defaultedCount} of ${s.financedCount} financed` },
-		{ v: '0%', k: 'platform fee', d: 'no charge on testnet' },
+		{ v: String(s.financedCount), k: 'Invoices financed' },
+		{ v: s.financedUsdt.toLocaleString('en-US', { maximumFractionDigits: 2 }), k: 'USDT paid to businesses' },
+		{ v: resolved ? pct((s.repaidCount / resolved) * 100) : '\u2014', k: 'Repaid in full' },
+		{ v: s.avgReturnPct === null ? '\u2014' : pct(s.avgReturnPct), k: 'Average investor return' },
 	]
 }
 
-export function Ticker() {
+export function StatsBand() {
 	const [facts, setFacts] = useState<Fact[] | null>(null)
 	useEffect(() => {
 		let on = true
 		fetch('/api/stats').then((r) => (r.ok ? r.json() : Promise.reject())).then((s: Stats) => on && setFacts(toFacts(s))).catch(() => on && setFacts([]))
 		return () => { on = false }
 	}, [])
-	const row = facts?.length ? [...facts, ...facts, ...facts] : []
+	const failed = facts !== null && facts.length === 0
 	return (
-		<div className="pause-on-hover flex items-stretch border-y border-hair bg-card">
-			<div className="hidden shrink-0 items-center gap-2.5 border-r border-hair bg-canvas px-6 sm:flex">
-				<span className="animate-pulse-ring h-2 w-2 rounded-full bg-verified" />
-				<span className="font-mono text-[11px] font-medium uppercase tracking-[0.06em] text-ink">Credra in numbers</span>
-				<span className="rounded-chip border border-dashed border-s-review px-1.5 py-px font-mono text-[10px] uppercase text-s-review">Testnet data</span>
-			</div>
-			<div className="mask-fade-x min-w-0 flex-1 overflow-hidden py-4">
-				{facts === null ? (
-					<div className="flex gap-12 px-6" aria-label="Loading">{[0, 1, 2, 3, 4].map((i) => <div key={i} className="skeleton h-7 w-52 shrink-0" />)}</div>
-				) : (
-					<div className="animate-marquee flex w-max items-center gap-12 pr-12">
-						{row.map((f, i) => {
-							const inner = (
+		<section className="dot-edge-top relative bg-card" aria-label="Credra in numbers">
+			<div className="mx-auto max-w-[1200px] px-5 pb-8 pt-10 md:px-8 md:pb-9 md:pt-12">
+				<div className="grid grid-cols-2 gap-y-7 md:grid-cols-4">
+					{(facts?.length ? facts : [0, 1, 2, 3].map(() => null)).map((f, i) => (
+						<div key={i} className="animate-popin flex flex-col items-center text-center" style={{ animationDelay: `${i * 60}ms` }}>
+							{f ? (
 								<>
-									<span className="rounded-[8px] bg-ink px-2.5 py-1 font-mono text-[14px] font-semibold leading-none text-white">{f.v}</span>
-									<span className="text-[14px] font-medium text-ink">{f.k}</span>
-									{f.d && <span className="text-[13px] text-ink-3">{f.d}</span>}
+									<p className="num-display text-[32px] leading-[1.15] text-ink md:text-[40px] md:leading-[48px] xl:text-[52px] xl:leading-[60px]">{f.v}</p>
+									<p className="mt-1.5 text-[14px] leading-6 text-ink-2">{f.k}</p>
 								</>
-							)
-							const cls = 'flex shrink-0 items-center gap-2.5 whitespace-nowrap'
-							return f.href
-								? <a key={i} href={f.href} target="_blank" rel="noreferrer" className={`${cls} transition-opacity hover:opacity-70`}>{inner}</a>
-								: <div key={i} className={cls}>{inner}</div>
-						})}
-					</div>
-				)}
+							) : (
+								<>
+									<div className="skeleton h-[38px] w-28 md:h-[48px] md:w-32 xl:h-[60px] xl:w-40" aria-label="Loading" />
+									<div className="skeleton mt-2.5 h-4 w-28" />
+								</>
+							)}
+						</div>
+					))}
+				</div>
+				<p className="mt-6 text-center text-[12px] leading-5 text-ink-3">
+					{failed ? 'Figures are unavailable right now. ' : 'Live testnet figures, no real funds. '}
+					<a className="text-accent" href={`${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6`} target="_blank" rel="noreferrer">Check them onchain <span aria-hidden>{'\u2197'}</span></a>
+				</p>
 			</div>
-		</div>
+		</section>
 	)
 }
 
-/* ─── Built on: one compact row ─── */
+/* ─── Built on: quiet marks, one row. Muted until hovered; colour is not needed to read them. ─── */
 export function BuiltOn() {
-	const cells = [
-		{ k: 'Chain', node: <WhitechainLogo height={22} />, sub: 'Whitechain Sepolia' },
-		{ k: 'Verification', node: <span className="flex items-center gap-2"><ChainlinkMark size={22} /><span className="text-[17px] font-semibold tracking-[-0.02em] text-ink">Chainlink <span className="text-ink-3">CRE</span></span></span>, sub: 'Workflow runtime' },
-		{ k: 'Settlement', node: <span className="flex items-center gap-2"><UsdtMark size={22} /><span className="text-[17px] font-semibold tracking-[-0.02em] text-ink">Tether <span className="text-ink-3">USDT</span></span></span>, sub: 'Official token' },
-		{ k: 'Receivables', node: <span className="text-[17px] font-semibold tracking-[-0.02em] text-ink">ERC-721 <span className="text-ink-3">CRDR</span></span>, sub: 'Allowlist-gated' },
-	]
+	const mark = 'group flex items-center gap-2.5 whitespace-nowrap opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0'
+	const word = 'text-[17px] font-medium tracking-[-0.02em] text-ink'
 	return (
-		<section className="mx-auto max-w-[1200px] px-5 py-10 md:px-8 md:py-12">
-			<div className="grid gap-px overflow-hidden rounded-card border border-hair bg-hair sm:grid-cols-2 lg:grid-cols-4">
-				{cells.map((c) => (
-					<div key={c.k} className="group flex items-center justify-between gap-3 bg-card px-5 py-4 transition-colors hover:bg-canvas">
-						<div>
-							<p className="mb-2 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-3">{c.k}</p>
-							<div className="flex h-7 items-center whitespace-nowrap">{c.node}</div>
-						</div>
-					</div>
-				))}
-			</div>
+		<section className="mx-auto max-w-[1200px] px-5 py-9 md:px-8 md:py-11" aria-label="Built on">
+			<ul className="flex flex-wrap items-center justify-center gap-x-12 gap-y-5 md:gap-x-16">
+				<li className={mark} title="Whitechain Sepolia"><WhitechainLogo height={22} /></li>
+				<li className={mark} title="Chainlink CRE, the workflow runtime"><ChainlinkMark size={22} /><span className={word}>Chainlink</span></li>
+				<li className={mark} title="Official USDT, the settlement token"><UsdtMark size={22} /><span className={word}>Tether USDT</span></li>
+				<li className={mark} title="Allowlist-gated ERC-721 receivables"><span className={word}>ERC-721 <span className="text-ink-3">receivables</span></span></li>
+			</ul>
 		</section>
 	)
 }

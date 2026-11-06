@@ -60,9 +60,8 @@ export function useTween(to: number, ms = 600, active = true) {
 }
 
 export function CountUp({ to, className = '' }: { to: number; className?: string }) {
-	const [ref, seen] = useInView<HTMLSpanElement>(0.4)
-	const v = useTween(to, 1200, seen)
-	return <span ref={ref} className={className}>{Math.round(v)}</span>
+	// Static: numbers are read, not chased (matches the stats band and Privy's still figures).
+	return <span className={className}>{to}</span>
 }
 
 /* ─── type ─── */

@@ -4,14 +4,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { HOSTED_DEMO } from '@/lib/hosted'
-import { Announcement, BuiltOn, Hero, Ticker } from '@/components/landing/Hero'
+import { Announcement, BuiltOn, Hero, StatsBand } from '@/components/landing/Hero'
 import { Bento } from '@/components/landing/Bento'
 import { Process } from '@/components/landing/Process'
 import { Audiences, CtaBanner, Showcase, Stats, Trust } from '@/components/landing/Sections'
 
 /* ─── Logo ─── */
 function Logo({ size = 'default' }: { size?: 'default' | 'small' }) {
-	const h = size === 'small' ? 24 : 32
+	const h = size === 'small' ? 24 : 34
 	return (
 		<Image
 			src="/logo.png"
@@ -45,13 +45,13 @@ function Nav() {
 		>
 			<div className="w-full max-w-[1200px] mx-auto px-5 md:px-8 flex items-center justify-between">
 				<Logo />
-				{/* Desktop links */}
-				<div className="hidden md:flex items-center gap-8">
+				{/* Desktop links (inline from lg; tablet and below use the menu) */}
+				<div className="hidden lg:flex items-center gap-8">
 					{links.map((l) => (
 						<a
 							key={l.href}
 							href={l.href}
-							className="text-[14px] text-ink-2 hover:text-ink transition-colors"
+							className="whitespace-nowrap text-[14px] text-ink-2 hover:text-ink transition-colors"
 						>
 							{l.label}
 						</a>
@@ -60,14 +60,14 @@ function Nav() {
 				<div className="flex items-center gap-3">
 					<Link
 						href="/app"
-						className="bg-pine hover:bg-pine-hover text-white text-[14px] font-medium px-5 h-[44px] rounded-ctl flex items-center transition-colors"
+						className="bg-pine hover:bg-pine-hover text-white text-[14px] font-medium px-5 h-[44px] rounded-ctl flex items-center whitespace-nowrap transition-colors"
 					>
 						Launch app
 					</Link>
 					{/* Mobile menu toggle */}
 					<button
 						onClick={() => setMenuOpen(!menuOpen)}
-						className="md:hidden w-10 h-10 flex items-center justify-center"
+						className="lg:hidden w-10 h-10 flex items-center justify-center"
 						aria-label="Menu"
 					>
 						<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -82,7 +82,7 @@ function Nav() {
 			</div>
 			{/* Mobile menu */}
 			{menuOpen && (
-				<div className="md:hidden absolute top-[72px] inset-x-0 bg-canvas border-b border-hair px-5 py-4 flex flex-col gap-3">
+				<div className="lg:hidden absolute top-[72px] inset-x-0 bg-canvas border-b border-hair px-5 py-4 flex flex-col gap-3">
 					{links.map((l) => (
 						<a
 							key={l.href}
@@ -173,8 +173,8 @@ export default function LandingPage() {
 			<Announcement />
 			<Nav />
 			<Hero />
-			<Ticker />
 			<BuiltOn />
+			<StatsBand />
 			<Bento />
 			<Process />
 			<Stats />

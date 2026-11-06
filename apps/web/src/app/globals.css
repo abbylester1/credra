@@ -17,6 +17,9 @@
 	--color-verified-soft: #E3F1EE;
 	--color-pine: #0D3B35;
 	--color-pine-hover: #092E29;
+	/* Pine-derived tints: a quiet ambient wash for section backgrounds, a stronger tint for small accents. */
+	--color-pine-wash: #EEF3F1;
+	--color-pine-tint: #DDE8E4;
 
 	--color-s-neutral: #66625B;
 	--color-s-neutral-soft: #EFEDE9;
@@ -50,6 +53,9 @@ a.text-accent:hover, button.text-accent:hover { text-decoration-color: currentCo
 
 html {
 	background: var(--color-canvas);
+	/* Stop iOS Safari from inflating text in landscape/zoomed contexts, which overflowed the hero on real phones. */
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
 }
 
 body {
@@ -125,6 +131,45 @@ body {
 		linear-gradient(90deg, rgba(18, 17, 15, 0.05) 1px, transparent 1px),
 		radial-gradient(rgba(18, 17, 15, 0.09) 1px, transparent 1px);
 	background-size: 96px 96px, 96px 96px, 12px 12px;
+}
+/* Refined range control: a clean pine thumb with a white ring, flat track set inline. */
+.credra-range::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	height: 16px;
+	width: 16px;
+	border-radius: 9999px;
+	background: var(--color-pine);
+	border: 2px solid var(--color-card);
+	box-shadow: 0 1px 3px rgba(18, 17, 15, 0.25);
+	cursor: pointer;
+}
+.credra-range::-moz-range-thumb {
+	height: 16px;
+	width: 16px;
+	border-radius: 9999px;
+	background: var(--color-pine);
+	border: 2px solid var(--color-card);
+	box-shadow: 0 1px 3px rgba(18, 17, 15, 0.25);
+	cursor: pointer;
+}
+.num-display {
+	font-family: var(--font-sans);
+	font-weight: 400;
+	letter-spacing: -0.03em;
+	font-variant-numeric: tabular-nums;
+}
+/* Halftone edge: one fading row of dots marks a section seam. The page's single decorative gesture. */
+.dot-edge-top::before {
+	content: '';
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 14px;
+	pointer-events: none;
+	background-image: radial-gradient(rgba(18, 17, 15, 0.22) 1px, transparent 1.4px);
+	background-size: 6px 6px;
+	-webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+	mask-image: linear-gradient(to bottom, #000, transparent);
 }
 .mask-fade-x {
 	mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);

@@ -216,3 +216,23 @@ Keep paragraphs to about 50 to 70 characters per line. Body copy is never bold.
 - Fonts: install the `geist` package and apply `GeistSans` and `GeistMono` in `layout.tsx`; remove the scaffold's Google font imports.
 - Shared components named in `tasks.md` (T021 and T022) implement: `StatusChip`, `ProvenanceStrip`, `SimulatedTag`, `Amount`, `HashLink`, `TxLink`, `StepRail`, `NetworkBanner`, `WalletButton`, `Timeline`, `EvidencePanel`.
 - A component or colour not defined here must be added to this file first.
+
+## Numerals, seams and quiet marks (from the Privy study)
+
+- **Stats are static and typographic.** Large numerals (`.num-display`: sans, weight 400, -0.03em tracking, tabular figures; 40px on phones, 52px/60px on desktop) with a 14px label 6px below. No chips, icons, borders or count-up. Only logos or marks may move, and slowly.
+- **The halftone edge (`.dot-edge-top`)** is the one decorative gesture: a single fading row of dots on a section seam. Use it sparingly (stats band, final call to action), never inside cards.
+- **Marks are muted until hovered** (70% opacity, greyscale). Colour is reserved for verified signals, so partner marks must not shout.
+- **Honesty line under live figures:** say what the numbers are (live testnet, no real funds) and link to the chain. One quiet 12px line, not a badge.
+
+## Pine tints (added)
+
+- `--color-pine-wash` (#EEF3F1): a very pale sage for **ambient section backgrounds** (gives rhythm between white and canvas). Used on the Audiences section.
+- `--color-pine-tint` (#DDE8E4): a slightly stronger tint for small accents (chips, step markers).
+- **Status-soft tints as category cards:** the existing `s-repaid-soft` / `s-funded-soft` / `s-review-soft` may back a card to distinguish an audience or category (Privy-style pastel cards), with a white secondary button and white step chips over them. Green still means verified only; these softs are categorical, not status signals, when used this way.
+- Pine stays the rare deep anchor (one banner / primary button / hero strip). Numbers sit on plain canvas or white, never tinted.
+
+## Component height discipline
+
+Keep landing components from towering; trim content before shrinking type.
+- **Feature / audience cards:** target ≤ ~320px. Show the essentials only — eyebrow, title, one line of body, one compact supporting line (inline, dot-separated — not a numbered list), and the CTA. Let cards size to content (`items-start`), don't force equal height with a filler spacer.
+- **Interactive panels (economics calculator):** target ≤ ~520px. Summarise outputs compactly — a single hero figure, a thin split bar (no legend), a small 3-up of secondary numbers, and one closing fee line. Never a long full-width ledger.
