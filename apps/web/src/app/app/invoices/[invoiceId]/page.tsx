@@ -144,8 +144,8 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 							<ol className="relative space-y-4 border-l border-hair pl-5">
 								{timeline.map((t, idx) => (
 									<li key={idx} className="relative">
-										<span aria-hidden className="absolute -left-[25px] top-1.5 h-2 w-2 bg-pine" />
-										<div className="flex flex-wrap items-start gap-x-3 gap-y-1"><span className="pt-px text-[14px] font-medium">{t.status}</span>{t.wallet ? <WalletTag align="left" address={t.wallet} label={labels?.[t.wallet.toLowerCase()]} /> : <span className="text-[12px] text-ink-3">{SOURCE_LABEL[t.source] ?? t.actor}</span>}</div>
+										<span aria-hidden className="absolute -left-[25px] top-2 h-2 w-2 bg-pine" />
+										<div className="flex flex-wrap items-start gap-x-3 gap-y-1"><span className="flex h-6 items-center text-[14px] font-medium">{t.status}</span>{t.wallet ? <WalletTag align="left" address={t.wallet} label={labels?.[t.wallet.toLowerCase()]} /> : <span className="text-[12px] text-ink-3">{SOURCE_LABEL[t.source] ?? t.actor}</span>}</div>
 										<div className="num text-[12px] text-ink-3">{new Date(t.at * 1000).toLocaleString('en-GB')}</div>
 										{t.txHash && <TxLink hash={t.txHash} />}
 									</li>

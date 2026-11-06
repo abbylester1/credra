@@ -113,7 +113,7 @@ export function WalletTag({ address, label, align = 'right', fallbackName = 'Unn
 	}
 	return (
 		<span className={cx('inline-flex flex-col gap-1.5', align === 'right' ? 'items-end text-right' : 'items-start text-left')}>
-			<button type="button" onClick={() => setOpen(!open)} aria-expanded={open} title={open ? 'Hide address' : 'Show wallet address'} className="group inline-flex flex-wrap items-center gap-x-2 gap-y-0.5 rounded-chip text-left text-[14px] font-medium leading-tight text-ink hover:text-accent">
+			<button type="button" onClick={() => setOpen(!open)} aria-expanded={open} title={open ? 'Hide address' : 'Show wallet address'} className="group inline-flex min-h-6 flex-wrap items-center gap-x-2 gap-y-0.5 rounded-chip text-left text-[14px] font-medium leading-5 text-ink hover:text-accent">
 				{name}
 				{label && showRole && <span className={cx('rounded-chip px-1.5 py-px text-[11px] font-medium', ROLE_TONE[label.role] ?? ROLE_TONE.Operator)}>{label.role}</span>}
 				<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={cx('text-ink-3 transition-transform duration-200', open && 'rotate-180')} aria-hidden><path d="M2 3.5l3 3 3-3" /></svg>
