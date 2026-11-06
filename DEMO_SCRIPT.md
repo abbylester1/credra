@@ -4,6 +4,10 @@ Two cuts from one recording session: a **2:30 submission video** (ETHGlobal acce
 
 Rules to respect: never speed up footage (jump-cut waits instead), voice only with no music over text, record at 1080p on a desktop screen recorder, slides with at most four bullets.
 
+## Teleprompter
+
+Open `apps/web/public/teleprompter.html` (double-click the file, or visit `/teleprompter.html` on the dev server) to read the lines in sync with the screen. Pick a cut, enter your name, press Space to start (3-2-1 countdown). It shows the current clip, what should be on screen, the narration, a per-segment countdown that turns amber when you run over, and the next clip. Arrow keys jump between segments, `+`/`-` change text size, `M` mirrors the text for a mirrored prompter, `R` resets. Auto-advance can be switched off to step through manually. The timer is a pacing guide and does not record anything.
+
 ## What is real and what is demo
 
 - The live in-app flow uses real testnet amounts (about 20 USDT), because that is all the official test USDT we hold. The explorer links prove it.
