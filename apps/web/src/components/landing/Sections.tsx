@@ -9,7 +9,7 @@ const STATS = [
 	{ n: 3, label: 'Contracts verified', sub: 'Source-verified on Blockscout.', href: `${EXPLORER}/address/0xc11162A72F388Efb6Ddd0B73Eea578598d733122`, cta: 'Open registry', icon: 'M5 4h10v12H5zM8 8h4M8 11h4' },
 	{ n: 40, label: 'Tests passing', sub: '29 contract, 11 rule tests.', href: 'https://github.com/abbylester1/credra', cta: 'Read the tests', icon: 'M4 10l4 4 8-8' },
 	{ n: 5, label: 'Fields cross-checked', sub: 'On every invoice.', href: '#approach', cta: 'See the checks', icon: 'M4 6h12M4 10h12M4 14h8' },
-	{ n: 0, label: 'USDT held by contracts', sub: 'Money moves wallet to wallet.', href: `${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6`, cta: 'Check the balance', icon: 'M10 3v14M6 7h8M6 13h8' },
+	{ n: 0, label: 'USDT held by contracts', sub: 'Money moves wallet to wallet.', href: `${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6`, cta: 'Check the balance', icon: 'usdt' },
 ]
 export function Stats() {
 	return (
@@ -29,7 +29,7 @@ export function Stats() {
 							>
 								<div className="flex items-start justify-between">
 									<span className="flex h-8 w-8 items-center justify-center rounded-ctl bg-accent-soft text-accent">
-										<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={s.icon} /></svg>
+										{s.icon === 'usdt' ? <UsdtMark size={18} /> : <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={s.icon} /></svg>}
 									</span>
 									<span className="text-ink-3 opacity-0 transition-opacity group-hover:opacity-100"><ExternalArrow /></span>
 								</div>
