@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { VERIFY_ENGINE_NOTE } from '@/lib/hosted'
 import { COMPARISONS, text } from '@/lib/verifyText'
 import { ProvenanceStrip, VerdictChip } from './ui'
 
@@ -25,6 +26,13 @@ const Mark = ({ kind }: { kind: 'pass' | 'fail' | 'attn' }) => (
 		{kind === 'pass' ? '✓' : kind === 'fail' ? '✕' : '!'}
 	</span>
 )
+
+function engineNote(reportJson: string): string {
+	try {
+		if (JSON.parse(reportJson).engine === 'in-process-rules') return VERIFY_ENGINE_NOTE + ' The verdict was recorded onchain by the application\'s verifier wallet, not by the Chainlink network.'
+	} catch {}
+	return 'The result was produced by the CRE workflow in simulation and recorded onchain by the application\'s verifier wallet. It is not a DON-signed write.'
+}
 
 export function EvidencePanel({ v }: { v: Verification | null }) {
 	const [open, setOpen] = useState(false)
@@ -67,7 +75,7 @@ export function EvidencePanel({ v }: { v: Verification | null }) {
 					<div>External reference: {v.externalReference ?? 'none'}</div>
 					<div className="break-all">Report hash: {v.verificationRef}</div>
 					<pre className="overflow-x-auto whitespace-pre-wrap break-all">{(() => { try { return JSON.stringify(JSON.parse(v.reportJson), null, 2) } catch { return v.reportJson } })()}</pre>
-					<p className="font-sans text-[12px] text-ink-3">The result was produced by the CRE workflow in simulation and recorded onchain by the application's verifier wallet. It is not a DON-signed write.</p>
+					<p className="font-sans text-[12px] text-ink-3">{engineNote(v.reportJson)}</p>
 				</div>
 			)}
 		</div>

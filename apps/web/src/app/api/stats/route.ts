@@ -14,7 +14,7 @@ let cache: { at: number; value: Stats } | null = null
  */
 export async function GET() {
 	if (cache && Date.now() - cache.at < 30_000) return json(cache.value)
-	const rows = listInvoiceRows()
+	const rows = await listInvoiceRows()
 	const chain = await Promise.all(rows.map((r) => readInvoice(r.invoice_id as `0x${string}`).then((c) => c.status).catch(() => null)))
 	let financedCount = 0, repaidCount = 0, defaultedCount = 0
 	let financedBase = 0n

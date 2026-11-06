@@ -12,7 +12,8 @@ const nextConfig: NextConfig = {
 	// NEXT_DIST_DIR lets a production build run next to a live dev server (for example while recording a demo).
 	distDir: process.env.NEXT_DIST_DIR || '.next',
 	turbopack: {
-		root: path.resolve(__dirname, '../..'),
+		// Locally the repo root (for the shared .env); on Vercel the project root, which is the Root Directory apps/web.
+		root: process.env.VERCEL ? __dirname : path.resolve(__dirname, '../..'),
 		rules: {
 			'*.css': {
 				loaders: ['@tailwindcss/turbopack'],
@@ -20,7 +21,7 @@ const nextConfig: NextConfig = {
 			},
 		},
 	},
-	serverExternalPackages: ['node:sqlite'],
+	serverExternalPackages: ['@libsql/client', 'libsql'],
 }
 
 export default nextConfig

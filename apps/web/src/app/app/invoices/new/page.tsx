@@ -10,6 +10,7 @@ import { registryAbi } from '@/lib/abi'
 import { apiJson, useWalletHeaders } from '@/lib/client'
 import { ADDRESSES } from '@/lib/config'
 import { friendlyError } from '@/lib/errors'
+import { HOSTED_DEMO } from '@/lib/hosted'
 import { buyerRef, documentHash, invoiceId } from '@/lib/hash'
 import { parseUsdt } from '@/lib/money'
 
@@ -174,7 +175,7 @@ function Form({ headers }: { headers: Record<string, string> }) {
 					<StepRail steps={[
 						{ label: 'Register on Whitechain', state: steps.register, note: tx ? <TxLink hash={tx} /> : 'Your wallet signs one transaction.' },
 						{ label: 'Save the invoice record', state: steps.save, note: 'The document stays private to you and the operator.' },
-						{ label: 'Verify', state: steps.verify, note: 'The CRE workflow checks the invoice against the external record.' },
+						{ label: 'Verify', state: steps.verify, note: HOSTED_DEMO ? 'The eligibility rules check the invoice against the external record.' : 'The CRE workflow checks the invoice against the external record.' },
 					]} />
 				</Card>
 			</div>

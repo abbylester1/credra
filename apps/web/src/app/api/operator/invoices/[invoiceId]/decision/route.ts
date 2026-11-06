@@ -14,7 +14,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ invoiceId: str
 	if (!(await isOperator())) return fail(403, 'operator_only', 'Operator access required.')
 	const { invoiceId } = await ctx.params
 	if (!isBytes32(invoiceId)) return fail(400, 'bad_id', 'Invalid invoice id.')
-	if (!getInvoiceRow(invoiceId)) return fail(404, 'not_found', 'Invoice not found.')
+	if (!(await getInvoiceRow(invoiceId))) return fail(404, 'not_found', 'Invoice not found.')
 	const body = z.object({ decision: z.enum(['APPROVE', 'REJECT']), reason: z.string().trim().min(10).max(500) }).safeParse(await req.json().catch(() => null))
 	if (!body.success) return fail(400, 'invalid_fields', 'Choose a decision and give a reason of at least 10 characters.')
 
@@ -34,7 +34,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ invoiceId: str
 	} catch {
 		return fail(502, 'record_failed', 'The decision could not be recorded onchain. The status did not change.')
 	}
-	insertDecision({ invoice_id: invoiceId, decision: body.data.decision, reason: body.data.reason, tx_hash: tx })
-	insertEvent({ invoice_id: invoiceId, status: statusLabel(status), tx_hash: tx, source: 'operator', actor: 'operator' })
+	await insertDecision({ invoice_id: invoiceId, decision: body.data.decision, reason: body.data.reason, tx_hash: tx })
+	await insertEvent({ invoice_id: invoiceId, status: statusLabel(status), tx_hash: tx, source: 'operator', actor: 'operator' })
 	return json({ status, txHash: tx })
 }

@@ -23,7 +23,7 @@ async function senderOf(tx: string | null): Promise<string | null> {
 export async function GET(_req: Request, ctx: { params: Promise<{ invoiceId: string }> }) {
 	const { invoiceId } = await ctx.params
 	if (!isBytes32(invoiceId)) return fail(400, 'bad_id', 'Invalid invoice id.')
-	const row = getInvoiceRow(invoiceId)
+	const row = await getInvoiceRow(invoiceId)
 	if (!row) return fail(404, 'not_found', 'Invoice not found.')
 
 	let chain
@@ -32,7 +32,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ invoiceId: str
 	} catch {
 		return fail(502, 'chain_unavailable', 'Could not read the chain right now. Nothing was changed. Try again.')
 	}
-	const run = latestRun(invoiceId)
+	const run = await latestRun(invoiceId)
 	let position = null
 	let holder: string | null = null
 	if (chain.status >= Status.Funded) {
@@ -50,7 +50,8 @@ export async function GET(_req: Request, ctx: { params: Promise<{ invoiceId: str
 			position = null
 		}
 	}
-	const events = eventsFor(invoiceId)
+	const events = await eventsFor(invoiceId)
+	const decisionRow = await latestDecision(invoiceId)
 	const senders = await Promise.all(events.map((e) => senderOf(e.tx_hash)))
 	return json({
 		invoice: summarize(row, chain, run),
@@ -58,7 +59,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ invoiceId: str
 		timeline: events.map((e, k) => ({ status: e.status, txHash: e.tx_hash, source: e.source, actor: e.actor, wallet: senders[k], at: e.created_at })),
 		position,
 		holder,
-		labels: walletLabels([row.issuer_wallet, holder ?? '', position?.originalInvestor ?? '', ...senders].filter((w): w is string => !!w)),
-		decision: (() => { const d = latestDecision(invoiceId); return d ? { decision: d.decision, reason: d.reason, txHash: d.tx_hash, at: d.created_at } : null })(),
+		labels: await walletLabels([row.issuer_wallet, holder ?? '', position?.originalInvestor ?? '', ...senders].filter((w): w is string => !!w)),
+		decision: decisionRow ? { decision: decisionRow.decision, reason: decisionRow.reason, txHash: decisionRow.tx_hash, at: decisionRow.created_at } : null,
 	})
 }

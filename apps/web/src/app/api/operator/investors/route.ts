@@ -32,7 +32,7 @@ export async function GET() {
 			})),
 		)
 		const live = checked.filter((c) => c.allowed)
-		const names = walletLabels(live.map((c) => c.address))
+		const names = await walletLabels(live.map((c) => c.address))
 		return json(live.map((c) => ({ ...c, name: names[c.address]?.name ?? null })))
 	} catch {
 		return fail(502, 'chain_unavailable', 'Could not read the allowlist right now. Nothing was changed.')
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
 	if (!body.success || !isAddress(body.data.address)) return fail(400, 'invalid_fields', 'Enter a valid wallet address.')
 	try {
 		const tx = await setInvestor(body.data.address, body.data.action)
-		if (body.data.action === 'add' && body.data.name?.trim()) setWalletLabel(body.data.address, body.data.name, 'Investor')
+		if (body.data.action === 'add' && body.data.name?.trim()) await setWalletLabel(body.data.address, body.data.name, 'Investor')
 		return json({ txHash: tx })
 	} catch {
 		return fail(502, 'tx_failed', 'The change could not be recorded onchain. Nothing was changed.')

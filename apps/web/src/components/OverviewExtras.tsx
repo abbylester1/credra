@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ADDRESSES, EXPLORER, shorten } from '@/lib/config'
+import { HOSTED_DEMO } from '@/lib/hosted'
 import type { InvoiceSummary } from '@/lib/useInvoices'
 import { statusLabel } from '@/lib/status'
 import { Amount, fmtDate, StatusChip } from './ui'
@@ -110,7 +111,7 @@ export function GettingStarted({ role }: { role: 'business' | 'investor' | 'oper
 		business: [
 			['Connect your wallet', 'Any wallet on Whitechain Sepolia works. No account needed.', '/app'],
 			['Submit an invoice', 'Add the amount, financing ask, due date and the invoice document.', '/app/invoices/new'],
-			['Wait for verification', 'The CRE workflow checks it against the external record.', '/app/invoices'],
+			['Wait for verification', HOSTED_DEMO ? 'The eligibility rules check it against the external record.' : 'The CRE workflow checks it against the external record.', '/app/invoices'],
 			['Receive USDT', 'An investor funds it and pays you directly.', '/app/invoices'],
 		],
 		investor: [

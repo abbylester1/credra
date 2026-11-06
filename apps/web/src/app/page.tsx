@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { HOSTED_DEMO } from '@/lib/hosted'
 import { Announcement, BuiltOn, Hero, Ticker } from '@/components/landing/Hero'
 import { Bento } from '@/components/landing/Bento'
 import { Process } from '@/components/landing/Process'
@@ -154,7 +155,7 @@ function Footer() {
 						<strong className="font-medium text-ink-2">Risk and demo notice.</strong>{' '}
 						This is testnet software built at a hackathon. Tokens have no value. It is not a live lending or investment product, and not legal, credit or compliance advice.
 						The external verification source is simulated. Verification is not legal enforceability or creditworthiness.
-						Verdicts are recorded by an application wallet, not by the Chainlink network.
+						Verdicts are recorded by an application wallet, not by the Chainlink network.{HOSTED_DEMO && ' On this hosted demo the eligibility rules run inside the app; the real CRE workflow simulation runs locally and is shown in the demo video.'}
 					</p>
 					<p className="text-[12px] text-ink-3 mt-4">
 						© 2026 Credra. MIT License.

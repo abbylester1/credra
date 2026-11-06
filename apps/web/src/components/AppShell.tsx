@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
 import { useWalletChainId } from '@/lib/useWalletChain'
 import { useWalletLabels } from '@/lib/useWalletLabels'
+import { HOSTED_DEMO, VERIFY_ENGINE_NOTE } from '@/lib/hosted'
 import { AuthScreen } from './AuthScreen'
 import { WalletSplash } from './WalletSplash'
 import { useConnectMode } from './Providers'
@@ -159,7 +160,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 			<div className="min-w-0">
 				<NetworkBanner />
 				<TopBar />
-				<main className="mx-auto max-w-[1120px] px-4 py-8 lg:px-8">{children}</main>
+				<main className="mx-auto max-w-[1120px] px-4 py-8 lg:px-8">
+					{HOSTED_DEMO && <p className="mb-6 rounded-ctl border border-hair bg-card px-4 py-3 text-[13px] leading-[1.55] text-ink-2">{VERIFY_ENGINE_NOTE}</p>}
+					{children}
+				</main>
 			</div>
 		</div>
 	)

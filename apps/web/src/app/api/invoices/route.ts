@@ -1,9 +1,6 @@
-import { mkdir, writeFile } from 'node:fs/promises'
-import path from 'node:path'
 import { z } from 'zod'
 import { fail, json } from '@/lib/api'
 import { readInvoice } from '@/lib/chain'
-import { env } from '@/lib/env'
 import { buyerRef, documentHash, invoiceId as makeInvoiceId } from '@/lib/hash'
 import { isOperator } from '@/lib/session'
 import { findByNumberOrHash, getInvoiceRow, insertDocument, insertEvent, insertInvoice, latestRun, listInvoiceRows } from '@/lib/repo'
@@ -60,7 +57,7 @@ export async function POST(req: Request) {
 	const hash = documentHash(bytes)
 	const id = makeInvoiceId(f.invoiceNumber)
 
-	if (findByNumberOrHash(f.invoiceNumber, hash) || getInvoiceRow(id)) {
+	if ((await findByNumberOrHash(f.invoiceNumber, hash)) || (await getInvoiceRow(id))) {
 		return fail(409, 'duplicate_invoice', 'This invoice number or document was already submitted.')
 	}
 
@@ -77,11 +74,7 @@ export async function POST(req: Request) {
 		return fail(400, 'terms_mismatch', 'The amounts or due date differ from the onchain registration.')
 	}
 
-	await mkdir(env.uploadsDir, { recursive: true })
-	const storagePath = path.join(/*turbopackIgnore: true*/ env.uploadsDir, `${hash}.${ext}`)
-	await writeFile(storagePath, bytes)
-
-	insertInvoice({
+	await insertInvoice({
 		invoice_id: id.toLowerCase(),
 		invoice_number: f.invoiceNumber,
 		issuer_wallet: wallet,
@@ -96,8 +89,8 @@ export async function POST(req: Request) {
 		document_hash: hash.toLowerCase(),
 		submit_tx: f.submitTx,
 	})
-	insertDocument({ invoice_id: id.toLowerCase(), storage_path: storagePath, document_hash: hash.toLowerCase(), mime_type: file.type, size_bytes: file.size })
-	insertEvent({ invoice_id: id, status: 'Submitted', tx_hash: f.submitTx, source: 'submit', actor: 'business wallet' })
+	await insertDocument({ invoice_id: id.toLowerCase(), document_hash: hash.toLowerCase(), mime_type: file.type, size_bytes: file.size, content: bytes })
+	await insertEvent({ invoice_id: id, status: 'Submitted', tx_hash: f.submitTx, source: 'submit', actor: 'business wallet' })
 
 	return json({ invoiceId: id.toLowerCase(), status: 'Submitted' }, 201)
 }
@@ -109,18 +102,18 @@ export async function GET(req: Request) {
 	if (scope === 'mine') {
 		const wallet = await verifyWalletHeaders(req.headers)
 		if (!wallet) return fail(401, 'wallet_auth_required', 'Sign in with your wallet to see your invoices.')
-		rows = listInvoiceRows(wallet)
+		rows = await listInvoiceRows(wallet)
 	} else if (scope === 'all') {
 		if (!(await isOperator())) return fail(403, 'operator_only', 'Operator access required.')
-		rows = listInvoiceRows()
+		rows = await listInvoiceRows()
 	} else {
-		rows = listInvoiceRows()
+		rows = await listInvoiceRows()
 	}
 	const items = await Promise.all(
 		rows.map(async (row) => {
 			try {
 				const chain = await readInvoice(row.invoice_id as `0x${string}`)
-				return summarize(row, chain, latestRun(row.invoice_id))
+				return summarize(row, chain, await latestRun(row.invoice_id))
 			} catch {
 				return null // transient RPC failure: omit rather than show a wrong status
 			}

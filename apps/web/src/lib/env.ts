@@ -18,12 +18,25 @@ export const env = {
 	get creDir() {
 		return process.env.CRE_DIR ?? path.resolve(process.cwd(), '../../cre')
 	},
-	get uploadsDir() {
-		return process.env.UPLOADS_DIR ?? path.resolve(process.cwd(), 'uploads')
+	/** libSQL URL: a hosted database (libsql://...) on Vercel, or a local file in development. */
+	get databaseUrl() {
+		if (process.env.DATABASE_URL) return process.env.DATABASE_URL
+		const file = process.env.DB_FILE ?? path.resolve(process.cwd(), 'credra.db')
+		return `file:${file}`
 	},
-	get dbFile() {
-		return process.env.DB_FILE ?? path.resolve(process.cwd(), 'credra.db')
+	get databaseAuthToken() {
+		return process.env.DATABASE_AUTH_TOKEN ?? ''
 	},
+	/**
+	 * 'cre': run the real CRE workflow simulation with the CRE CLI (local development, the recorded demo).
+	 * 'inprocess': run the same eligibility rules inside the app (hosted demo, where the CLI is not installed).
+	 */
+	get verifyMode(): 'cre' | 'inprocess' {
+		const v = process.env.VERIFY_MODE
+		if (v === 'cre' || v === 'inprocess') return v
+		return process.env.VERCEL ? 'inprocess' : 'cre'
+	},
+	
 }
 
 function req(name: string): string {

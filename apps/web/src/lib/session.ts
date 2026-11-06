@@ -18,7 +18,7 @@ export async function startOperatorSession() {
 	jar.set(SESSION_COOKIE, makeToken(secret()), {
 		httpOnly: true,
 		sameSite: 'strict',
-		secure: false, // localhost demo; set true behind HTTPS
+		secure: !!process.env.VERCEL, // true on the hosted (HTTPS) demo; localhost stays plain HTTP
 		path: '/',
 		maxAge: 8 * 60 * 60,
 	})

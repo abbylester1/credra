@@ -8,5 +8,5 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: Request) {
 	const raw = new URL(req.url).searchParams.get('wallets') ?? ''
 	const wallets = raw.split(',').filter((w) => isAddress(w)).slice(0, 25)
-	return json(walletLabels(wallets))
+	return json(await walletLabels(wallets))
 }

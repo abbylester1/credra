@@ -19,12 +19,12 @@ const MIN_STATUS: Record<string, number> = { fund: 5, repay: 6, default: 7 }
 export async function POST(req: Request, ctx: { params: Promise<{ invoiceId: string }> }) {
 	const { invoiceId } = await ctx.params
 	if (!isBytes32(invoiceId)) return fail(400, 'bad_id', 'Invalid invoice id.')
-	if (!getInvoiceRow(invoiceId)) return fail(404, 'not_found', 'Invoice not found.')
+	if (!(await getInvoiceRow(invoiceId))) return fail(404, 'not_found', 'Invoice not found.')
 	const body = z.object({ txHash: z.string().regex(/^0x[0-9a-fA-F]{64}$/), kind: z.enum(['fund', 'repay', 'default']) }).safeParse(await req.json().catch(() => null))
 	if (!body.success) return fail(400, 'invalid_fields', 'Send a transaction hash and kind.')
 	const { txHash, kind } = body.data
 
-	if (eventExistsForTx(txHash)) return json({ recorded: false, reason: 'already_recorded' })
+	if (await eventExistsForTx(txHash)) return json({ recorded: false, reason: 'already_recorded' })
 
 	let receipt
 	try {
@@ -38,6 +38,6 @@ export async function POST(req: Request, ctx: { params: Promise<{ invoiceId: str
 	const chain = await readInvoice(invoiceId)
 	const holder = await readHolder(invoiceId)
 	if (chain.status < MIN_STATUS[kind]) return fail(409, 'status_mismatch', 'The invoice has not reached that state onchain yet.')
-	insertEvent({ invoice_id: invoiceId, status: LABEL[kind], tx_hash: txHash, source: kind, actor: ACTOR[kind] })
+	await insertEvent({ invoice_id: invoiceId, status: LABEL[kind], tx_hash: txHash, source: kind, actor: ACTOR[kind] })
 	return json({ recorded: true, status: chain.status, holder })
 }

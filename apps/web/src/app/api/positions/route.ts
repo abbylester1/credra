@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: Request) {
 	const wallet = new URL(req.url).searchParams.get('wallet') ?? ''
 	if (!isAddress(wallet)) return fail(400, 'bad_wallet', 'Provide a wallet address.')
-	const rows = listInvoiceRows()
+	const rows = await listInvoiceRows()
 	const out = await Promise.all(
 		rows.map(async (row) => {
 			try {
@@ -21,7 +21,7 @@ export async function GET(req: Request) {
 				if (!holder || holder.toLowerCase() !== wallet.toLowerCase()) return null
 				const p = await readPosition(row.invoice_id as `0x${string}`)
 				return {
-					...summarize(row, chain, latestRun(row.invoice_id)),
+					...summarize(row, chain, await latestRun(row.invoice_id)),
 					holder,
 					fundedAmount: p.fundedAmount.toString(),
 					repaidAmount: p.repaidAmount.toString(),
