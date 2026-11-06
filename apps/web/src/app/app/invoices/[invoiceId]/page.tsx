@@ -19,7 +19,7 @@ type Detail = {
 	labels: Record<string, { name: string; role: string }>
 	invoice: InvoiceSummary
 	verification: Verification | null
-	timeline: { status: string; txHash: string | null; source: string; actor: string | null; at: number }[]
+	timeline: { status: string; txHash: string | null; source: string; actor: string | null; wallet: string | null; at: number }[]
 	position: { originalInvestor: string; fundedAmount: string; repaidAmount: string; fundedAt: number; repaidAt: number } | null
 	holder: string | null
 	decision: { decision: string; reason: string; txHash: string; at: number } | null
@@ -42,7 +42,7 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 	if (q.error || !q.data) return <InlineNotice tone="error">{(q.error as Error)?.message ?? 'Invoice not found.'} Nothing was changed.</InlineNotice>
 
 	const { invoice: i, verification: v, timeline, position, holder, decision, labels } = q.data
-	const tag = (w: string) => <WalletTag address={w} label={labels?.[w.toLowerCase()]} />
+	const tag = (w: string) => <WalletTag align="left" address={w} label={labels?.[w.toLowerCase()]} />
 	const isIssuer = !!address && address.toLowerCase() === i.issuerWallet.toLowerCase()
 	const canManage = isIssuer || role === 'operator'
 	const due = relativeDue(i.dueDate)
@@ -145,7 +145,7 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 								{timeline.map((t, idx) => (
 									<li key={idx} className="relative">
 										<span aria-hidden className="absolute -left-[25px] top-1.5 h-2 w-2 bg-pine" />
-										<div className="flex flex-wrap items-center gap-2"><span className="text-[14px] font-medium">{t.status}</span><span className="text-[12px] text-ink-3">{SOURCE_LABEL[t.source] ?? t.actor}</span></div>
+										<div className="flex flex-wrap items-start gap-x-3 gap-y-1"><span className="pt-px text-[14px] font-medium">{t.status}</span>{t.wallet ? <WalletTag align="left" address={t.wallet} label={labels?.[t.wallet.toLowerCase()]} /> : <span className="text-[12px] text-ink-3">{SOURCE_LABEL[t.source] ?? t.actor}</span>}</div>
 										<div className="num text-[12px] text-ink-3">{new Date(t.at * 1000).toLocaleString('en-GB')}</div>
 										{t.txHash && <TxLink hash={t.txHash} />}
 									</li>
@@ -183,7 +183,7 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 					</Card>
 					<Card>
 						<h2 className="mb-1 text-[16px] font-semibold">Parties</h2>
-						<Dl rows={[
+						<Dl stacked rows={[
 							['Issuer', tag(i.issuerWallet)],
 							['Registration', <TxLink key="b" hash={i.submitTx} />],
 							...(position && position.fundedAt ? ([['Original investor', tag(position.originalInvestor)], ['Receivable holder', holder ? tag(holder) : 'Unknown']] as [string, React.ReactNode][]) : []),

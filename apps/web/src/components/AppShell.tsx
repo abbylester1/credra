@@ -11,7 +11,7 @@ import { AuthScreen } from './AuthScreen'
 import { useConnectMode } from './Providers'
 import { CHAIN_ID, EXPLORER, shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
-import { Button, Skeleton } from './ui'
+import { Button, Skeleton, WalletTag } from './ui'
 
 type Item = { href: string; label: string; icon: string; roles?: string[] }
 const NAV: { group: string; items: Item[] }[] = [
@@ -58,8 +58,7 @@ function WalletCard() {
 	return (
 		<div className="rounded-card border border-hair bg-card p-3">
 			<div className="label">{loading ? <Skeleton className="h-3 w-16" /> : ROLE_LABEL[role]}</div>
-			{mine && <div className="mt-1 text-[14px] font-medium text-ink">{mine.name}</div>}
-			<div className="num mt-1 text-[13px]" title={address}>{address && shorten(address, 6, 4)}</div>
+			<div className="mt-1"><WalletTag align="left" address={address!} label={mine ?? null} fallbackName="Your wallet" showRole={false} /></div>
 			<div className="mt-2 flex items-center justify-between gap-2">
 				<span className="flex items-center gap-1.5 text-[12px] text-ink-3">
 					<span className={`h-1.5 w-1.5 rounded-full ${ok ? 'bg-accent' : 'bg-s-review'}`} aria-hidden />

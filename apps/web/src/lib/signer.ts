@@ -40,3 +40,4 @@ export async function setInvestor(address: `0x${string}`, action: 'add' | 'remov
 }
 
 export const verifierAddress = () => privateKeyToAccount(env.verifierKey).address
+export const adminAddress = () => privateKeyToAccount(env.adminKey).address

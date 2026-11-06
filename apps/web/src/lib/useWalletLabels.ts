@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { apiJson } from './client'
 
-export type WalletLabel = { name: string; role: 'Business' | 'Investor' }
+export type WalletLabel = { name: string; role: 'Business' | 'Investor' | 'Verifier' | 'Operator' }
 
 /** Names and roles for the given wallets (issuers from their invoices, investors from the operator). */
 export function useWalletLabels(wallets: (string | undefined | null)[]) {

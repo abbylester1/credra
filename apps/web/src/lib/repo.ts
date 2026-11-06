@@ -1,5 +1,6 @@
 import 'server-only'
 import { getDb } from './db'
+import { adminAddress, verifierAddress } from './signer'
 
 export type InvoiceRow = {
 	invoice_id: string
@@ -125,7 +126,7 @@ export const latestDecision = (invoiceId: string) =>
 		| undefined
 
 /** Human-readable names for wallets. Issuers are named from their invoices; investors are named by the operator. */
-export type WalletLabel = { name: string; role: 'Business' | 'Investor' }
+export type WalletLabel = { name: string; role: 'Business' | 'Investor' | 'Verifier' | 'Operator' }
 
 export function setWalletLabel(wallet: string, name: string, role: WalletLabel['role']) {
 	getDb()
@@ -133,9 +134,23 @@ export function setWalletLabel(wallet: string, name: string, role: WalletLabel['
 		.run(wallet.toLowerCase(), name.trim().slice(0, 60), role)
 }
 
+/** Application wallets that sign on the platform's behalf. Named so the audit trail never shows a bare address. */
+function serviceLabels(): Record<string, WalletLabel> {
+	try {
+		return {
+			[verifierAddress().toLowerCase()]: { name: 'Credra Verifier', role: 'Verifier' },
+			[adminAddress().toLowerCase()]: { name: 'Credra Operator', role: 'Operator' },
+		}
+	} catch {
+		return {}
+	}
+}
+
 export function walletLabels(wallets: string[]): Record<string, WalletLabel> {
 	const out: Record<string, WalletLabel> = {}
+	const service = serviceLabels()
 	for (const w of new Set(wallets.map((x) => x.toLowerCase()))) {
+		if (service[w]) { out[w] = service[w]; continue }
 		const l = getDb().prepare('SELECT name, role FROM wallet_labels WHERE wallet = ?').get(w) as WalletLabel | undefined
 		if (l) { out[w] = l; continue }
 		const b = getDb().prepare('SELECT issuer_name FROM invoices WHERE issuer_wallet = ? ORDER BY created_at DESC LIMIT 1').get(w) as { issuer_name: string } | undefined

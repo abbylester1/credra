@@ -3,7 +3,7 @@
 import { explorerAddress, explorerTx, shorten } from '@/lib/config'
 import { formatUsdt } from '@/lib/money'
 import { statusLabel } from '@/lib/status'
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 
 const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(' ')
 
@@ -96,15 +96,35 @@ export function AddressLink({ address }: { address: string }) {
 	)
 }
 
-/** A wallet shown as a person: name and role first, short address as the verifiable detail. */
-export function WalletTag({ address, label }: { address: string; label?: { name: string; role: string } | null }) {
-	if (!label) return <AddressLink address={address} />
-	const tone = label.role === 'Investor' ? 'bg-s-funded-soft text-s-funded' : 'bg-accent-soft text-accent'
+const ROLE_TONE: Record<string, string> = {
+	Investor: 'bg-s-funded-soft text-s-funded',
+	Business: 'bg-accent-soft text-accent',
+	Verifier: 'bg-s-review-soft text-s-review',
+	Operator: 'bg-s-neutral-soft text-s-neutral',
+}
+
+/** A wallet shown as a person: name and role. The address stays hidden until the name is clicked. */
+export function WalletTag({ address, label, align = 'right', fallbackName = 'Unnamed wallet', showRole = true }: { address: string; label?: { name: string; role: string } | null; align?: 'left' | 'right'; fallbackName?: string; showRole?: boolean }) {
+	const [open, setOpen] = useState(false)
+	const [copied, setCopied] = useState(false)
+	const name = label?.name ?? fallbackName
+	async function copy() {
+		try { await navigator.clipboard.writeText(address); setCopied(true); setTimeout(() => setCopied(false), 1200) } catch {}
+	}
 	return (
-		<span className="inline-flex flex-wrap items-center justify-end gap-x-2 gap-y-1">
-			<span className="text-[14px] font-medium text-ink">{label.name}</span>
-			<span className={cx('rounded-chip px-1.5 py-px text-[11px] font-medium', tone)}>{label.role}</span>
-			<AddressLink address={address} />
+		<span className={cx('inline-flex flex-col gap-1.5', align === 'right' ? 'items-end text-right' : 'items-start text-left')}>
+			<button type="button" onClick={() => setOpen(!open)} aria-expanded={open} title={open ? 'Hide address' : 'Show wallet address'} className="group inline-flex flex-wrap items-center gap-x-2 gap-y-0.5 rounded-chip text-left text-[14px] font-medium leading-tight text-ink hover:text-accent">
+				{name}
+				{label && showRole && <span className={cx('rounded-chip px-1.5 py-px text-[11px] font-medium', ROLE_TONE[label.role] ?? ROLE_TONE.Operator)}>{label.role}</span>}
+				<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={cx('text-ink-3 transition-transform duration-200', open && 'rotate-180')} aria-hidden><path d="M2 3.5l3 3 3-3" /></svg>
+			</button>
+			{open && (
+				<span className="animate-popin flex flex-wrap items-center gap-x-2 gap-y-1 rounded-ctl bg-inset px-2.5 py-1.5">
+					<span className="num break-all text-[12px] text-ink-2">{address}</span>
+					<button type="button" onClick={copy} className="text-[12px] font-medium text-accent hover:underline">{copied ? 'Copied' : 'Copy'}</button>
+					<a href={explorerAddress(address)} target="_blank" rel="noreferrer" className="text-[12px] font-medium text-accent hover:underline">Explorer {'↗'}</a>
+				</span>
+			)}
 		</span>
 	)
 }
@@ -183,13 +203,14 @@ export function Field({ label, hint, error, children }: { label: string; hint?: 
 export const inputCls =
 	'h-11 w-full rounded-ctl border border-field bg-card px-3 text-[14px] text-ink placeholder:text-ink-3 focus-visible:outline-2 focus-visible:outline-accent'
 
-export function Dl({ rows }: { rows: [string, ReactNode][] }) {
+/** Key-value list. `stacked` puts the label above the value, for narrow columns. */
+export function Dl({ rows, stacked }: { rows: [string, ReactNode][]; stacked?: boolean }) {
 	return (
 		<dl className="divide-y divide-hair">
 			{rows.map(([k, v]) => (
-				<div key={k} className="flex items-baseline justify-between gap-4 py-2.5 text-[14px]">
-					<dt className="text-ink-3">{k}</dt>
-					<dd className="text-right text-ink">{v}</dd>
+				<div key={k} className={stacked ? 'space-y-1 py-3 text-[14px]' : 'flex items-baseline justify-between gap-4 py-2.5 text-[14px]'}>
+					<dt className={stacked ? 'text-[12px] text-ink-3' : 'shrink-0 text-ink-3'}>{k}</dt>
+					<dd className={stacked ? 'text-ink' : 'min-w-0 text-right text-ink'}>{v}</dd>
 				</div>
 			))}
 		</dl>
