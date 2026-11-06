@@ -124,7 +124,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 			<aside className="border-b border-hair bg-canvas px-4 py-4 lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r lg:py-6">
 				<div className="flex h-full flex-col gap-6">
 					<Link href="/" className="flex items-center px-2" aria-label="Credra home">
-						<Image src="/logo.png" alt="Credra" width={112} height={32} className="h-8 w-auto object-contain" priority />
+						<Image src="/logo.png" alt="Credra" width={113} height={22} className="h-[22px] w-auto object-contain" priority />
 					</Link>
 					<nav aria-label="Main" className="flex gap-4 lg:flex-1 lg:flex-col lg:gap-5">
 						{groups.map((g) => (
