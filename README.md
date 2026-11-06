@@ -60,6 +60,8 @@ An honest snapshot of what works today.
 
 Evidence lives in [`evidence/`](evidence/): CRE runs, the supported-chains output, deployment and end-to-end transaction links.
 
+**Live demo (testnet): https://credra-seven.vercel.app** · sign in with email, Google or a wallet. The hosted build runs the same eligibility rules inside the web app against a simulated registry stored in the database, and labels that in the UI. The Chainlink CRE runs are the CLI simulations in [`evidence/`](evidence/); the hosted demo does not claim a CRE run.
+
 ## Quick start
 
 ```bash
@@ -170,6 +172,8 @@ cd apps/mock-registry && bun server.ts            # simulated external API on :8
 cd apps/web && bun install && bun run dev         # app on :3000, open /app
 # Sign-in uses Privy: put NEXT_PUBLIC_PRIVY_APP_ID=<your public app id> in apps/web/.env.local and enable Google under Authentication.
 # Without it the app falls back to a browser wallet such as MetaMask.
+# Local data is a SQLite file (apps/web/credra.db). To use a hosted libSQL/Turso database instead, set DATABASE_URL and
+# DATABASE_AUTH_TOKEN (and NEXT_PUBLIC_HOSTED_DEMO=1 on Vercel). apps/web/scripts/migrate-to-hosted-db.ts copies local data over.
 
 # 2. Optional: end-to-end on testnet, acting as the business wallet
 cd apps/web && bun --env-file ../../.env scripts/e2e-mvp.ts
@@ -182,7 +186,7 @@ cd apps/web && bun --env-file ../../.env scripts/e2e-mvp.ts
 ```bash
 cd contracts && forge test                                   # 29 tests
 cd cre/invoice-verification && bun install && bun test       # 11 tests
-cd apps/web && bun run test                                  # 26 tests
+cd apps/web && bun run test                                  # 35 tests
 ```
 
 Static analysis ([Slither](evidence/slither.md)) found 5 low-severity items and no medium or high ones. That is a first pass, not an audit.
@@ -195,6 +199,7 @@ Static analysis ([Slither](evidence/slither.md)) found 5 low-severity items and 
 - One investor per invoice. No secondary market, KYC, credit scoring or automatic detection of the buyer's payment; repayment is an explicit transaction.
 - Operator access is a demo passcode. Wallet authentication is signature based with a 10-minute window and no nonce store.
 - Both public RPCs are intermittently slow, so the app reads through a fallback transport.
+- The hosted (Vercel) build has no CRE CLI, so it verifies in process with a copy of `rules.ts` that a test keeps identical to the CRE workflow's. Its data lives in a libSQL (Turso) database, including uploaded invoice documents.
 - The demo video and landing page are not finished at the time of writing.
 
 ## Roadmap
