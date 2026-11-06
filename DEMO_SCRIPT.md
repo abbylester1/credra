@@ -84,3 +84,24 @@ A full rehearsal ran with a 10 USDT invoice (Meridian Textiles Ltd): sign, submi
 - Keep the sample invoice at its generated 20 and 18 USDT. The generated document image says 20.00, so editing the form amounts would make the document and the form disagree.
 - The investor wallet cannot repay 20 USDT after funding 18 (22 USDT balance). Repay as the business user, whose wallet holds enough, or top the investor up first.
 - Wait for the Funded event to appear on the timeline before moving on. It is recorded automatically after the transaction confirms (leaving the page too early skips it).
+
+## Cut 3: walkthrough style, about 3:30 (explains the concept, then spends most of the time on the live demo)
+
+Conversational "let me show you" voice, like a short workshop. About 25% concept, 65% demo, 10% close. Stay under 4:00 (ETHGlobal rejects longer uploads). Replace `[name]` with yours.
+
+| Time | On screen | Say |
+|---|---|---|
+| 0:00–0:15 | You on the landing hero | "Hi, I'm [name], and this is Credra: verified invoice financing in USDT, built on Whitechain with a Chainlink CRE workflow doing the verification." |
+| 0:15–0:40 | Landing: the calculator at 50,000 USDT, 4% discount | "Here's the problem. A business ships goods, sends an invoice, and then waits thirty days or more to be paid. With Credra, an investor pays most of that invoice today, and gets the full amount back when the buyer pays. On a fifty-thousand USDT invoice at four percent, the business gets forty-eight thousand now, and the investor earns two thousand. The platform fee is zero." |
+| 0:40–1:00 | Landing: the five-step "How it works" stepper | "The hard part is trust: why would an investor fund an invoice they can't check? So nothing opens for funding until a Chainlink CRE workflow verifies it against an external record, and every step is recorded onchain." |
+| 1:00–1:25 | App: sign in with email, "Use sample invoice", Submit, approve the Privy prompt | "Let me show you. I sign in with just an email, and the app creates a wallet for me. I submit an invoice with its document. Testnet amounts are small, so this one is scaled down. The document's fingerprint is registered on Whitechain." |
+| 1:25–2:05 | Terminal: the `cre workflow simulate` command, then the app's Eligible verification record | "Now the verification. This is the CRE workflow, running with the CRE CLI. It reads the invoice from Whitechain, asks an external API for the matching record, and compares issuer, buyer, amount, due date and document hash. This one is a fifty-thousand USDT invoice, and it comes back eligible. If a field doesn't match, it's rejected. If the API is down, it goes to manual review, never to eligible. In the app you see the same check field by field. The source is a simulated registry, and it's labelled that way. The verdict is recorded by our verifier wallet, not by the Chainlink network." |
+| 2:05–2:40 | Investor account: Approve USDT, Fund invoice, then the explorer | "Now I switch to an investor. They approve the official Tether USDT and fund the invoice. The business is paid directly, and the contract never holds the money. Here's that transaction on the Whitechain explorer: the official USDT contract, and the funds going to the business wallet." |
+| 2:40–3:10 | Repay, then the timeline, click a name to reveal the address | "At the due date, the payer repays the full amount to whoever holds the receivable token. The timeline names every actor: the business, our verifier, the investor, and each step links to the explorer, so anyone can audit it." |
+| 3:10–3:30 | Landing "Proof" section, then the end card | "To be clear about what's real: the contracts and the money movement are real testnet, the verification source is simulated, and the verdict comes from our wallet, not a decentralised network. Next steps are a real data source and a deployed CRE workflow. Zero platform fees, code on GitHub. Thanks for watching." |
+
+Delivery notes:
+- Say what you are about to do, then do it ("Let me submit it"), and name each result before moving on. Pause a beat after each transaction confirms.
+- Keep terminal text large and read the verdict line aloud.
+- Do not speed footage up. Jump-cut the waits.
+- Total narration is about 480 words, which is about 3:25 at a calm pace. If a take runs over 3:45, trim the concept section first.
