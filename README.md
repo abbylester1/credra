@@ -93,18 +93,6 @@ To run the whole stack you also need Node 22, [bun](https://bun.sh) and the [CRE
 
 ![Credra architecture](docs/images/architecture.svg)
 
-The same flow as a diagram:
-
-```mermaid
-flowchart LR
-    B["Business"] -->|submit invoice| REG["InvoiceRegistry"]
-    APP["Credra app + verifier wallet"] -->|verify, record verdict| REG
-    APP -.->|checks against| EXT["Simulated registry"]
-    I["Investor"] -->|fund in USDT| RF["ReceivableFinance ERC-721"]
-    RF -->|USDT to business| B
-    RF -->|repaid in USDT| H["Receivable holder"]
-```
-
 ## Why onchain stablecoin settlement on Whitechain
 
 Invoice financing needs several parties to trust one record: the issuer, the investor, and whoever verifies. A bank rail can move the money, but it cannot also enforce who may hold the receivable, refuse a second financing of the same invoice, or let anyone inspect the verification record and payment trail without asking the platform.
