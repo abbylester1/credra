@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
 import { useWalletChainId } from '@/lib/useWalletChain'
+import { AuthScreen } from './AuthScreen'
 import { useConnectMode } from './Providers'
 import { CHAIN_ID, EXPLORER, shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
@@ -80,11 +81,7 @@ function TopBar() {
 			</nav>
 			<div className="flex items-center gap-3">
 				{!loading && <span className="rounded-chip bg-accent-soft px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.05em] text-accent">{ROLE_LABEL[role]}</span>}
-				<a href={EXPLORER} target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-ctl border border-hair bg-card px-2.5 py-1.5 text-[12px] text-ink-2 transition-colors hover:border-field">
-					<Image src="/whitechain.svg" alt="" width={16} height={16} unoptimized />
-					Whitechain Sepolia
-					<span className="animate-pulse-ring h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-				</a>
+
 			</div>
 		</div>
 	)
@@ -108,8 +105,11 @@ function NetworkBanner() {
 export function AppShell({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname()
 	const { operator, role } = useRole()
+	const { isConnected, isReconnecting, isConnecting } = useAccount()
 	const groups = NAV.filter((g) => g.group !== 'Admin' || operator).map((g) => ({ ...g, items: g.items.filter((i) => !i.roles || i.roles.includes(role)) }))
 	const active = (href: string) => (href === '/app' ? pathname === '/app' : pathname.startsWith(href))
+
+	if (!isConnected && !operator && !isReconnecting && !isConnecting && pathname !== '/app/operator') return <AuthScreen />
 
 	return (
 		<div className="min-h-screen lg:grid lg:grid-cols-[232px_minmax(0,1fr)]">
@@ -136,7 +136,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 							</div>
 						))}
 					</nav>
-					<WalletCard />
+					<div className="space-y-3">
+						<WalletCard />
+						<a href={EXPLORER} target="_blank" rel="noreferrer" className="flex items-center justify-between gap-2 px-1 text-[12px] text-ink-3 transition-colors hover:text-ink">
+							<span className="flex items-center gap-2"><Image src="/whitechain.svg" alt="" width={14} height={14} unoptimized />Whitechain Sepolia</span>
+							<span className="flex items-center gap-1.5"><span className="animate-pulse-ring h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />Explorer</span>
+						</a>
+					</div>
 				</div>
 			</aside>
 			<div className="min-w-0">

@@ -86,7 +86,7 @@ export function InvoiceTable({ items, showReturn = true }: { items: InvoiceSumma
 			{rows.length === 0 ? (
 				<EmptyState title={items.length === 0 ? 'No invoices yet' : 'No invoices match'} body={items.length === 0 ? 'Invoices appear here once they are submitted.' : 'Try another stage or clear the search.'} />
 			) : (
-				<div className="overflow-x-auto rounded-card border border-hair bg-card">
+				<div className="overflow-x-auto rounded-[16px] border border-hair bg-card">
 					<table className="w-full min-w-[820px] border-collapse text-left text-[14px]">
 						<thead>
 							<tr className="border-b border-hair text-[12px] text-ink-3">

@@ -106,7 +106,7 @@ export function ProvenanceStrip({ simulated, recordedBy, tx }: { simulated?: boo
 
 /* ---------- Layout ---------- */
 export function Card({ children, className, pad = true }: { children: ReactNode; className?: string; pad?: boolean }) {
-	return <section className={cx('rounded-card border border-hair bg-card', pad && 'p-6', className)}>{children}</section>
+	return <section className={cx('rounded-[16px] border border-hair bg-card', pad && 'p-6', className)}>{children}</section>
 }
 
 export function PageHeader({ title, description, actions }: { title: string; description?: string; actions?: ReactNode }) {

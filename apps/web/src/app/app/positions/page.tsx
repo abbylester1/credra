@@ -37,7 +37,7 @@ export default function PositionsPage() {
 						<Card className="animate-popin [animation-delay:70ms]"><div className="text-[13px] text-ink-3">Expected repayment</div><div className="mt-2"><Amount value={sum((p) => p.amount, (p) => p.status === 5)} figure /></div></Card>
 						<Card className="animate-popin [animation-delay:140ms]"><div className="text-[13px] text-ink-3">Repaid to date</div><div className="mt-2"><Amount value={sum((p) => p.repaidAmount)} figure tone="accent" /></div></Card>
 					</div>
-					<div className="overflow-x-auto rounded-card border border-hair bg-card">
+					<div className="overflow-x-auto rounded-[16px] border border-hair bg-card">
 						<table className="w-full min-w-[760px] border-collapse text-left text-[14px]">
 							<thead><tr className="border-b border-hair text-[12px] text-ink-3">
 								<th className="px-4 py-3 font-medium">Invoice</th>

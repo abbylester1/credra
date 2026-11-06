@@ -7,13 +7,17 @@ import { Amount, Button, Card, fmtDate, InlineNotice, PageHeader } from '@/compo
 import { useInvoices, type InvoiceSummary, type Scope } from '@/lib/useInvoices'
 import { useRole } from '@/lib/useRole'
 
+const ICONS = ['M4 4h12v12H4zM8 8h4M8 12h4', 'M4 10l4 4 8-8', 'M10 3v14M6 7h8M6 13h8', 'M5 3v14M5 5h10l-2 3 2 3H5']
 function Metric({ label, children, i = 0 }: { label: string; children: React.ReactNode; i?: number }) {
 	return (
 		<div className="animate-popin" style={{ animationDelay: `${i * 70}ms` }}>
-			<Card className="!p-6 transition-shadow duration-300 hover:shadow-[0_14px_30px_-22px_rgba(15,26,22,0.35)]">
-				<div className="text-[13px] text-ink-3">{label}</div>
-				<div className="mt-3">{children}</div>
-			</Card>
+			<div className="group rounded-[20px] border border-hair bg-inset p-5 transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(15,26,22,0.35)]">
+				<span className="flex h-9 w-9 items-center justify-center rounded-ctl border border-hair bg-card text-accent">
+					<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={ICONS[i % ICONS.length]} /></svg>
+				</span>
+				<div className="mt-5 text-[13px] text-ink-3">{label}</div>
+				<div className="mt-1.5">{children}</div>
+			</div>
 		</div>
 	)
 }
@@ -53,7 +57,7 @@ function Overview({ scope, role, headers }: { scope: Scope; role: string; header
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 				{metrics.map(([l, v], i) => <Metric key={l as string} label={l as string} i={i}>{v}</Metric>)}
 			</div>
-			<div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+			<div className="dotgrid mt-6 grid gap-4 rounded-[20px] border border-hair bg-inset p-4 md:p-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
 				<Activity items={items} />
 				<Pipeline items={items} />
 			</div>

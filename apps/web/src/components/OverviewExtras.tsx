@@ -45,7 +45,7 @@ export function Pipeline({ items }: { items: InvoiceSummary[] }) {
 	const counts = STAGES.map(([codes]) => items.filter((i) => codes.includes(i.status)).length)
 	const total = counts.reduce((a, b) => a + b, 0)
 	return (
-		<section className="rounded-card border border-hair bg-card p-6">
+		<section className="rounded-[16px] border border-hair bg-card p-6">
 			<div className="flex items-baseline justify-between">
 				<h2 className="text-[16px] font-semibold">Pipeline</h2>
 				<span className="num text-[12px] text-ink-3">{total} invoices</span>
@@ -71,7 +71,7 @@ export function Pipeline({ items }: { items: InvoiceSummary[] }) {
 export function Activity({ items }: { items: InvoiceSummary[] }) {
 	const recent = [...items].sort((a, b) => b.createdAt - a.createdAt).slice(0, 6)
 	return (
-		<section className="rounded-card border border-hair bg-card">
+		<section className="rounded-[16px] border border-hair bg-card">
 			<div className="flex items-center justify-between px-6 py-4">
 				<h2 className="text-[16px] font-semibold">Recent activity</h2>
 				<Link href="/app/invoices" className="text-[13px] text-accent hover:underline">All invoices</Link>
@@ -120,7 +120,7 @@ export function GettingStarted({ role }: { role: 'business' | 'investor' | 'oper
 		],
 	}[role]
 	return (
-		<section className="rounded-card border border-hair bg-card p-6">
+		<section className="rounded-[16px] border border-hair bg-card p-6">
 			<h2 className="text-[16px] font-semibold">Getting started</h2>
 			<ol className="mt-4 space-y-1">
 				{steps.map(([t, d, href], i) => (
@@ -145,7 +145,7 @@ export function Protocol() {
 		['USDT (official)', ADDRESSES.usdt],
 	]
 	return (
-		<section className="rounded-card border border-hair bg-card p-6">
+		<section className="rounded-[16px] border border-hair bg-card p-6">
 			<div className="flex items-center justify-between">
 				<h2 className="text-[16px] font-semibold">Protocol</h2>
 				<span className="flex items-center gap-1.5 text-[12px] text-ink-3"><Image src="/whitechain.svg" alt="" width={16} height={16} unoptimized />Whitechain Sepolia</span>
