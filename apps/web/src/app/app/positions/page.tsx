@@ -21,7 +21,7 @@ export default function PositionsPage() {
 	const sum = (f: (p: Position) => string, filter: (p: Position) => boolean = () => true) => items.filter(filter).reduce((s, p) => s + BigInt(f(p)), 0n)
 	return (
 		<>
-			<PageHeader title="Positions" description="Receivables you hold. Repayment is paid to the current holder." />
+			<PageHeader title="Positions" description="Your receivables. Repayment goes to the current holder." />
 			{!address ? (
 				<InlineNotice tone="warn">Connect your wallet to see your positions.</InlineNotice>
 			) : q.isLoading ? (

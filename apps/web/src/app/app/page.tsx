@@ -57,7 +57,7 @@ function Overview({ scope, role, headers }: { scope: Scope; role: string; header
 					<Link href="/app/invoices" className="text-[13px] text-accent hover:underline">View all</Link>
 				</div>
 				{attention.length === 0 ? (
-					<div className="px-6 pb-6"><EmptyState title="Nothing needs attention" body="Activity appears here as invoices move through verification and funding." /></div>
+					<div className="px-6 pb-6"><EmptyState title="Nothing needs attention" body="Invoices that need action appear here." /></div>
 				) : (
 					<ul className="divide-y divide-hair border-t border-hair">
 						{attention.map((i) => (
@@ -81,7 +81,7 @@ export default function OverviewPage() {
 		<>
 			<PageHeader
 				title="Overview"
-				description="Your financing activity at a glance."
+				description="Financing activity and open items."
 				actions={role === 'business' ? <Link href="/app/invoices/new"><Button variant="primary">Submit invoice</Button></Link> : undefined}
 			/>
 			{loading ? (

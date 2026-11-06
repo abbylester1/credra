@@ -48,7 +48,7 @@ function Investors() {
 	return (
 		<Card>
 			<h2 className="text-[16px] font-semibold">Approved investors</h2>
-			<p className="mt-1 text-[14px] text-ink-2">Only these wallets can fund invoices or receive receivables. Removing a wallet blocks new funding and incoming transfers.</p>
+			<p className="mt-1 text-[14px] text-ink-2">Only these wallets can fund invoices or receive receivables.</p>
 			<ul className="mt-3 divide-y divide-hair">
 				{q.isLoading && <li className="py-2 text-[14px] text-ink-3">Loading</li>}
 				{q.data?.length === 0 && <li className="py-2 text-[14px] text-ink-3">No approved investors.</li>}
@@ -75,7 +75,7 @@ function Console() {
 		<div className="space-y-8">
 			<Card className="border-dashed !border-s-review">
 				<div className="mb-3 flex items-center gap-2"><h2 className="text-[16px] font-semibold">Demo tools</h2><SimulatedTag /></div>
-				<p className="mb-4 text-[14px] text-ink-2">Writes a record into the simulated external registry so an invoice has something to be verified against. This is not real data.</p>
+				<p className="mb-4 text-[14px] text-ink-2">Seed the simulated registry so an invoice can be verified against it. Not real data.</p>
 				<div className="grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
 					<Field label="Invoice"><select className={inputCls} value={num} onChange={(e) => setNum(e.target.value)}><option value="">Choose an invoice</option>{items.map((i) => <option key={i.invoiceId} value={i.invoiceNumber}>{i.invoiceNumber} ({i.issuerName})</option>)}</select></Field>
 					<Field label="Record contains"><select className={inputCls} value={scenario} onChange={(e) => setScenario(e.target.value as typeof scenario)}>{SCENARIOS.map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select></Field>
@@ -100,7 +100,7 @@ export default function OperatorPage() {
 	const { operator, loading, refetchOperator } = useRole()
 	return (
 		<>
-			<PageHeader title="Operator console" description="Demo tools and every invoice on the platform." actions={operator ? <Button dense onClick={async () => { await apiJson('/api/operator/login', { method: 'DELETE' }); await refetchOperator() }}>Sign out</Button> : undefined} />
+			<PageHeader title="Operator console" description="Demo tools and platform-wide invoice view." actions={operator ? <Button dense onClick={async () => { await apiJson('/api/operator/login', { method: 'DELETE' }); await refetchOperator() }}>Sign out</Button> : undefined} />
 			{loading ? <p className="text-[14px] text-ink-3">Checking access</p> : operator ? <Console /> : <Login onDone={() => void refetchOperator()} />}
 		</>
 	)

@@ -21,7 +21,7 @@ export default function InvoicesPage() {
 		<>
 			<PageHeader
 				title="Invoices"
-				description={role === 'investor' ? 'Eligible invoices open for funding.' : role === 'operator' ? 'All invoices across the platform.' : 'Invoices you have submitted for financing.'}
+				description={role === 'investor' ? 'Eligible invoices open for funding.' : role === 'operator' ? 'All invoices on the platform.' : 'Your submitted invoices.'}
 				actions={action}
 			/>
 			{loading ? (
@@ -34,7 +34,7 @@ export default function InvoicesPage() {
 				<SignInGate>{(h) => <List scope="mine" headers={h} />}</SignInGate>
 			)}
 			{!loading && role === 'business' && (
-				<div className="mt-8"><EmptyState title="Need to finance an invoice?" body="Submit the invoice and its document. It is registered onchain and verified before it can be funded." action={<Link href="/app/invoices/new"><Button>Submit invoice</Button></Link>} /></div>
+				<div className="mt-8"><EmptyState title="Need to finance an invoice?" body="Submit an invoice and its document. It gets registered onchain and verified before funding." action={<Link href="/app/invoices/new"><Button>Submit invoice</Button></Link>} /></div>
 			)}
 		</>
 	)
