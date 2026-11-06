@@ -31,6 +31,9 @@ export type RunRow = {
 	record_tx: string | null
 	source_simulated: number
 	created_at: number
+	risk_grade: string | null
+	risk_score: number | null
+	risk_json: string | null
 }
 
 export type EventRow = {
@@ -80,15 +83,48 @@ export type DocumentRow = { storage_path: string; mime_type: string; document_ha
 export const getDocumentRow = (invoiceId: string) =>
 	get<DocumentRow>('SELECT storage_path, mime_type, document_hash, size_bytes, content FROM documents WHERE invoice_id = ? ORDER BY id DESC LIMIT 1', [invoiceId.toLowerCase()])
 
-export async function insertRun(r: Omit<RunRow, 'id' | 'created_at'>) {
+export async function insertRun(r: Omit<RunRow, 'id' | 'created_at' | 'risk_grade' | 'risk_score' | 'risk_json'> & Partial<Pick<RunRow, 'risk_grade' | 'risk_score' | 'risk_json'>>) {
 	await run(
 		`INSERT INTO verification_runs (invoice_id, verdict, failed_checks, review_reasons, external_reference, report_json,
-		 verification_ref, record_tx, source_simulated, created_at) VALUES (?,?,?,?,?,?,?,?,?,?)`,
+		 verification_ref, record_tx, source_simulated, created_at, risk_grade, risk_score, risk_json) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
 		[
 			r.invoice_id, r.verdict, r.failed_checks, r.review_reasons, r.external_reference, r.report_json,
-			r.verification_ref, r.record_tx, r.source_simulated, now(),
+			r.verification_ref, r.record_tx, r.source_simulated, now(), r.risk_grade ?? null, r.risk_score ?? null, r.risk_json ?? null,
 		],
 	)
+}
+
+/* ───────── settings and risk inputs ───────── */
+export async function getSetting(key: string): Promise<string | null> {
+	return (await get<{ value: string }>('SELECT value FROM settings WHERE key = ?', [key]))?.value ?? null
+}
+export async function setSetting(key: string, value: string) {
+	await run('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', [key, value])
+}
+
+/** How many of this issuer's invoices ended Repaid or Defaulted, from the recorded status events. */
+export async function issuerHistory(wallet: string): Promise<{ repaid: number; defaulted: number }> {
+	const rows = await all<{ status: string; c: number }>(
+		`SELECT e.status AS status, COUNT(DISTINCT e.invoice_id) AS c FROM status_events e
+		 JOIN invoices i ON i.invoice_id = e.invoice_id
+		 WHERE lower(i.issuer_wallet) = ? AND e.status IN ('Repaid','Defaulted') GROUP BY e.status`,
+		[wallet.toLowerCase()],
+	)
+	const n = (s: string) => Number(rows.find((r) => r.status === s)?.c ?? 0)
+	return { repaid: n('Repaid'), defaulted: n('Defaulted') }
+}
+
+/** This buyer's share of all invoice value on the platform (0..1), or null when there are too few invoices to mean anything. */
+export async function buyerShare(buyerRef: string): Promise<number | null> {
+	const rows = await all<{ buyer_ref: string; amount: string }>('SELECT buyer_ref, amount FROM invoices')
+	if (rows.length < 5) return null
+	let total = 0, mine = 0
+	for (const r of rows) {
+		const v = Number(r.amount) / 1e6
+		total += v
+		if (r.buyer_ref.toLowerCase() === buyerRef.toLowerCase()) mine += v
+	}
+	return total > 0 ? mine / total : null
 }
 
 export const latestRun = (invoiceId: string) =>

@@ -18,6 +18,7 @@ export type InvoiceSummary = {
 	documentHash: string
 	submitTx: string
 	verdict: string | null
+	grade: string | null
 	createdAt: number
 }
 

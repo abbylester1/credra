@@ -4,8 +4,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { use, useState } from 'react'
 import { useAccount } from 'wagmi'
-import { EvidencePanel, type Verification } from '@/components/Evidence'
-import { Amount, Button, Card, DetailSkeleton, Dl, fmtDate, InlineNotice, ProvenanceStrip, relativeDue, StatusChip, TxLink, AddressLink, WalletTag } from '@/components/ui'
+import { EvidencePanel, VerifySteps, type Verification } from '@/components/Evidence'
+import { Amount, Button, Card, DetailSkeleton, GradeChip, Dl, fmtDate, InlineNotice, ProvenanceStrip, relativeDue, StatusChip, TxLink, AddressLink, WalletTag } from '@/components/ui'
 import { apiJson, useWalletHeaders } from '@/lib/client'
 import { friendlyError } from '@/lib/errors'
 import { shorten } from '@/lib/config'
@@ -83,6 +83,7 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 					<div className="flex flex-wrap items-center gap-3">
 						<h1 className="text-[34px] font-semibold leading-[1.1] tracking-[-0.03em]">{i.issuerName}</h1>
 						<StatusChip status={i.status} />
+						{i.grade && <GradeChip grade={i.grade} />}
 					</div>
 					<p className="mt-1 text-[14px] text-ink-3"><span className="num">{i.invoiceNumber}</span> {'·'} Due {fmtDate(i.dueDate)}, <span className={due.late ? 'text-s-reject' : ''}>{due.text}</span></p>
 				</div>
@@ -91,6 +92,7 @@ export default function InvoiceDetail({ params }: { params: Promise<{ invoiceId:
 				)}
 			</header>
 			{msg && <div className="mb-4"><InlineNotice tone={msg.tone}>{msg.text}</InlineNotice></div>}
+			{busy && <div className="animate-popin mb-6 rounded-card border border-hair bg-card p-6"><h2 className="mb-3 text-[16px] font-semibold">Verifying this invoice</h2><VerifySteps running v={null} /></div>}
 
 			<Lifecycle status={i.status} />
 

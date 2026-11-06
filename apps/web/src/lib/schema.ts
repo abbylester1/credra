@@ -36,7 +36,10 @@ CREATE TABLE IF NOT EXISTS verification_runs (
 	verification_ref TEXT NOT NULL,
 	record_tx TEXT,
 	source_simulated INTEGER NOT NULL DEFAULT 1,
-	created_at INTEGER NOT NULL
+	created_at INTEGER NOT NULL,
+	risk_grade TEXT,
+	risk_score INTEGER,
+	risk_json TEXT
 );
 CREATE TABLE IF NOT EXISTS operator_decisions (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,6 +62,10 @@ CREATE TABLE IF NOT EXISTS wallet_labels (
 	wallet TEXT PRIMARY KEY,
 	name TEXT NOT NULL,
 	role TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS settings (
+	key TEXT PRIMARY KEY,
+	value TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS mock_registry (
 	invoice_number TEXT PRIMARY KEY,

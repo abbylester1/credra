@@ -18,7 +18,17 @@ export function summarize(row: InvoiceRow, chain: OnchainInvoice, run?: RunRow) 
 		documentHash: chain.documentHash,
 		submitTx: row.submit_tx,
 		verdict: run?.verdict ?? null,
+		grade: run?.risk_grade ?? null,
 		createdAt: row.created_at,
+	}
+}
+
+function parseRisk(json: string | null) {
+	if (!json) return null
+	try {
+		return JSON.parse(json) as { model: string; simulated: true; rating: string; score: number | null; factors: { key: string; label: string; points: number; detail: string }[]; note?: string; minGrade: string; downgraded: boolean }
+	} catch {
+		return null
 	}
 }
 
@@ -35,5 +45,6 @@ export const parseRun = (run?: RunRow) =>
 				recordedBy: 'application-verifier-wallet',
 				createdAt: run.created_at,
 				reportJson: run.report_json,
+				risk: parseRisk(run.risk_json),
 			}
 		: null

@@ -2,7 +2,9 @@
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useMinGrade } from '@/components/Evidence'
 import { InvoiceTable } from '@/components/InvoiceTable'
+import { GRADES } from '@/lib/risk'
 import { AddressLink, Button, WalletTag, Card, Field, inputCls, InlineNotice, PageHeader, SimulatedTag, Skeleton, TxLink } from '@/components/ui'
 import { apiJson } from '@/lib/client'
 import { useInvoices } from '@/lib/useInvoices'
@@ -67,6 +69,29 @@ function Investors() {
 	)
 }
 
+function MinGrade() {
+	const qc = useQueryClient()
+	const cur = useMinGrade()
+	const [pick, setPick] = useState<string | null>(null)
+	const [msg, setMsg] = useState<{ tone: 'ok' | 'error'; text: string } | null>(null)
+	const value = pick ?? cur.data?.minGrade ?? 'B-'
+	return (
+		<Card>
+			<h2 className="text-[16px] font-semibold">Risk policy</h2>
+			<p className="mb-4 mt-1 text-[14px] text-ink-2">Invoices that pass verification but grade below the minimum are held for manual review. The grade is an indicative score from a simulated model, not a credit rating. Changes apply to the next verification.</p>
+			<div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+				<Field label="Minimum grade to fund"><select className={inputCls} value={value} onChange={(e) => setPick(e.target.value)}>{GRADES.map((g) => <option key={g} value={g}>{g.replace('-', '−')}</option>)}</select></Field>
+				<Button disabled={!cur.data || value === cur.data.minGrade} onClick={async () => {
+					setMsg(null)
+					try { await apiJson('/api/risk', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ minGrade: value }) }); await qc.invalidateQueries({ queryKey: ['risk-min'] }); setPick(null); setMsg({ tone: 'ok', text: `Minimum grade is now ${value.replace('-', '−')}.` }) }
+					catch (x) { setMsg({ tone: 'error', text: (x as Error).message }) }
+				}}>Save</Button>
+			</div>
+			{msg && <div className="mt-3"><InlineNotice tone={msg.tone}>{msg.text}</InlineNotice></div>}
+		</Card>
+	)
+}
+
 function Console() {
 	const q = useInvoices('all')
 	const [num, setNum] = useState('')
@@ -89,6 +114,7 @@ function Console() {
 				</div>
 				{msg && <div className="mt-3"><InlineNotice tone={msg.tone}>{msg.text}</InlineNotice></div>}
 			</Card>
+			<MinGrade />
 			<Investors />
 			<section>
 				<h2 className="mb-3 text-[20px] font-semibold">All invoices</h2>

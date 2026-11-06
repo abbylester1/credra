@@ -19,6 +19,8 @@ export const REVIEW_TEXT: Record<string, string> = {
 	external_api_unavailable: 'The external record could not be reached, so verification could not complete.',
 	invoice_disputed_in_external_registry: 'The external record marks this invoice as disputed.',
 	record_failed: 'The result could not be recorded onchain. The status did not change.',
+	grade_below_minimum: 'The invoice passed verification but its risk grade is below the minimum to fund, so it is held for manual review.',
+	risk_check_unavailable: 'The risk check could not complete, so the invoice is held for manual review.',
 	timeout: 'Verification took too long and was stopped.',
 	cli_not_found: 'The verification workflow could not be started.',
 	no_result_in_output: 'Verification produced no result.',

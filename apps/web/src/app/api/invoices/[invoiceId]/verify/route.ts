@@ -5,6 +5,7 @@ import { getInvoiceRow, insertEvent, insertRun } from '@/lib/repo'
 import { isOperator } from '@/lib/session'
 import { recordVerification } from '@/lib/signer'
 import { canVerify, statusLabel } from '@/lib/status'
+import { runRiskCheck } from '@/lib/riskService'
 import { runVerification } from '@/lib/verify'
 import { verdictToStatus } from '@/lib/verdictMap'
 import { verifyWalletHeaders } from '@/lib/walletAuth'
@@ -36,32 +37,39 @@ export async function POST(req: Request, ctx: { params: Promise<{ invoiceId: str
 	if (!canVerify(chain.status)) return fail(409, 'not_verifiable', `This invoice is ${statusLabel(chain.status).toLowerCase()} and cannot be verified again.`)
 
 	const cre = await runVerification(invoiceId, row.invoice_number)
-	const status = verdictToStatus(cre.verdict)
-	const ref = reportRef(cre.reportJson)
+	// Backend risk engine: grade the invoice and apply the minimum-grade policy. It can only make the outcome more cautious.
+	const outcome = await runRiskCheck(row, chain, cre.verdict, cre.reviewReasons)
+	const verdict = outcome.verdict
+	const reviewReasons = outcome.reviewReasons
+	const riskJson = JSON.stringify({ ...outcome.risk, minGrade: outcome.minGrade, downgraded: outcome.downgraded })
+	const status = verdictToStatus(verdict)
+	const ref = reportRef(`${cre.reportJson}\n${riskJson}`)
+	const riskCols = { risk_grade: outcome.risk?.rating ?? null, risk_score: outcome.risk?.score ?? null, risk_json: riskJson }
 
 	let txHash: string | null = null
 	try {
 		txHash = await recordVerification(invoiceId, status, ref)
 	} catch {
 		await insertRun({
-			invoice_id: row.invoice_id, verdict: cre.verdict, failed_checks: JSON.stringify(cre.failedChecks),
-			review_reasons: JSON.stringify([...cre.reviewReasons, 'record_failed']), external_reference: cre.externalReference,
-			report_json: cre.reportJson, verification_ref: ref, record_tx: null, source_simulated: 1,
+			invoice_id: row.invoice_id, verdict, failed_checks: JSON.stringify(cre.failedChecks),
+			review_reasons: JSON.stringify([...reviewReasons, 'record_failed']), external_reference: cre.externalReference,
+			report_json: cre.reportJson, verification_ref: ref, record_tx: null, source_simulated: 1, ...riskCols,
 		})
 		return fail(502, 'record_failed', 'Verification ran but the result could not be recorded onchain. The invoice status did not change. Try again.')
 	}
 
 	await insertRun({
-		invoice_id: row.invoice_id, verdict: cre.verdict, failed_checks: JSON.stringify(cre.failedChecks),
-		review_reasons: JSON.stringify(cre.reviewReasons), external_reference: cre.externalReference,
-		report_json: cre.reportJson, verification_ref: ref, record_tx: txHash, source_simulated: 1,
+		invoice_id: row.invoice_id, verdict, failed_checks: JSON.stringify(cre.failedChecks),
+		review_reasons: JSON.stringify(reviewReasons), external_reference: cre.externalReference,
+		report_json: cre.reportJson, verification_ref: ref, record_tx: txHash, source_simulated: 1, ...riskCols,
 	})
 	await insertEvent({ invoice_id: row.invoice_id, status: statusLabel(status), tx_hash: txHash, source: 'verification', actor: 'verifier wallet' })
 
 	return json({
-		verdict: cre.verdict,
+		verdict,
 		failedChecks: cre.failedChecks,
-		reviewReasons: cre.reviewReasons,
+		reviewReasons,
+		risk: outcome.risk ? { rating: outcome.risk.rating, score: outcome.risk.score, minGrade: outcome.minGrade, downgraded: outcome.downgraded } : null,
 		externalReference: cre.externalReference,
 		status,
 		recordTx: txHash,

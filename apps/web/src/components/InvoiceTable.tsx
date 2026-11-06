@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import type { InvoiceSummary } from '@/lib/useInvoices'
-import { Amount, EmptyState, fmtDate, relativeDue, StatusChip, VerdictChip } from './ui'
+import { Amount, EmptyState, fmtDate, relativeDue, GradeChip, StatusChip, VerdictChip } from './ui'
 
 const STAGES: { key: string; label: string; match: (s: number) => boolean }[] = [
 	{ key: 'all', label: 'All', match: () => true },
@@ -97,6 +97,7 @@ export function InvoiceTable({ items, showReturn = true }: { items: InvoiceSumma
 								{showReturn && <th className="px-4 py-3 text-right font-medium">Return</th>}
 								<th className="px-4 py-3 font-medium">Due date</th>
 								<th className="px-4 py-3 font-medium">Verification</th>
+								<th className="px-4 py-3 font-medium">Grade</th>
 								<th className="px-4 py-3 font-medium">Status</th>
 							</tr>
 						</thead>
@@ -118,6 +119,7 @@ export function InvoiceTable({ items, showReturn = true }: { items: InvoiceSumma
 											<div className={`text-[12px] ${due.late ? 'text-s-reject' : 'text-ink-3'}`}>{due.text}</div>
 										</td>
 										<td className="px-4 py-2.5"><VerdictChip verdict={i.verdict} /></td>
+										<td className="px-4 py-2.5">{i.verdict ? <GradeChip grade={i.grade} size="sm" /> : <span className="text-ink-3">{'—'}</span>}</td>
 										<td className="px-4 py-2.5"><StatusChip status={i.status} /></td>
 									</tr>
 								)

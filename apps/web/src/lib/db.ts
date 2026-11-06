@@ -18,10 +18,18 @@ export function db(): Promise<Client> {
 		client = createClient({ url: env.databaseUrl, authToken: env.databaseAuthToken || undefined })
 		await client.executeMultiple(SCHEMA)
 		// Databases created before documents moved into the database have no content column yet.
-		try {
-			await client.execute('ALTER TABLE documents ADD COLUMN content BLOB')
-		} catch {
-			// column already exists
+		// Same for columns added later. Each is a no-op once the column exists.
+		for (const stmt of [
+			'ALTER TABLE documents ADD COLUMN content BLOB',
+			'ALTER TABLE verification_runs ADD COLUMN risk_grade TEXT',
+			'ALTER TABLE verification_runs ADD COLUMN risk_score INTEGER',
+			'ALTER TABLE verification_runs ADD COLUMN risk_json TEXT',
+		]) {
+			try {
+				await client.execute(stmt)
+			} catch {
+				// column already exists
+			}
 		}
 		return client
 	})()

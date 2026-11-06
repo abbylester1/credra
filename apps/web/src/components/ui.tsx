@@ -80,6 +80,17 @@ export function Amount({ value, unit = 'USDT', figure, tone }: { value: string |
 	)
 }
 
+/** Indicative risk grade. Neutral tones on purpose: colour is reserved for verified signals. */
+export function GradeChip({ grade, size = 'md' }: { grade: string | null | undefined; size?: 'sm' | 'md' }) {
+	const g = grade ?? 'NR'
+	const tone = g === 'NR' ? 'border border-dashed border-hair text-ink-3' : g.startsWith('A') ? 'bg-ink text-white' : g.startsWith('B') ? 'bg-inset text-ink' : 'bg-s-review-soft text-s-review'
+	return (
+		<span key={g} title={g === 'NR' ? 'Not rated' : `Indicative grade ${g}`} className={cx('animate-popin inline-flex items-center justify-center rounded-chip font-semibold tabular-nums', size === 'sm' ? 'min-w-7 px-1.5 py-0.5 text-[11px]' : 'min-w-8 px-2 py-1 text-[12px]', tone)}>
+			{g}
+		</span>
+	)
+}
+
 export function TxLink({ hash }: { hash: string }) {
 	return (
 		<a href={explorerTx(hash)} target="_blank" rel="noreferrer" className="num text-[12px] text-accent hover:underline" title={hash}>
