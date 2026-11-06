@@ -13,7 +13,7 @@ A calm financial ledger. Credra moves money and makes trust claims, so the inter
 2. **Exact numbers.** Amounts are integers in base units rendered with fixed decimals in monospace. Never rounded, never approximated.
 3. **Honest labels.** Simulated data and application-recorded results are visibly marked, in the same place every time.
 4. **One next action.** Each screen has one primary action. Blocked actions say why and what would unblock them.
-5. **Calm by default.** No gradients, glow, parallax or animated backgrounds. Motion only confirms a state change.
+5. **Calm by default.** No gradients, glow or parallax. In the app, motion only confirms a state change. The marketing landing page (`/`) may use purposeful motion: scroll reveals, sequenced illustrations, count-ups and a marquee ticker. All of it must stop under `prefers-reduced-motion`, and illustrations using demo values must say so.
 
 ## Design direction (v1.1, 2026-11-06)
 

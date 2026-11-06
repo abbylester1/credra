@@ -113,8 +113,8 @@ export function PageHeader({ title, description, actions }: { title: string; des
 	return (
 		<header className="mb-8 flex flex-wrap items-start justify-between gap-4">
 			<div>
-				<h1 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.02em]">{title}</h1>
-				{description && <p className="mt-1 text-[15px] text-ink-3">{description}</p>}
+				<h1 className="text-[34px] font-semibold leading-[1.1] tracking-[-0.03em]">{title}</h1>
+				{description && <p className="mt-1.5 max-w-[60ch] text-[15px] text-ink-3">{description}</p>}
 			</div>
 			<div className="flex items-center gap-2">{actions}</div>
 		</header>

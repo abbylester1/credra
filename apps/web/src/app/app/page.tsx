@@ -2,16 +2,19 @@
 
 import Link from 'next/link'
 import { SignInGate } from '@/components/SignInGate'
-import { Amount, Button, Card, EmptyState, fmtDate, InlineNotice, PageHeader, StatusChip } from '@/components/ui'
+import { Activity, GettingStarted, Pipeline, Protocol, Welcome } from '@/components/OverviewExtras'
+import { Amount, Button, Card, fmtDate, InlineNotice, PageHeader } from '@/components/ui'
 import { useInvoices, type InvoiceSummary, type Scope } from '@/lib/useInvoices'
 import { useRole } from '@/lib/useRole'
 
-function Metric({ label, children }: { label: string; children: React.ReactNode }) {
+function Metric({ label, children, i = 0 }: { label: string; children: React.ReactNode; i?: number }) {
 	return (
-		<Card className="!p-6">
-			<div className="text-[13px] text-ink-3">{label}</div>
-			<div className="mt-2">{children}</div>
-		</Card>
+		<div className="animate-popin" style={{ animationDelay: `${i * 70}ms` }}>
+			<Card className="!p-6 transition-shadow duration-300 hover:shadow-[0_14px_30px_-22px_rgba(15,26,22,0.35)]">
+				<div className="text-[13px] text-ink-3">{label}</div>
+				<div className="mt-3">{children}</div>
+			</Card>
+		</div>
 	)
 }
 const Count = ({ n }: { n: number }) => <span className="num text-[32px] font-medium leading-none">{n}</span>
@@ -45,32 +48,15 @@ function Overview({ scope, role, headers }: { scope: Scope; role: string; header
 						['Total invoices', <Count key="d" n={items.length} />],
 					]
 
-	const attention = items.filter((i) => (role === 'operator' ? i.status === 2 : role === 'business' ? i.status === 3 || i.status === 4 || i.status === 2 : true)).slice(0, 5)
 	return (
 		<>
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-				{metrics.map(([l, v]) => <Metric key={l as string} label={l as string}>{v}</Metric>)}
+				{metrics.map(([l, v], i) => <Metric key={l as string} label={l as string} i={i}>{v}</Metric>)}
 			</div>
-			<Card className="mt-6" pad={false}>
-				<div className="flex items-center justify-between px-6 py-4">
-					<h2 className="text-[16px] font-semibold">{role === 'investor' ? 'Open invoices' : 'Needs attention'}</h2>
-					<Link href="/app/invoices" className="text-[13px] text-accent hover:underline">View all</Link>
-				</div>
-				{attention.length === 0 ? (
-					<div className="px-6 pb-6"><EmptyState title="Nothing needs attention" body="Invoices that need action appear here." /></div>
-				) : (
-					<ul className="divide-y divide-hair border-t border-hair">
-						{attention.map((i) => (
-							<li key={i.invoiceId}>
-								<Link href={`/app/invoices/${i.invoiceId}`} className="flex flex-wrap items-center justify-between gap-3 px-6 py-3 hover:bg-canvas">
-									<span><span className="font-medium">{i.issuerName}</span> <span className="num text-[12px] text-ink-3">{i.invoiceNumber}</span></span>
-									<span className="flex items-center gap-4"><Amount value={i.amount} /><StatusChip status={i.status} /></span>
-								</Link>
-							</li>
-						))}
-					</ul>
-				)}
-			</Card>
+			<div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+				<Activity items={items} />
+				<Pipeline items={items} />
+			</div>
 		</>
 	)
 }
@@ -81,9 +67,9 @@ export default function OverviewPage() {
 		<>
 			<PageHeader
 				title="Overview"
-				description="Financing activity and open items."
-				actions={role === 'business' ? <Link href="/app/invoices/new"><Button variant="primary">Submit invoice</Button></Link> : undefined}
+				description="Your financing activity, the pipeline and where to go next."
 			/>
+			<Welcome role={role} />
 			{loading ? (
 				<p className="text-[14px] text-ink-3">Checking your wallet</p>
 			) : role === 'operator' ? (
@@ -93,6 +79,10 @@ export default function OverviewPage() {
 			) : (
 				<SignInGate>{(h) => <Overview scope="mine" role="business" headers={h} />}</SignInGate>
 			)}
+			<div className="mt-6 grid gap-6 lg:grid-cols-2">
+				<GettingStarted role={role} />
+				<Protocol />
+			</div>
 		</>
 	)
 }

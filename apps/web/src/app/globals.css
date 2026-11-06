@@ -69,6 +69,44 @@ body {
 	color: var(--color-ink-3);
 }
 
+/* Landing and app motion. Keyframes only define the entry state, so with
+   reduced motion (animation: none) elements rest in their final state. */
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes popin { from { opacity: 0; transform: translateY(10px) scale(0.97); } }
+@keyframes slidein { from { opacity: 0; transform: translateX(-10px); } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(10, 108, 99, 0.4); } 100% { box-shadow: 0 0 0 10px rgba(10, 108, 99, 0); } }
+@keyframes flow { to { stroke-dashoffset: -28; } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+@keyframes fillbar { from { transform: scaleX(0); } }
+@keyframes blink { 50% { opacity: 0; } }
+
+.animate-marquee { animation: marquee 48s linear infinite; }
+.animate-floaty { animation: floaty 6s ease-in-out infinite; }
+.animate-floaty-slow { animation: floaty 8s ease-in-out infinite; animation-delay: -3s; }
+.animate-popin { animation: popin 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.animate-slidein { animation: slidein 0.45s ease-out both; }
+.animate-pulse-ring { animation: pulse-ring 1.8s ease-out infinite; }
+.animate-flow { animation: flow 1.2s linear infinite; }
+.animate-shake { animation: shake 0.4s ease-in-out both; }
+.animate-fillbar { transform-origin: left; animation: fillbar 1s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.animate-blink { animation: blink 1s steps(1) infinite; }
+.pause-on-hover:hover .animate-marquee { animation-play-state: paused; }
+
+.dotgrid {
+	background-image: radial-gradient(rgba(15, 26, 22, 0.14) 1px, transparent 1px);
+	background-size: 18px 18px;
+}
+.linegrid {
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+	background-size: 36px 36px;
+}
+.mask-fade-x {
+	mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
 	* {
 		animation: none !important;
