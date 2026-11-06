@@ -168,6 +168,8 @@ DESIGN.md                Design system reference
 # 1. Run the stack
 cd apps/mock-registry && bun server.ts            # simulated external API on :8787
 cd apps/web && bun install && bun run dev         # app on :3000, open /app
+# Sign-in uses Privy: put NEXT_PUBLIC_PRIVY_APP_ID=<your public app id> in apps/web/.env.local and enable Google under Authentication.
+# Without it the app falls back to a browser wallet such as MetaMask.
 
 # 2. Optional: end-to-end on testnet, acting as the business wallet
 cd apps/web && bun --env-file ../../.env scripts/e2e-mvp.ts

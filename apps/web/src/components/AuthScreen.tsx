@@ -6,12 +6,13 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { useConnect } from 'wagmi'
 import { useConnectMode } from './Providers'
+import { UsdtMark } from './landing/shared'
 import { Button, Spinner } from './ui'
 
 /* ───────── right-hand panel: product pillars on a quiet textured canvas ───────── */
 const PILLARS = [
 	{ t: 'Verify', d: 'Every invoice is checked against an external record before it can be funded.', href: '/#approach', icon: <path d="M5 10l3 3 7-7" /> },
-	{ t: 'Fund', d: 'Approved investors pay the business directly in USDT.', href: '/#process', icon: <path d="M10 3v14M6.5 7h5a2.5 2.5 0 010 5h-3a2.5 2.5 0 000 5H14" /> },
+	{ t: 'Fund', d: 'Approved investors pay the business directly in USDT.', href: '/#process', icon: null },
 	{ t: 'Settle', d: 'Repayment goes to whoever holds the receivable.', href: '/#economics', icon: <path d="M3 10h14M13 6l4 4-4 4" /> },
 	{ t: 'Audit', d: 'Every step is onchain with a link you can open.', href: '/#transparency', icon: <path d="M5 3h10v14H5zM8 7h4M8 10h4M8 13h2" /> },
 ]
@@ -30,7 +31,7 @@ function Showcase() {
 						<Link key={p.t} href={p.href} className="group flex min-h-[170px] flex-col justify-between bg-card/85 p-5 backdrop-blur-sm transition-colors hover:bg-card">
 							<div>
 								<span className="flex h-8 w-8 items-center justify-center rounded-ctl border border-hair bg-canvas text-ink">
-									<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>{p.icon}</svg>
+									{p.icon ? <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>{p.icon}</svg> : <UsdtMark size={18} />}
 								</span>
 								<p className="mt-4 text-[16px] font-semibold text-ink">{p.t}</p>
 								<p className="mt-1 text-[13px] leading-[1.5] text-ink-3">{p.d}</p>

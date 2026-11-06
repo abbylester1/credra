@@ -49,5 +49,11 @@ Public: https://github.com/abbylester1/credra (MIT). Commit messages carry no AI
 - `cre/.env` is gitignored too.
 
 ## Status and next steps
-Done: contracts + tests, deploy + explorer verification, CRE workflow simulated against live testnet (ELIGIBLE / REJECTED / MANUAL_REVIEW / not-found), evidence committed, web app (business/investor/operator views), official-USDT funding and repayment executed on testnet (invoice E2E-mw3ziwws-match, 60/54/6 USDT, all 5 tx links in evidence/whitechain-transactions.md), README updated with explorer links.
-Pending: WHITECHAIN_FEEDBACK.md, demo video.
+Done: contracts + tests, deploy + explorer verification, CRE workflow simulated against live testnet, evidence committed, web app (landing page, sign-in, business/investor/operator views, wallet names, audit timeline), official-USDT funding and repayment executed on testnet both by script (E2E-mw3ziwws-match, 60/54/6 USDT) and through the web app with Privy embedded wallets (INV-4HABX5, 20/18/2 USDT). All tx links are in evidence/whitechain-transactions.md. WHITECHAIN_FEEDBACK.md written.
+Pending: demo video. Optional: Arkiv track (not started; only worth it if its prize criteria are easy to meet).
+
+## Web app notes
+- Sign-in is Privy (email code, Google, wallet) with embedded wallets. Needs `NEXT_PUBLIC_PRIVY_APP_ID` in `apps/web/.env.local` (public id, gitignored). Without it the app falls back to a plain browser wallet. Google login must be enabled in the Privy dashboard (it was off by default).
+- Embedded wallets need testnet WBT for gas. Investors must be on the allowlist; an issuer cannot fund its own invoice in the UI.
+- Colour rule (DESIGN.md "Colour discipline"): warm neutrals, ink links, `verified` green only for verified signals, pine rare. Measure area by colour family before shipping visual changes.
+- Wallet names: issuers are named from their invoices, investors by the operator (name field on the allowlist form). Addresses show on click.
