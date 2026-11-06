@@ -7,7 +7,7 @@ import { useConnectMode } from './Providers'
 import { CHAIN_ID } from '@/lib/config'
 import { friendlyError } from '@/lib/errors'
 import { useWalletHeaders } from '@/lib/client'
-import { Button, Card, InlineNotice } from './ui'
+import { Button, InlineNotice } from './ui'
 
 /** Requires a connected wallet on the right network and a signed access message before showing children. */
 export function SignInGate({ children }: { children: (headers: Record<string, string>) => React.ReactNode }) {
@@ -25,15 +25,15 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 	if (!isConnected) {
 		const inj = connectors[0]
 		return (
-			<Card className="mx-auto max-w-[720px] text-center">
-				<h2 className="text-[20px] font-semibold">Connect your wallet</h2>
-				<p className="mx-auto mt-1 max-w-[52ch] text-[14px] text-ink-2">{mode.privy ? 'Sign in with email, Google or a wallet. An embedded wallet is created for you.' : 'Credra uses your browser wallet to identify you. No account or password is needed.'}</p>
-				<div className="mt-4 flex justify-center">
-					<Button variant="primary" disabled={mode.login ? false : !inj || isPending} onClick={() => (mode.login ? mode.login() : inj && connect({ connector: inj }))}>
-						{isPending ? 'Waiting for your wallet' : mode.privy ? 'Sign in' : 'Connect wallet'}
-					</Button>
+			<div className="flex flex-col gap-3 rounded-[14px] border border-hair bg-card px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+				<div>
+					<p className="text-[15px] font-medium text-ink">{mode.privy ? 'Sign in to view your invoices' : 'Connect a wallet to view your invoices'}</p>
+					<p className="mt-0.5 text-[13px] text-ink-3">{mode.privy ? 'Email, Google or a wallet — an embedded wallet is created for you.' : 'No account needed. Credra uses your wallet to identify you.'}</p>
 				</div>
-			</Card>
+				<Button variant="primary" className="shrink-0" disabled={mode.login ? false : !inj || isPending} onClick={() => (mode.login ? mode.login() : inj && connect({ connector: inj }))}>
+					{isPending ? 'Connecting…' : mode.privy ? 'Sign in' : 'Connect wallet'}
+				</Button>
+			</div>
 		)
 	}
 	if (chainId !== CHAIN_ID) {
@@ -41,27 +41,28 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 	}
 	if (!headers) {
 		return (
-			<Card className="mx-auto max-w-[720px]">
-				<h2 className="text-[20px] font-semibold">Sign in with your wallet</h2>
-				<p className="mt-1 text-[14px] text-ink-2">Sign a short message to prove this wallet is yours. It costs no gas and sends no transaction.</p>
-				{err && <div className="mt-3"><InlineNotice tone="error">{err}</InlineNotice></div>}
-				<div className="mt-4">
-					<Button
-						variant="primary"
-						onClick={async () => {
-							setErr(null)
-							try {
-								setHeaders(await getHeaders())
-							} catch (e) {
-								console.error('wallet sign-in failed', e)
-								setErr(friendlyError(e))
-							}
-						}}
-					>
-						Sign in
-					</Button>
+			<div className="flex flex-col gap-3 rounded-[14px] border border-hair bg-card px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+				<div>
+					<p className="text-[15px] font-medium text-ink">Verify your wallet to load your invoices</p>
+					<p className="mt-0.5 text-[13px] text-ink-3">Sign a short message — no gas, no transaction.</p>
+					{err && <div className="mt-2"><InlineNotice tone="error">{err}</InlineNotice></div>}
 				</div>
-			</Card>
+				<Button
+					variant="primary"
+					className="shrink-0"
+					onClick={async () => {
+						setErr(null)
+						try {
+							setHeaders(await getHeaders())
+						} catch (e) {
+							console.error('wallet sign-in failed', e)
+							setErr(friendlyError(e))
+						}
+					}}
+				>
+					Sign in
+				</Button>
+			</div>
 		)
 	}
 	return <>{children(headers)}</>
