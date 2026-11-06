@@ -29,11 +29,11 @@ export function Welcome({ role, name }: { role: 'business' | 'investor' | 'opera
 /* ───────── Pipeline distribution ───────── */
 const STAGES: [number[], string, string][] = [
 	[[1], 'Submitted', 'bg-s-neutral'],
-	[[2], 'Under review', 'bg-s-review'],
+	[[2], 'In review', 'bg-s-review'],
 	[[3], 'Eligible', 'bg-verified'],
 	[[5], 'Funded', 'bg-s-funded'],
 	[[6], 'Repaid', 'bg-s-repaid'],
-	[[4, 7], 'Rejected or defaulted', 'bg-s-reject'],
+	[[4, 7], 'Rejected', 'bg-s-reject'],
 ]
 export function Pipeline({ items, compact }: { items: InvoiceSummary[]; compact?: boolean }) {
 	const counts = STAGES.map(([codes]) => items.filter((i) => codes.includes(i.status)).length)
@@ -52,21 +52,21 @@ export function Pipeline({ items, compact }: { items: InvoiceSummary[]; compact?
 		)
 	}
 	return (
-		<section className="rounded-[16px] border border-hair bg-card p-6">
+		<section className="self-start rounded-[16px] border border-hair bg-card p-6">
 			<div className="flex items-baseline justify-between">
 				<h2 className="text-[16px] font-semibold">Pipeline</h2>
-				<span className="num text-[12px] text-ink-3">{total} invoices</span>
+				<span className="num text-[12px] text-ink-3">{total} {total === 1 ? 'invoice' : 'invoices'}</span>
 			</div>
-			<div className="mt-4 flex h-3 gap-0.5 overflow-hidden rounded-full bg-inset">
-				{total === 0 ? null : STAGES.map(([, label, bg], i) => counts[i] > 0 && (
+			<div className="mt-4 flex h-2.5 gap-0.5 overflow-hidden rounded-full bg-inset">
+				{total > 0 && STAGES.map(([, label, bg], i) => counts[i] > 0 && (
 					<div key={label} title={`${label}: ${counts[i]}`} className={`animate-fillbar h-full ${bg}`} style={{ width: `${(counts[i] / total) * 100}%`, animationDelay: `${i * 80}ms` }} />
 				))}
 			</div>
-			<ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 sm:grid-cols-3">
+			<ul className="mt-3 divide-y divide-hair">
 				{STAGES.map(([, label, bg], i) => (
-					<li key={label} className="flex items-center justify-between text-[13px]">
-						<span className="flex items-center gap-2 text-ink-2"><span className={`h-2 w-2 ${bg}`} />{label}</span>
-						<span className="num text-ink">{counts[i]}</span>
+					<li key={label} className={`flex items-center justify-between py-2.5 text-[14px] ${counts[i] === 0 ? 'text-ink-3' : 'text-ink'}`}>
+						<span className="flex items-center gap-2.5 whitespace-nowrap"><span className={`h-2 w-2 shrink-0 ${bg} ${counts[i] === 0 ? 'opacity-40' : ''}`} />{label}</span>
+						<span className="num">{counts[i]}</span>
 					</li>
 				))}
 			</ul>
