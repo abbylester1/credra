@@ -74,3 +74,13 @@ Whitechain note to include if time allows: chain 1874, all three contracts sourc
 - If the CRE run fails on camera, play the saved log from `evidence/cre-simulation-whitechain-testnet.md`.
 - If the RPC or Privy is slow, record each segment separately and keep a backup take. Cut waits, do not speed footage up.
 - Keep the whole thing under 3:40 on the rehearsal, and above 2:00 on the final export.
+
+## Dry run notes (production build, port 3100)
+
+A full rehearsal ran with a 10 USDT invoice (Meridian Textiles Ltd): sign, submit, onchain registration, CRE verification (Eligible), approve, fund, approve, repay. The status ended Repaid and the timeline recorded all four events with names (Meridian Textiles Ltd, Credra Verifier, Halden Capital Partners) and explorer links.
+
+- Console shows "Unable to fetch token price for chain with id 1874" from Privy (no USD price for testnet gas). It is harmless and not visible on screen. Keep devtools closed while recording.
+- Sessions are per origin: sign in on `localhost:3100` for both users before recording.
+- Keep the sample invoice at its generated 20 and 18 USDT. The generated document image says 20.00, so editing the form amounts would make the document and the form disagree.
+- The investor wallet cannot repay 20 USDT after funding 18 (22 USDT balance). Repay as the business user, whose wallet holds enough, or top the investor up first.
+- Wait for the Funded event to appear on the timeline before moving on. It is recorded automatically after the transaction confirms (leaving the page too early skips it).
