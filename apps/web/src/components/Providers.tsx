@@ -20,6 +20,7 @@ const ConnectContext = createContext<Connect>({ privy: false, login: null, logou
 export const useConnectMode = () => useContext(ConnectContext)
 
 const privyWagmiConfig = createPrivyConfig({
+	ssr: true,
 	chains: [whitechain],
 	transports: { [whitechain.id]: fallback([http(RPC_PRIMARY, { timeout: 12_000 }), http(RPC_FALLBACK, { timeout: 12_000 })]) },
 })

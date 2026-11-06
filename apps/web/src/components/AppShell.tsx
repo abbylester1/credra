@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
 import { useWalletChainId } from '@/lib/useWalletChain'
@@ -106,9 +107,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname()
 	const { operator, role } = useRole()
 	const { isConnected, isReconnecting, isConnecting } = useAccount()
+	// Wallet state only exists on the client; render a neutral frame first so server and client markup match.
+	const [mounted, setMounted] = useState(false)
+	useEffect(() => setMounted(true), [])
 	const groups = NAV.filter((g) => g.group !== 'Admin' || operator).map((g) => ({ ...g, items: g.items.filter((i) => !i.roles || i.roles.includes(role)) }))
 	const active = (href: string) => (href === '/app' ? pathname === '/app' : pathname.startsWith(href))
 
+	if (!mounted) return <div className="min-h-screen bg-canvas" aria-hidden />
 	if (!isConnected && !operator && !isReconnecting && !isConnecting && pathname !== '/app/operator') return <AuthScreen />
 
 	return (
