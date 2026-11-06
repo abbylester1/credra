@@ -6,15 +6,14 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { useConnect } from 'wagmi'
 import { useConnectMode } from './Providers'
-import { UsdtMark } from './landing/shared'
 import { Button, Spinner } from './ui'
 
 /* ───────── right-hand panel: product pillars on a quiet textured canvas ───────── */
 const PILLARS = [
-	{ t: 'Verify', d: 'Every invoice is checked against an external record before it can be funded.', href: '/#approach', icon: <path d="M5 10l3 3 7-7" /> },
-	{ t: 'Fund', d: 'Approved investors pay the business directly in USDT.', href: '/#process', icon: null },
-	{ t: 'Settle', d: 'Repayment goes to whoever holds the receivable.', href: '/#economics', icon: <path d="M3 10h14M13 6l4 4-4 4" /> },
-	{ t: 'Audit', d: 'Every step is onchain with a link you can open.', href: '/#transparency', icon: <path d="M5 3h10v14H5zM8 7h4M8 10h4M8 13h2" /> },
+	{ t: 'Verify', d: 'Every invoice is checked against an external record before it can be funded.', href: '/#approach', icon: 'M5 12l5 5L20 7' },
+	{ t: 'Fund', d: 'Approved investors pay the business directly in USDT.', href: '/#process', icon: 'M16.7 8a3 3 0 0 0-2.7-2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1-2.7-2M12 3v3m0 12v3' },
+	{ t: 'Settle', d: 'Repayment goes to whoever holds the receivable.', href: '/#economics', icon: 'M5 12h14M15 8l4 4-4 4' },
+	{ t: 'Audit', d: 'Every step is onchain with a link you can open.', href: '/#transparency', icon: 'M14 3v4a1 1 0 0 0 1 1h4M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2zM9 13h6M9 17h6M9 9h1' },
 ]
 
 function Showcase() {
@@ -31,7 +30,7 @@ function Showcase() {
 						<Link key={p.t} href={p.href} className="group flex min-h-[170px] flex-col justify-between bg-card/85 p-5 backdrop-blur-sm transition-colors hover:bg-card">
 							<div>
 								<span className="flex h-8 w-8 items-center justify-center rounded-ctl border border-hair bg-canvas text-ink">
-									{p.icon ? <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>{p.icon}</svg> : <UsdtMark size={18} />}
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={p.icon} /></svg>
 								</span>
 								<p className="mt-4 text-[16px] font-semibold text-ink">{p.t}</p>
 								<p className="mt-1 text-[13px] leading-[1.5] text-ink-3">{p.d}</p>
@@ -89,6 +88,10 @@ function PrivySignIn() {
 	const errText = status === 'error' ? (awaitingCode ? 'That code did not work. Check it and try again.' : 'Could not send the code. Check the address and try again.') : oauth.state.status === 'error' ? 'Google sign-in did not complete. Try again.' : null
 
 	useEffect(() => { if (awaitingCode) codeRef.current?.focus() }, [awaitingCode])
+
+	if (status === 'done' || oauth.state.status === 'done') {
+		return <p className="flex items-center gap-2.5 text-[15px] text-ink-2"><Spinner className="h-4 w-4" />Signing you in</p>
+	}
 
 	if (awaitingCode) {
 		return (

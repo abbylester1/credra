@@ -8,6 +8,7 @@ import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
 import { useWalletChainId } from '@/lib/useWalletChain'
 import { useWalletLabels } from '@/lib/useWalletLabels'
 import { AuthScreen } from './AuthScreen'
+import { WalletSplash } from './WalletSplash'
 import { useConnectMode } from './Providers'
 import { CHAIN_ID, EXPLORER, shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
@@ -110,6 +111,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname()
 	const { operator, role } = useRole()
 	const { isConnected, isReconnecting, isConnecting } = useAccount()
+	const mode = useConnectMode()
 	// Wallet state only exists on the client; render a neutral frame first so server and client markup match.
 	const [mounted, setMounted] = useState(false)
 	useEffect(() => setMounted(true), [])
@@ -117,6 +119,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 	const active = (href: string) => (href === '/app' ? pathname === '/app' : pathname.startsWith(href))
 
 	if (!mounted) return <div className="min-h-screen bg-canvas" aria-hidden />
+	if (mode.privy && !operator && !isConnected && (!mode.ready || mode.authenticated)) return <WalletSplash message={mode.ready ? 'Setting up your wallet' : 'Loading'} />
 	if (!isConnected && !operator && !isReconnecting && !isConnecting && pathname !== '/app/operator') return <AuthScreen />
 
 	return (
