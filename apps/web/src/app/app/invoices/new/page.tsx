@@ -54,7 +54,7 @@ function Form({ headers }: { headers: Record<string, string> }) {
 		const stamp = Date.now().toString(36).slice(-6).toUpperCase()
 		const number = `INV-${stamp}`
 		const due = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10)
-		const vals = { number, issuer: 'Demo Exports Ltd', buyer: 'Acme Corp', currency: 'USD', amount: '20', financing: '18', invoiceDate: new Date().toISOString().slice(0, 10), dueDate: due }
+		const vals = { number, issuer: 'Meridian Textiles Ltd', buyer: 'Acme Corp', currency: 'USD', amount: '20', financing: '18', invoiceDate: new Date().toISOString().slice(0, 10), dueDate: due }
 		setF(vals)
 		const c = document.createElement('canvas'); c.width = 800; c.height = 1000
 		const g = c.getContext('2d')!
@@ -135,7 +135,7 @@ function Form({ headers }: { headers: Record<string, string> }) {
 					<fieldset className="space-y-4" disabled={busy}>
 						<legend className="mb-1 text-[16px] font-semibold">Parties</legend>
 						<div className="grid gap-4 sm:grid-cols-2">
-							<Field label="Issuer (your business)"><input className={inputCls} value={f.issuer} onChange={set('issuer')} placeholder="Demo Exports Ltd" required /></Field>
+							<Field label="Issuer (your business)"><input className={inputCls} value={f.issuer} onChange={set('issuer')} placeholder="Meridian Textiles Ltd" required /></Field>
 							<Field label="Buyer"><input className={inputCls} value={f.buyer} onChange={set('buyer')} placeholder="Acme Corp" required /></Field>
 						</div>
 					</fieldset>

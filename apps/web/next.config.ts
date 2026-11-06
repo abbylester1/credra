@@ -9,6 +9,8 @@ try {
 }
 
 const nextConfig: NextConfig = {
+	// NEXT_DIST_DIR lets a production build run next to a live dev server (for example while recording a demo).
+	distDir: process.env.NEXT_DIST_DIR || '.next',
 	turbopack: {
 		root: path.resolve(__dirname, '../..'),
 		rules: {
