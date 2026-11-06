@@ -106,7 +106,7 @@ function AppWindow() {
 
 			{/* floating toasts */}
 			{toast && (
-				<div key="t1" className="animate-popin absolute -top-9 right-4 z-10 hidden w-[250px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block lg:-right-6">
+				<div key="t1" className="animate-popin absolute bottom-full right-0 z-10 mb-3 hidden w-[250px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block">
 					<div className="flex items-center gap-2">
 						<span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent-soft text-accent"><Tick on className="!h-[18px] !w-[18px]" /></span>
 						<p className="text-[13px] font-medium text-ink">Verdict recorded onchain</p>
@@ -115,7 +115,7 @@ function AppWindow() {
 				</div>
 			)}
 			{funded && (
-				<div key="t2" className="animate-popin absolute -bottom-12 left-6 z-10 hidden w-[270px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block lg:-left-8">
+				<div key="t2" className="animate-popin absolute left-0 top-full z-10 mt-3 hidden w-[270px] rounded-card border border-hair bg-card p-3 shadow-[0_12px_30px_-12px_rgba(15,26,22,0.35)] md:block">
 					<div className="flex items-center gap-2.5">
 						<UsdtMark size={24} />
 						<div>
@@ -127,7 +127,7 @@ function AppWindow() {
 			)}
 
 			{/* receivable token card (Ramp-style physical card, but a CRDR receivable) */}
-			<div className="animate-floaty absolute -bottom-[100px] right-4 z-[5] hidden h-[132px] w-[210px] overflow-hidden rounded-[14px] bg-pine p-4 text-white shadow-[0_20px_40px_-16px_rgba(9,46,41,0.7)] lg:block">
+			<div className="animate-floaty absolute right-0 top-full z-[5] mt-3 hidden h-[112px] w-[200px] overflow-hidden rounded-[14px] bg-pine p-4 text-white shadow-[0_20px_40px_-16px_rgba(9,46,41,0.7)] lg:block">
 				<div className="linegrid absolute inset-0 opacity-60" />
 				<div className="relative flex h-full flex-col justify-between">
 					<div className="flex items-center justify-between">
@@ -136,7 +136,7 @@ function AppWindow() {
 					</div>
 					<div>
 						<p className="font-mono text-[10px] uppercase tracking-[0.06em] text-white/60">Receivable #0001</p>
-						<p className="font-mono text-[17px] font-medium">10,000.00 USDT</p>
+						<p className="font-mono text-[16px] font-medium">10,000.00 USDT</p>
 					</div>
 				</div>
 			</div>
@@ -209,7 +209,7 @@ export function Hero() {
 
 			{/* stage */}
 			<div className="mx-auto max-w-[1200px] px-5 pb-10 md:px-8 md:pb-16">
-				<div className="dotgrid relative overflow-hidden rounded-[20px] border border-hair bg-inset px-4 pb-14 pt-12 md:px-14 md:pb-32 md:pt-16">
+				<div className="dotgrid relative overflow-hidden rounded-[20px] border border-hair bg-inset px-4 pb-14 pt-12 md:px-14 md:pb-36 md:pt-24">
 					<div className="absolute left-4 top-4 z-10">
 						<span className="rounded-chip border border-dashed border-s-review bg-canvas/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.06em] text-s-review">Illustrative demo data</span>
 					</div>

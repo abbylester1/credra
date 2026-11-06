@@ -153,16 +153,16 @@ function Economics() {
 				<Slider label="Invoice amount" value={amount} min={1000} max={100000} step={1000} onChange={setAmount} display={`${fmt(amount)} USDT`} />
 				<div className="grid gap-5 sm:grid-cols-2">
 					<Slider label="Discount" value={disc} min={1} max={20} step={1} onChange={setDisc} display={`${disc}%`} />
-					<Slider label="Days to due date" value={days} min={15} max={180} step={5} onChange={setDays} display={`${days} days`} />
+					<Slider label="Days to due" value={days} min={15} max={180} step={5} onChange={setDays} display={`${days} days`} />
 				</div>
 			</div>
 
 			<div className="mt-6">
 				<div className="flex h-9 overflow-hidden rounded-ctl">
-					<div className="flex items-center bg-pine px-3 font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${100 - disc}%` }}>Business receives now</div>
-					<div className="flex items-center justify-center bg-accent font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${disc}%` }}>{disc >= 6 ? 'Discount' : ''}</div>
+					<div className="flex items-center overflow-hidden whitespace-nowrap bg-pine px-3 font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${100 - disc}%` }}><span className="truncate">Business receives now</span></div>
+					<div className="flex items-center justify-center overflow-hidden whitespace-nowrap bg-accent px-1 font-mono text-[11px] text-white transition-[width] duration-500" style={{ width: `${disc}%` }}><span className="truncate">{disc >= 16 ? 'Discount' : ''}</span></div>
 				</div>
-				<div className="mt-1.5 flex justify-between font-mono text-[11px] text-ink-3"><span>0</span><span>{fmt(amount)} USDT repaid in full</span></div>
+				<div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 font-mono text-[11px] text-ink-3"><span className="flex items-center gap-3"><span className="flex items-center gap-1.5"><span className="h-2 w-2 bg-pine" />Paid now</span><span className="flex items-center gap-1.5"><span className="h-2 w-2 bg-accent" />Discount</span></span><span>{fmt(amount)} USDT repaid in full</span></div>
 			</div>
 
 			<div className="mt-5 grid grid-cols-2 gap-3">
