@@ -109,7 +109,7 @@ export function Activity({ items }: { items: InvoiceSummary[] }) {
 export function GettingStarted({ role }: { role: 'business' | 'investor' | 'operator' }) {
 	const steps = {
 		business: [
-			['Connect your wallet', 'Any wallet on Whitechain Sepolia works. No account needed.', '/app'],
+			['Sign in', 'Email, Google or a wallet — we create one for you.', '/app'],
 			['Submit an invoice', 'Add the amount, financing ask, due date and the invoice document.', '/app/invoices/new'],
 			['Wait for verification', HOSTED_DEMO ? 'The eligibility rules check it against the external record.' : 'The CRE workflow checks it against the external record.', '/app/invoices'],
 			['Receive USDT', 'An investor funds it and pays you directly.', '/app/invoices'],

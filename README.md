@@ -11,7 +11,7 @@ Register an invoice on Whitechain, verify it with a Chainlink CRE workflow, fund
 [![License: MIT](https://img.shields.io/badge/license-MIT-0A6C63.svg)](LICENSE)
 [![Whitechain Sepolia](https://img.shields.io/badge/chain-Whitechain%20Sepolia%20(1874)-0D3B35)](https://explorer.testnet.whitechain.io)
 [![Chainlink CRE](https://img.shields.io/badge/verification-Chainlink%20CRE-2F4FBF)](https://docs.chain.link/cre)
-[![Tests](https://img.shields.io/badge/tests-66%20passing-2B7A3E)](#testing)
+[![Tests](https://img.shields.io/badge/tests-102%20passing-2B7A3E)](#testing)
 [![Testnet only](https://img.shields.io/badge/status-testnet%20demo-8F5200)](#current-limitations)
 
 [Quick start](#quick-start) · [How it works](#how-it-works) · [Architecture](#architecture) · [Deployed contracts](#deployed-contracts) · [Limitations](#current-limitations)
@@ -133,7 +133,7 @@ USDT was obtained by swapping WBT through YetiTrade (no public USDT faucet exist
 ```text
 contracts/               Foundry project: InvoiceRegistry, InvestorAllowlist, ReceivableFinance (29 tests)
 cre/invoice-verification/  CRE workflow (TypeScript) and pure eligibility rules (11 tests)
-apps/web/                Next.js app: UI, API routes, verification runner (26 tests)
+apps/web/                Next.js app: UI, API routes, verification runner (62 tests)
 apps/mock-registry/      Simulated external verification API
 specs/                   Spec Kit: specification, plan, tasks, UI spec
 evidence/                CRE runs, transaction links, static analysis
@@ -165,7 +165,7 @@ cd apps/web && bun --env-file ../../.env scripts/e2e-mvp.ts
 ```bash
 cd contracts && forge test                                   # 29 tests
 cd cre/invoice-verification && bun install && bun test       # 11 tests
-cd apps/web && bun run test                                  # 35 tests
+cd apps/web && bun run test                                  # 62 tests
 ```
 
 Static analysis ([Slither](evidence/slither.md)) found 5 low-severity items and no medium or high ones. That is a first pass, not an audit.
