@@ -60,3 +60,21 @@ The investor wallet also repaid, so it was the payer and the receivable holder. 
 | 6 | Repayment of the full 20.00 USDT to the receivable holder | [0x485b75ce9f2eb377fd6a7b147a821270942efdffc87d350eba6e9792904b0772](https://explorer.testnet.whitechain.io/tx/0x485b75ce9f2eb377fd6a7b147a821270942efdffc87d350eba6e9792904b0772) |
 
 Final state: invoice status **Repaid** (6). Testnet only, no real funds.
+
+## Hosted deployment check (Vercel, official USDT)
+
+Run against https://credra-seven.vercel.app with `scripts/e2e-mvp.ts` and `scripts/e2e-lifecycle.ts` (`WEB_URL` set to the hosted app), acting as the throwaway business and investor wallets. Invoice `E2E-mw52qiwt-match`, amount 10.00 USDT, financing 9.00 USDT, discount 1.00 USDT.
+
+Verification on the hosted build ran in process (`engine: in-process-rules`, `simulated: true`) against the simulated registry, and the verdict was recorded by the application verifier wallet. This is not a Chainlink CRE run; the CRE simulations are in `evidence/`.
+
+| # | Step | Tx |
+|---|---|---|
+| 1 | Business registers the invoice (10.00 USDT, financing 9.00) | [0x9b75a3967757f337a7529ea5d0a599187d5c2056581ebff2240dd68a4353ec8e](https://explorer.testnet.whitechain.io/tx/0x9b75a3967757f337a7529ea5d0a599187d5c2056581ebff2240dd68a4353ec8e) |
+| 2 | Verifier wallet records the verdict (Eligible) | [0x4497d96b89426b29da5b0f60533d65c8eb69e2d994a1dcdc048d63cc563511a3](https://explorer.testnet.whitechain.io/tx/0x4497d96b89426b29da5b0f60533d65c8eb69e2d994a1dcdc048d63cc563511a3) |
+| 3 | Investor approves USDT | [0xeaaf1b584efc9295882887d4bb373e3cb6efe40e29b5942d82d7e307ff5acf6b](https://explorer.testnet.whitechain.io/tx/0xeaaf1b584efc9295882887d4bb373e3cb6efe40e29b5942d82d7e307ff5acf6b) |
+| 4 | Investor funds the invoice (9.00 USDT to the business, CRDR receivable minted) | [0x4a876561cd40d441cdabdc1fa336ab1c1c5477f7e095ad6218fed6f3cd432b07](https://explorer.testnet.whitechain.io/tx/0x4a876561cd40d441cdabdc1fa336ab1c1c5477f7e095ad6218fed6f3cd432b07) |
+| 5 | Investor sends 1.00 USDT to the business (discount, so it can repay in full) | [0x82b455d6fe0247a4f38031c0465c6b07760eb95176154909536d6cb58b4a93d5](https://explorer.testnet.whitechain.io/tx/0x82b455d6fe0247a4f38031c0465c6b07760eb95176154909536d6cb58b4a93d5) |
+| 6 | Business approves USDT | [0x499f1b869475711a43dd95d038d39c8471fbe92053e653150f7a65210bcf7bd3](https://explorer.testnet.whitechain.io/tx/0x499f1b869475711a43dd95d038d39c8471fbe92053e653150f7a65210bcf7bd3) |
+| 7 | Business repays the full 10.00 USDT to the receivable holder | [0xa59add74aeaedb00afdc8daa2e6c496ea63be984328c918c73dc15b7a30b07a9](https://explorer.testnet.whitechain.io/tx/0xa59add74aeaedb00afdc8daa2e6c496ea63be984328c918c73dc15b7a30b07a9) |
+
+Final state: invoice status **Repaid** (6). The hosted stats endpoint then reported 4 invoices financed, 90 USDT, all repaid. Testnet only, no real funds.
