@@ -55,7 +55,11 @@ function Form({ headers }: { headers: Record<string, string> }) {
 		const stamp = Date.now().toString(36).slice(-6).toUpperCase()
 		const number = `INV-${stamp}`
 		const due = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10)
-		const vals = { number, issuer: 'Meridian Textiles Ltd', buyer: 'Acme Corp', currency: 'USD', amount: '20', financing: '18', invoiceDate: new Date().toISOString().slice(0, 10), dueDate: due }
+		const issuers = ['Meridian Textiles Ltd', 'Vantage Logistics Pvt Ltd', 'Nexcore Pharma Ltd', 'Summit Hardware Ltd', 'Brightfield Energy Ltd']
+		const buyers = ['Acme Corp', 'Metro Distributors Ltd', 'Global Trade Partners', 'Pacific Retail Group']
+		const issuer = issuers[Math.floor(Math.random() * issuers.length)]
+		const buyer = buyers[Math.floor(Math.random() * buyers.length)]
+		const vals = { number, issuer, buyer, currency: 'USD', amount: '20', financing: '18', invoiceDate: new Date().toISOString().slice(0, 10), dueDate: due }
 		setF(vals)
 		const c = document.createElement('canvas'); c.width = 800; c.height = 1000
 		const g = c.getContext('2d')!
@@ -63,7 +67,7 @@ function Form({ headers }: { headers: Record<string, string> }) {
 		g.fillStyle = '#0F1A16'; g.font = '600 40px sans-serif'; g.fillText('INVOICE', 60, 100)
 		g.font = '16px monospace'; g.fillStyle = '#5C6B63'; g.fillText('Sample document for the Credra testnet demo', 60, 130)
 		g.fillStyle = '#0F1A16'; g.font = '20px monospace'
-		;[['Invoice no.', number], ['Issued', vals.invoiceDate], ['Due', due], ['From', vals.issuer], ['Bill to', vals.buyer], ['Description', 'Export services, March batch'], ['Amount due', `${vals.amount}.00 USDT`]].forEach(([k, v], i) => {
+		;[['Invoice no.', number], ['Issued', vals.invoiceDate], ['Due', due], ['From', issuer], ['Bill to', buyer], ['Description', 'Export services, March batch'], ['Amount due', `${vals.amount}.00 USDT`]].forEach(([k, v], i) => {
 			g.fillStyle = '#5C6B63'; g.fillText(k, 60, 220 + i * 52); g.fillStyle = '#0F1A16'; g.fillText(v, 280, 220 + i * 52)
 		})
 		g.strokeStyle = '#DCE2DD'; g.strokeRect(40, 180, 720, 400)

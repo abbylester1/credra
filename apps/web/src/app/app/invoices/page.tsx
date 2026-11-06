@@ -27,7 +27,7 @@ export default function InvoicesPage() {
 		<>
 			<PageHeader
 				title="Invoices"
-				description={role === 'investor' ? 'Eligible invoices open for funding.' : role === 'operator' ? 'All invoices on the platform.' : 'Your submitted invoices.'}
+				description={role === 'investor' ? 'Verified invoices open for funding.' : role === 'operator' ? 'All invoices on the platform.' : 'Your submitted invoices.'}
 				actions={action}
 			/>
 			{loading ? (

@@ -12,7 +12,7 @@ import { Amount, fmtDate, StatusChip } from './ui'
 export function Welcome({ role, name }: { role: 'business' | 'investor' | 'operator'; name?: string }) {
 	const copy = {
 		business: { title: 'Turn invoices into capital.', body: 'Submit an invoice, get it verified, and receive USDT once an investor funds it.', cta: ['Submit invoice', '/app/invoices/new'] as const },
-		investor: { title: 'Fund verified receivables.', body: 'Review the verification record, fund eligible invoices and track repayment from the receivable you hold.', cta: ['Browse invoices', '/app/invoices'] as const },
+		investor: { title: 'Back verified invoices.', body: 'Every invoice here cleared verification. Review the record, commit in USDT, and track repayment as the receivable holder.', cta: ['Browse invoices', '/app/invoices'] as const },
 		operator: { title: 'Run the verification desk.', body: 'Seed the simulated registry, review flagged invoices and manage the investor allowlist.', cta: ['Open console', '/app/operator'] as const },
 	}[role]
 	return (
@@ -115,10 +115,10 @@ export function GettingStarted({ role }: { role: 'business' | 'investor' | 'oper
 			['Receive USDT', 'An investor funds it and pays you directly.', '/app/invoices'],
 		],
 		investor: [
-			['Get on the allowlist', 'An operator approves your wallet before you can fund.', '/app'],
-			['Review an invoice', 'Open the verification record before you commit.', '/app/invoices'],
-			['Fund in USDT', 'Approve USDT and fund. The business is paid directly.', '/app/invoices'],
-			['Track your position', 'Repayment is sent to whoever holds the receivable.', '/app/positions'],
+			['Get approved to fund', 'Your wallet is reviewed before funding access is granted — only selected wallets can commit capital.', '/app'],
+			['Review the verification record', 'Each invoice shows the full check: issuer, amount, due date and document hash against the external record.', '/app/invoices'],
+			['Fund in USDT', 'Approve official USDT and commit. Payment goes straight to the business — Credra holds nothing.', '/app/invoices'],
+			['Track your receivable', 'You hold an onchain token. Repayment reaches the token holder at the due date — transferable and auditable.', '/app/positions'],
 		],
 		operator: [
 			['Seed the registry', 'Write a simulated record for an invoice to verify against.', '/app/operator'],
@@ -169,7 +169,7 @@ export function Protocol() {
 					</li>
 				))}
 			</ul>
-			<p className="mt-3 rounded-ctl bg-inset px-3 py-2 text-[12px] leading-[1.5] text-ink-2">Contracts hold no funds. Verification data is simulated and verdicts are recorded by an application wallet.</p>
+			<p className="mt-3 rounded-ctl bg-inset px-3 py-2 text-[12px] leading-[1.5] text-ink-2">Contracts hold no funds — USDT moves wallet to wallet. Verification data is simulated. Verdicts are recorded by an application wallet, not a decentralised network. Repayment is a business obligation; there is no collateral or onchain enforcement.</p>
 		</section>
 	)
 }
