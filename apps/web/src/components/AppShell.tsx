@@ -38,7 +38,13 @@ function WalletCard() {
 				<Button variant="primary" className="w-full" disabled={!inj || isPending} onClick={() => inj && connect({ connector: inj })}>
 					{isPending ? 'Waiting for your wallet' : 'Connect wallet'}
 				</Button>
-				{error && <p className="text-[12px] text-s-reject">No wallet found. Install a browser wallet to continue.</p>}
+				{error && (
+					<p className="text-[12px] text-s-reject">
+						{typeof window !== 'undefined' && !(window as { ethereum?: unknown }).ethereum
+							? <>No wallet found. <a className="underline" href="https://metamask.io/download" target="_blank" rel="noreferrer">Install MetaMask</a>.</>
+							: 'Connection was not approved. Check your wallet and try again.'}
+					</p>
+				)}
 			</div>
 		)
 	}

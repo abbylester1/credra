@@ -49,6 +49,30 @@ function Form({ headers }: { headers: Record<string, string> }) {
 	const ready = !!(f.number && f.issuer && f.buyer && file && termsOk && dueTs > Date.now() / 1000)
 	const reason = !f.number || !f.issuer || !f.buyer ? 'Fill in the invoice details.' : !file ? 'Attach the invoice document.' : !termsOk ? 'Financing must be above zero and below the invoice amount.' : dueTs <= Date.now() / 1000 ? 'The due date must be in the future.' : ''
 
+	/** Fills the form with unique demo values and attaches a generated PNG invoice, so the whole flow can be tried in a minute. */
+	async function useSample() {
+		const stamp = Date.now().toString(36).slice(-6).toUpperCase()
+		const number = `INV-${stamp}`
+		const due = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10)
+		const vals = { number, issuer: 'Demo Exports Ltd', buyer: 'Acme Corp', currency: 'USD', amount: '20', financing: '18', invoiceDate: new Date().toISOString().slice(0, 10), dueDate: due }
+		setF(vals)
+		const c = document.createElement('canvas'); c.width = 800; c.height = 1000
+		const g = c.getContext('2d')!
+		g.fillStyle = '#fff'; g.fillRect(0, 0, 800, 1000)
+		g.fillStyle = '#0F1A16'; g.font = '600 40px sans-serif'; g.fillText('INVOICE', 60, 100)
+		g.font = '16px monospace'; g.fillStyle = '#5C6B63'; g.fillText('Sample document for the Credra testnet demo', 60, 130)
+		g.fillStyle = '#0F1A16'; g.font = '20px monospace'
+		;[['Invoice no.', number], ['Issued', vals.invoiceDate], ['Due', due], ['From', vals.issuer], ['Bill to', vals.buyer], ['Description', 'Export services, March batch'], ['Amount due', `${vals.amount}.00 USDT`]].forEach(([k, v], i) => {
+			g.fillStyle = '#5C6B63'; g.fillText(k, 60, 220 + i * 52); g.fillStyle = '#0F1A16'; g.fillText(v, 280, 220 + i * 52)
+		})
+		g.strokeStyle = '#DCE2DD'; g.strokeRect(40, 180, 720, 400)
+		g.fillStyle = '#8F5200'; g.font = '14px monospace'; g.fillText('Illustrative data. Not a real invoice.', 60, 640)
+		const blob: Blob = await new Promise((r) => c.toBlob((b) => r(b!), 'image/png'))
+		const file = new File([blob], `${number}.png`, { type: 'image/png' })
+		setFile(file)
+		setHash(documentHash(new Uint8Array(await file.arrayBuffer())))
+	}
+
 	async function pick(e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0] ?? null
 		setFile(file)
@@ -98,7 +122,9 @@ function Form({ headers }: { headers: Record<string, string> }) {
 			<Card>
 				<form onSubmit={(e) => { e.preventDefault(); void submit() }} className="space-y-8">
 					<fieldset className="space-y-4" disabled={busy}>
-						<legend className="mb-1 text-[16px] font-semibold">Invoice</legend>
+						<legend className="mb-1 flex w-full items-center justify-between text-[16px] font-semibold">Invoice
+							<button type="button" onClick={() => void useSample()} className="rounded-ctl border border-hair bg-inset px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:bg-hair">Use sample invoice</button>
+						</legend>
 						<div className="grid gap-4 sm:grid-cols-2">
 							<Field label="Invoice number" hint="Letters, numbers, dots, dashes."><input className={inputCls} value={f.number} onChange={set('number')} placeholder="INV-1001" required /></Field>
 							<Field label="Currency of the invoice"><input className={inputCls} value={f.currency} onChange={set('currency')} maxLength={3} /></Field>
@@ -159,7 +185,7 @@ function Form({ headers }: { headers: Record<string, string> }) {
 export default function NewInvoicePage() {
 	return (
 		<>
-			<PageHeader title="Submit invoice" description="Register an invoice and have it verified before it can be funded." />
+			<PageHeader title="Submit invoice" description="Register it, attach the document, get it verified." />
 			<SignInGate>{(h) => <Form headers={h} />}</SignInGate>
 		</>
 	)
