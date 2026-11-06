@@ -1,11 +1,11 @@
 'use client'
 
-import { PrivyProvider, usePrivy } from '@privy-io/react-auth'
-import { createConfig as createPrivyConfig, WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi'
+import { PrivyProvider, useCreateWallet, usePrivy, useWallets } from '@privy-io/react-auth'
+import { createConfig as createPrivyConfig, useSetActiveWallet, WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { fallback, http } from 'viem'
-import { WagmiProvider } from 'wagmi'
+import { useAccount, WagmiProvider } from 'wagmi'
 import { whitechain } from '@/lib/chain'
 import { RPC_FALLBACK, RPC_PRIMARY } from '@/lib/config'
 import { wagmiConfig } from '@/lib/wagmi'
@@ -26,7 +26,33 @@ const privyWagmiConfig = createPrivyConfig({
 })
 
 function PrivyBridge({ children }: { children: React.ReactNode }) {
-	const { login, logout, ready, authenticated } = usePrivy()
+	const { login, logout, ready, authenticated, user } = usePrivy()
+	const { createWallet } = useCreateWallet()
+	const creating = useRef(false)
+	const { wallets, ready: walletsReady } = useWallets()
+	const { setActiveWallet } = useSetActiveWallet()
+	const { isConnected } = useAccount()
+	const connecting = useRef<string | null>(null)
+	// A previous Disconnect leaves wagmi.io.privy.wallet.<address>.disconnected in storage, and the wagmi
+	// connector refuses to reconnect a wallet carrying that flag. Clear it and connect the wallet explicitly.
+	useEffect(() => {
+		if (!authenticated || !walletsReady || isConnected || wallets.length === 0) return
+		const w = wallets.find((x) => x.walletClientType === 'privy') ?? wallets[0]
+		if (connecting.current === w.address) return
+		connecting.current = w.address
+		try {
+			Object.keys(localStorage).filter((k) => /^wagmi\.io\.privy\.wallet\..*\.disconnected$/.test(k)).forEach((k) => localStorage.removeItem(k))
+		} catch {}
+		setActiveWallet(w).catch((e) => { console.error('could not connect the wallet', e); connecting.current = null })
+	}, [authenticated, walletsReady, isConnected, wallets, setActiveWallet])
+	// Privy only auto-creates the embedded wallet inside its own modal. Our custom sign-in screen
+	// uses the headless login hooks, so create the wallet here for any user who has none.
+	useEffect(() => {
+		if (!ready || !authenticated || !user || creating.current) return
+		if (user.linkedAccounts.some((a) => a.type === 'wallet')) return
+		creating.current = true
+		createWallet().catch((e) => { console.error('embedded wallet creation failed', e); creating.current = false })
+	}, [ready, authenticated, user, createWallet])
 	return <ConnectContext.Provider value={{ privy: true, login: () => login(), logout, ready, authenticated }}>{children}</ConnectContext.Provider>
 }
 
