@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useConnect } from 'wagmi'
-import { ADDRESSES, EXPLORER, shorten } from '@/lib/config'
 import { useConnectMode } from './Providers'
 import { Button } from './ui'
 
@@ -49,13 +48,6 @@ export function AuthScreen() {
 					<div className="mt-6 flex items-center justify-between text-[13px]">
 						<Link href="/app/operator" className="text-ink-3 hover:text-ink">Operator? Enter passcode</Link>
 						<Link href="/" className="text-ink-3 hover:text-ink">Back to site</Link>
-					</div>
-					<div className="mt-10 rounded-card border border-hair bg-card p-4">
-						<div className="flex items-center justify-between text-[12px] text-ink-3">
-							<span className="flex items-center gap-2"><Image src="/whitechain.svg" alt="" width={16} height={16} unoptimized />Whitechain Sepolia</span>
-							<a href={EXPLORER} target="_blank" rel="noreferrer" className="text-accent hover:underline">Explorer ↗</a>
-						</div>
-						<a href={`${EXPLORER}/address/${ADDRESSES.registry}`} target="_blank" rel="noreferrer" className="mt-2 block font-mono text-[12px] text-ink-2 hover:text-ink">InvoiceRegistry {shorten(ADDRESSES.registry, 6, 4)} ↗</a>
 					</div>
 				</div>
 			</div>
