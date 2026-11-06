@@ -93,38 +93,16 @@ To run the whole stack you also need Node 22, [bun](https://bun.sh) and the [CRE
 
 ![Credra architecture](docs/images/architecture.svg)
 
-The same flow as an editable diagram:
+The same flow as a diagram:
 
 ```mermaid
 flowchart LR
-    B[Business wallet] -->|submit invoice| R
-    I[Investor wallet] -->|approve and fund in USDT| F
-    O[Operator] --> W
-
-    subgraph W[apps/web - Next.js]
-      UI[UI and API routes]
-      DB[(libSQL: SQLite locally, Turso hosted)]
-      V[Verifier wallet, server side]
-    end
-
-    UI -->|local: spawns| C[Chainlink CRE workflow simulation]
-    UI -->|hosted: in process| H[Same rules.ts, copy kept identical by a test]
-    C -->|reads invoice| R
-    H -->|reads invoice| R
-    C -->|calls| E[Simulated external registry]
-    H -->|reads| E
-    V -->|records verdict| R
-
-    subgraph WC[Whitechain Sepolia]
-      R[InvoiceRegistry]
-      A[InvestorAllowlist]
-      F[ReceivableFinance - ERC-721]
-      U[(Official USDT)]
-    end
-
-    F --> R
-    F --> A
-    F <-->|settlement| U
+    B["Business"] -->|submit invoice| REG["InvoiceRegistry"]
+    APP["Credra app + verifier wallet"] -->|verify, record verdict| REG
+    APP -.->|checks against| EXT["Simulated registry"]
+    I["Investor"] -->|fund in USDT| RF["ReceivableFinance ERC-721"]
+    RF -->|USDT to business| B
+    RF -->|repaid in USDT| H["Receivable holder"]
 ```
 
 ## Why onchain stablecoin settlement on Whitechain
@@ -236,7 +214,7 @@ If fees were added later, common models elsewhere are an origination fee on the 
 
 ## AI usage
 
-Built with substantial help from Claude (Anthropic) through Claude Code: contract drafting and tests, the CRE workflow, the web app, specifications and documentation. Everything was run and checked in this repository, and the evidence files record real testnet runs.
+The work was spec-driven. Research, specification, planning and design came first with [Spec Kit](https://github.com/github/spec-kit) — those artifacts are in [`specs/`](specs/) — and only then the build. Claude (Anthropic), through Claude Code, assisted with parts of it, working to the conventions in [`CLAUDE.md`](CLAUDE.md) and [`DESIGN.md`](DESIGN.md). Everything was run and reviewed in this repository; the testnet transactions in [`evidence/`](evidence/) are real.
 
 ## License
 
