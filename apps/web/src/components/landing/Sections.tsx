@@ -178,6 +178,7 @@ function Economics() {
 					</div>
 				))}
 			</div>
+			<div className="mt-3 flex items-center justify-between rounded-ctl border border-hair px-3.5 py-3"><span className="text-[13px] text-ink-2">Platform fee</span><span className="flex items-center gap-1.5 font-mono text-[15px] font-medium text-ink">0.00 <UsdtMark size={14} /></span></div>
 		</div>
 	)
 }
@@ -223,7 +224,7 @@ export function Showcase() {
 				<Row
 					id="economics" flip eyebrow="Economics" lead="Clear economics," rest="no surprises."
 					body="Move the sliders. See what the business gets and the investor earns."
-					bullets={['Investor pays the business directly', 'Full repayment to the holder', 'No admin withdrawal']}
+					bullets={['Investor pays the business directly', 'Full repayment to the holder', 'No platform fee, no admin withdrawal']}
 				><Economics /></Row>
 				<Row
 					id="transparency" eyebrow="Transparency" lead="Every step, every actor," rest="onchain."

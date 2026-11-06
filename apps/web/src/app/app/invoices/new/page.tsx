@@ -146,7 +146,7 @@ function Form({ headers }: { headers: Record<string, string> }) {
 							<Field label="Requested financing" hint={advance !== null ? `${advance}% advance` : 'Typically 80 to 95 percent of the invoice.'} error={f.financing && financingBase !== null && amountBase !== null && financingBase >= amountBase ? 'Must be below the invoice amount.' : undefined}><input inputMode="decimal" className={`${inputCls} num`} value={f.financing} onChange={set('financing')} placeholder="9000" required /></Field>
 						</div>
 						{termsOk && amountBase && financingBase && (
-							<p className="text-[14px] text-ink-2">Investor return: <Amount value={amountBase - financingBase} tone="accent" /></p>
+							<p className="text-[14px] text-ink-2">Investor return: <Amount value={amountBase - financingBase} tone="accent" /> <span className="mx-2 text-ink-3">·</span>Platform fee: <Amount value={0n} /></p>
 						)}
 					</fieldset>
 					<fieldset className="space-y-3" disabled={busy}>

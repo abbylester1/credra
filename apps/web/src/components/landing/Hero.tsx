@@ -231,6 +231,7 @@ function toFacts(s: Stats): Fact[] {
 		{ v: resolved ? pct(s.repaidCount, resolved) : 'n/a', k: 'repaid in full', d: resolved ? `${s.repaidCount} of ${resolved} settled` : 'none settled yet' },
 		{ v: s.avgReturnPct === null ? 'n/a' : `${s.avgReturnPct}%`, k: 'avg investor return', d: 'per invoice' },
 		{ v: pct(s.defaultedCount, s.financedCount), k: 'default rate', d: `${s.defaultedCount} of ${s.financedCount} financed` },
+		{ v: '0%', k: 'platform fee', d: 'no charge on testnet' },
 	]
 }
 

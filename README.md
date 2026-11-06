@@ -206,7 +206,15 @@ Static analysis ([Slither](evidence/slither.md)) found 5 low-severity items and 
 - [x] Operator review of manual-review invoices and allowlist management
 - [x] Record the official-USDT funding and repayment transactions on testnet
 - [ ] Transactions and verification pages
-- [ ] Landing page and demo video
+- [x] Landing page, Privy sign-in with embedded wallets
+- [ ] Demo video
+- [ ] Fees (see below)
+
+### Fees
+
+Credra charges **no platform fee** today. The only cost in a deal is the investor's discount (invoice amount minus financing amount), and the app shows "Platform fee: 0.00 USDT" on every invoice. Contracts never hold funds and there is no admin withdrawal.
+
+If fees were added later, common models elsewhere are an origination fee on the financing (about 0.5% to 2% in traditional invoice finance), a performance fee on the investor's return (about 10% on some onchain credit protocols), or a small ongoing fee on outstanding loans (Centrifuge has proposed 0.4%). Any of these would need a contract change, a redeploy and a new evidence run, so none is implemented. These figures come from vendor and protocol write-ups and should be checked before being quoted.
 
 ## AI usage
 
