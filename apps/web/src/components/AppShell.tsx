@@ -72,7 +72,8 @@ function WalletCard() {
 
 function TopBar() {
 	const pathname = usePathname()
-	const { role, loading } = useRole()
+	const { role, loading, operator } = useRole()
+	const { isConnected } = useAccount()
 	const section = pathname.split('/').filter(Boolean).slice(1)
 	return (
 		<div className="sticky top-0 z-20 hidden items-center justify-between border-b border-hair bg-canvas/90 px-8 py-3 backdrop-blur-sm lg:flex">
@@ -83,7 +84,7 @@ function TopBar() {
 				))}
 			</nav>
 			<div className="flex items-center gap-3">
-				{!loading && <span className="rounded-chip bg-accent-soft px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.05em] text-accent">{ROLE_LABEL[role]}</span>}
+				{!loading && (isConnected || operator) && <span className="rounded-chip bg-accent-soft px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.05em] text-accent">{ROLE_LABEL[role]}</span>}
 
 			</div>
 		</div>
