@@ -6,7 +6,7 @@ import { RPC_PRIMARY } from '@/lib/config'
 import { ChainlinkMark, Chip, ExternalArrow, Mono, Tick, UsdtMark, WhitechainLogo, short, TX, EXPLORER } from './shared'
 
 const CHECKS = [
-	['Amount', '10,000.00', '10,000.00'],
+	['Amount', '50,000.00', '50,000.00'],
 	['Issuer wallet', '0x1951…90D6', '0x1951…90D6'],
 	['Buyer reference', 'ACME-BUYER-7', 'ACME-BUYER-7'],
 	['Due date', '30 Nov 2026', '30 Nov 2026'],
@@ -62,7 +62,7 @@ function AppWindow() {
 							<div>
 								<p className="label">Invoice · Acme Corp</p>
 								<p className="mt-1.5 font-mono text-[28px] font-medium leading-none tracking-[-0.01em] text-ink md:text-[34px]">
-									10,000.00 <span className="text-[12px] text-ink-3">USDT</span>
+									50,000.00 <span className="text-[12px] text-ink-3">USDT</span>
 								</p>
 							</div>
 							<div className="h-6">
@@ -87,7 +87,7 @@ function AppWindow() {
 						</div>
 
 						<div className="mt-4 grid grid-cols-3 gap-3">
-							{[['Financing', '9,000.00'], ['Discount', '1,000.00'], ['Return', '11.1%']].map(([k, v], i) => (
+							{[['Financing', '48,000.00'], ['Discount', '2,000.00'], ['Return', '4.2%']].map(([k, v], i) => (
 								<div key={k} className="rounded-ctl bg-canvas px-3 py-2.5">
 									<p className="text-[11px] text-ink-3">{k}</p>
 									<p className={`font-mono text-[15px] font-medium ${i === 2 ? 'text-verified' : 'text-ink'}`}>{v}</p>
@@ -117,7 +117,7 @@ function AppWindow() {
 					<div className="flex items-center gap-2.5">
 						<UsdtMark size={24} />
 						<div>
-							<p className="text-[13px] font-medium text-ink">9,000.00 USDT sent to Acme Corp</p>
+							<p className="text-[13px] font-medium text-ink">48,000.00 USDT sent to Acme Corp</p>
 							<p className="font-mono text-[11px] text-ink-3">Receivable CRDR #1 minted</p>
 						</div>
 					</div>
@@ -134,7 +134,7 @@ function AppWindow() {
 					</div>
 					<div>
 						<p className="font-mono text-[10px] uppercase tracking-[0.06em] text-white/60">Receivable #0001</p>
-						<p className="font-mono text-[16px] font-medium">10,000.00 USDT</p>
+						<p className="font-mono text-[16px] font-medium">50,000.00 USDT</p>
 					</div>
 				</div>
 			</div>

@@ -33,8 +33,8 @@ function Submit() {
 	return (
 		<Shell title="New invoice">
 			<Field k="Invoice number" v="INV-1001" delay={0} />
-			<Field k="Amount" v="10,000.00 USDT" delay={120} />
-			<Field k="Financing amount" v="9,000.00 USDT" delay={240} />
+			<Field k="Amount" v="50,000.00 USDT" delay={120} />
+			<Field k="Financing amount" v="48,000.00 USDT" delay={240} />
 			<Field k="Due date" v="30 Nov 2026" delay={360} />
 			<Field k="keccak256(document)" v="0x9a1f…c2e0" delay={480} />
 			<div className="animate-popin mt-4 flex items-center justify-between rounded-ctl bg-pine px-4 py-2.5 text-white" style={{ animationDelay: '800ms' }}>
@@ -87,14 +87,14 @@ function Fund() {
 	return (
 		<Shell title="Fund invoice">
 			<div className="flex items-center justify-between rounded-card bg-canvas p-4">
-				<div className="flex items-center gap-2.5"><UsdtMark size={28} /><div><p className="font-mono text-[18px] font-medium text-ink">9,000.00</p><p className="text-[11px] text-ink-3">USDT to the business</p></div></div>
+				<div className="flex items-center gap-2.5"><UsdtMark size={28} /><div><p className="font-mono text-[18px] font-medium text-ink">48,000.00</p><p className="text-[11px] text-ink-3">USDT to the business</p></div></div>
 				<Chip tone="funded">Funded</Chip>
 			</div>
 			<div className="animate-popin relative mt-4 h-[104px] overflow-hidden rounded-[12px] bg-pine p-4 text-white" style={{ animationDelay: '600ms' }}>
 				<div className="linegrid absolute inset-0 opacity-60" />
 				<div className="relative flex h-full flex-col justify-between">
 					<div className="flex justify-between"><span className="text-[14px] font-semibold">credra</span><span className="font-mono text-[10px] text-white/60">CRDR · ERC-721</span></div>
-					<div><p className="font-mono text-[10px] uppercase text-white/60">Receivable minted to investor</p><p className="font-mono text-[15px]">10,000.00 USDT due 30 Nov</p></div>
+					<div><p className="font-mono text-[10px] uppercase text-white/60">Receivable minted to investor</p><p className="font-mono text-[15px]">50,000.00 USDT due 30 Nov</p></div>
 				</div>
 			</div>
 		</Shell>
@@ -103,13 +103,13 @@ function Fund() {
 function Settle() {
 	return (
 		<Shell title="Repayment">
-			<p className="font-mono text-[28px] font-medium leading-none text-ink">10,000.00 <span className="text-[12px] text-ink-3">USDT</span></p>
+			<p className="font-mono text-[28px] font-medium leading-none text-ink">50,000.00 <span className="text-[12px] text-ink-3">USDT</span></p>
 			<p className="mt-1 text-[12px] text-ink-3">paid to the current receivable holder</p>
 			<div className="mt-4 flex h-3 overflow-hidden rounded-full bg-inset">
-				<div className="animate-fillbar h-full bg-pine" style={{ width: '90%' }} />
-				<div className="animate-fillbar h-full bg-verified" style={{ width: '10%', animationDelay: '500ms' }} />
+				<div className="animate-fillbar h-full bg-pine" style={{ width: '96%' }} />
+				<div className="animate-fillbar h-full bg-verified" style={{ width: '4%', animationDelay: '500ms' }} />
 			</div>
-			<div className="mt-2 flex justify-between text-[11px]"><span className="text-ink-2">Principal 9,000.00</span><span className="text-verified">Discount 1,000.00</span></div>
+			<div className="mt-2 flex justify-between text-[11px]"><span className="text-ink-2">Principal 48,000.00</span><span className="text-verified">Discount 2,000.00</span></div>
 			<div className="mt-4"><Chip tone="repaid">Repaid</Chip></div>
 		</Shell>
 	)

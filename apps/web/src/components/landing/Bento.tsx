@@ -41,7 +41,7 @@ function Card({ href, title, rest, className = '', children }: { href: string; t
 
 /* ── 1. Verified before funded ── */
 const ROWS: [string, string, string][] = [
-	['Amount', '10,000.00', '10,000.00'],
+	['Amount', '50,000.00', '50,000.00'],
 	['Issuer wallet', '0x1951…90D6', '0x1951…90D6'],
 	['Buyer', 'ACME-BUYER-7', 'ACME-BUYER-7'],
 	['Due date', '30 Nov 2026', '30 Nov 2026'],
@@ -108,13 +108,13 @@ function FlowIllustration() {
 			<div className="rounded-card border border-hair bg-card p-5">
 				<div className="flex items-center justify-between gap-2">
 					<Wallet label="Investor" />
-					<Pipe label="9,000.00" />
+					<Pipe label="48,000.00" />
 					<Wallet label="Business" />
 				</div>
 				<div className="my-4 border-t border-dashed border-hair" />
 				<div className="flex items-center justify-between gap-2">
 					<Wallet label="Payer" />
-					<Pipe label="10,000.00" />
+					<Pipe label="50,000.00" />
 					<Wallet label="Token holder" />
 				</div>
 				<p className="mt-4 rounded-ctl bg-inset px-3 py-2 text-center font-mono text-[11px] text-ink-2">Contract balance: 0.00 USDT</p>

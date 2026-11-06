@@ -72,7 +72,7 @@ function Row({ id, eyebrow, lead, rest, body, bullets, flip, children }: { id?: 
 /* ─────────── Verification record ─────────── */
 const RECORD: [string, string, string][] = [
 	['Record found', 'registered', 'found'],
-	['Amount', '10,000.00', '10,000.00'],
+	['Amount', '50,000.00', '50,000.00'],
 	['Issuer wallet', '0x1951…90D6', '0x1951…90D6'],
 	['Buyer', 'ACME-7', 'ACME-7'],
 	['Due date', '30 Nov 2026', '30 Nov 2026'],
@@ -135,9 +135,9 @@ function Slider({ label, value, min, max, step, onChange, display }: { label: st
 	)
 }
 function Economics() {
-	const [amount, setAmount] = useState(10000)
-	const [disc, setDisc] = useState(10)
-	const [days, setDays] = useState(60)
+	const [amount, setAmount] = useState(50000)
+	const [disc, setDisc] = useState(4)
+	const [days, setDays] = useState(45)
 	const discount = (amount * disc) / 100
 	const financing = amount - discount
 	const ret = (discount / financing) * 100
@@ -150,9 +150,10 @@ function Economics() {
 				<span className="rounded-chip border border-dashed border-s-review px-1.5 py-px font-mono text-[10px] uppercase text-s-review">Demo</span>
 			</div>
 			<div className="mt-5 grid gap-5">
-				<Slider label="Invoice amount" value={amount} min={1000} max={100000} step={1000} onChange={setAmount} display={`${fmt(amount)} USDT`} />
+				<div className="flex gap-2">{[5000, 50000, 250000].map((v) => <button key={v} type="button" onClick={() => setAmount(v)} className={`rounded-chip border px-2.5 py-1 font-mono text-[11px] transition-colors ${amount === v ? 'border-ink bg-ink text-white' : 'border-hair text-ink-2 hover:border-field'}`}>{v >= 1000 ? `${v / 1000}k` : v}</button>)}</div>
+				<Slider label="Invoice amount" value={amount} min={1000} max={250000} step={1000} onChange={setAmount} display={`${fmt(amount)} USDT`} />
 				<div className="grid gap-5 sm:grid-cols-2">
-					<Slider label="Discount" value={disc} min={1} max={20} step={1} onChange={setDisc} display={`${disc}%`} />
+					<Slider label="Discount" value={disc} min={1} max={10} step={1} onChange={setDisc} display={`${disc}%`} />
 					<Slider label="Days to due" value={days} min={15} max={180} step={5} onChange={setDays} display={`${days} days`} />
 				</div>
 			</div>
