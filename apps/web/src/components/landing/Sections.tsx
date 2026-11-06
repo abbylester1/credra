@@ -71,12 +71,12 @@ function Row({ id, eyebrow, lead, rest, body, bullets, flip, children }: { id?: 
 
 /* ─────────── Verification record ─────────── */
 const RECORD: [string, string, string][] = [
-	['Invoice exists in the external record', 'registered', 'found'],
-	['Amount', '10,000.00 USDT', '10,000.00 USDT'],
+	['Record found', 'registered', 'found'],
+	['Amount', '10,000.00', '10,000.00'],
 	['Issuer wallet', '0x1951…90D6', '0x1951…90D6'],
-	['Buyer reference', 'ACME-BUYER-7', 'ACME-BUYER-7'],
+	['Buyer', 'ACME-7', 'ACME-7'],
 	['Due date', '30 Nov 2026', '30 Nov 2026'],
-	['Document fingerprint', '0x9a1f…c2e0', '0x9a1f…c2e0'],
+	['Document hash', '0x9a1f…c2e0', '0x9a1f…c2e0'],
 ]
 function VerificationRecord() {
 	const [ref, seen] = useInView<HTMLDivElement>(0.3)
@@ -110,9 +110,9 @@ function VerificationRecord() {
 					</div>
 				)
 			})}
-			<div className="space-y-1.5 p-5 font-mono text-[12px] text-ink-2">
-				<div className="flex flex-wrap items-center gap-2"><span className="rounded-chip border border-dashed border-s-review px-1.5 text-[10px] uppercase text-s-review">Simulated</span><span>Source: simulated ERP record, not a real registry</span></div>
-				<p>Recorded by: application verifier wallet, not the Chainlink network</p>
+			<div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-5 py-4 font-mono text-[12px] text-ink-2">
+				<span className="rounded-chip border border-dashed border-s-review px-1.5 text-[10px] uppercase text-s-review">Simulated</span>
+				<span>Verifier wallet</span>
 				<a href={`${EXPLORER}/tx/${TX.role}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-accent hover:underline">tx {short(TX.role)} <ExternalArrow /></a>
 			</div>
 		</div>
@@ -147,7 +147,7 @@ function Economics() {
 		<div className="rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-30px_rgba(15,26,22,0.4)] md:p-6">
 			<div className="flex items-center justify-between">
 				<p className="text-[15px] font-semibold text-ink">Financing terms</p>
-				<span className="rounded-chip border border-dashed border-s-review px-1.5 py-px font-mono text-[10px] uppercase text-s-review">Illustrative calculator</span>
+				<span className="rounded-chip border border-dashed border-s-review px-1.5 py-px font-mono text-[10px] uppercase text-s-review">Demo</span>
 			</div>
 			<div className="mt-5 grid gap-5">
 				<Slider label="Invoice amount" value={amount} min={1000} max={100000} step={1000} onChange={setAmount} display={`${fmt(amount)} USDT`} />
@@ -178,7 +178,6 @@ function Economics() {
 					</div>
 				))}
 			</div>
-			<p className="mt-4 text-[12px] leading-[1.55] text-ink-3">Terms are set per invoice onchain. No contract holds funds.</p>
 		</div>
 	)
 }
@@ -187,10 +186,10 @@ function Economics() {
 function Timeline() {
 	const [ref, seen] = useInView<HTMLDivElement>(0.3)
 	const ev: [string, string, string, 'neutral' | 'accent' | 'funded' | 'repaid', string?][] = [
-		['Submitted', 'Business wallet', 'Invoice and document hash registered', 'neutral'],
-		['Eligible', 'Verifier wallet', 'Verdict recorded after the CRE workflow ran', 'accent'],
-		['Funded', 'Investor wallet', '54.00 USDT to the business, receivable minted', 'funded', TX.fund],
-		['Repaid', 'Business wallet', '60.00 USDT to the receivable holder', 'repaid', TX.repay],
+		['Submitted', 'Business wallet', 'Invoice registered', 'neutral'],
+		['Eligible', 'Verifier wallet', 'Verdict recorded', 'accent'],
+		['Funded', 'Investor wallet', '54.00 USDT to business', 'funded', TX.fund],
+		['Repaid', 'Business wallet', '60.00 USDT to holder', 'repaid', TX.repay],
 	]
 	return (
 		<div ref={ref} className="rounded-card border border-hair bg-card p-5 shadow-[0_20px_50px_-30px_rgba(15,26,22,0.4)] md:p-6">
@@ -228,7 +227,7 @@ export function Showcase() {
 				><Economics /></Row>
 				<Row
 					id="transparency" eyebrow="Transparency" lead="Every step, every actor," rest="onchain."
-					body="Statuses, signers and transactions are public. Funded and Repaid link to real testnet transactions."
+					body="Public statuses, signers and transactions. Funded and Repaid link to real testnet transactions."
 				><Timeline /></Row>
 			</div>
 		</section>

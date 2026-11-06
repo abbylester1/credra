@@ -96,9 +96,7 @@ function AppWindow() {
 						</div>
 						<div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-ctl bg-inset px-3 py-2 font-mono text-[11px] text-ink-2">
 							<span className="rounded-chip border border-dashed border-s-review px-1.5 text-[10px] uppercase text-s-review">Simulated</span>
-							<span>Source: simulated ERP record</span>
-							<span className="text-ink-3">·</span>
-							<span>Recorded by: verifier wallet</span>
+							<span>Verifier wallet</span>
 						</div>
 					</div>
 				</div>
