@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" font-family="Inter, -apple-system, 'Helvetica Neue', Arial, sans-serif">
+  <title>Credra architecture</title>
+  <desc>Wallets and the operator use the web app. Verification runs through the CRE CLI locally or in process when hosted, against a simulated registry. The verifier wallet records the verdict on Whitechain; investors fund and repay in official USDT through ReceivableFinance.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M1 1.5 L9 5 L1 8.5" fill="none" stroke="#1B1B18" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M1 1.5 L9 5 L1 8.5" fill="none" stroke="#6B6A63" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#F6F5F2"/>
+
+  <!-- title -->
+  <text x="40" y="44" font-size="26" font-weight="700" fill="#1B1B18" letter-spacing="-0.5">Credra architecture</text>
+  <text x="40" y="66" font-size="14" fill="#6B6A63">Verify an invoice, fund it in official USDT, settle to the receivable holder. Testnet.</text>
+
+  <!-- ===== actors ===== -->
+  <g font-size="15" fill="#1B1B18">
+    <rect x="70" y="140" width="230" height="80" rx="12" fill="#FFFFFF" stroke="#E2E0DA"/>
+    <text x="90" y="174" font-weight="600">Business</text>
+    <text x="90" y="196" font-size="13" fill="#6B6A63">Submits invoices</text>
+
+    <rect x="70" y="250" width="230" height="80" rx="12" fill="#FFFFFF" stroke="#E2E0DA"/>
+    <text x="90" y="284" font-weight="600">Investor</text>
+    <text x="90" y="306" font-size="13" fill="#6B6A63">Allowlisted, funds in USDT</text>
+
+    <rect x="70" y="360" width="230" height="80" rx="12" fill="#FFFFFF" stroke="#E2E0DA"/>
+    <text x="90" y="394" font-weight="600">Operator</text>
+    <text x="90" y="416" font-size="13" fill="#6B6A63">Reviews, manages allowlist</text>
+  </g>
+  <text x="70" y="490" font-size="12" fill="#6B6A63">Sign in with Privy: email, Google</text>
+  <text x="70" y="508" font-size="12" fill="#6B6A63">or wallet. Embedded wallets sign</text>
+  <text x="70" y="526" font-size="12" fill="#6B6A63">the onchain transactions.</text>
+
+  <!-- actors to web app -->
+  <g stroke="#1B1B18" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+    <path d="M300 180 H398"/>
+    <path d="M300 290 H398"/>
+    <path d="M300 400 H398"/>
+  </g>
+
+  <!-- ===== web app ===== -->
+  <rect x="400" y="110" width="520" height="560" rx="16" fill="#FBFAF8" stroke="#CFCCC4"/>
+  <text x="430" y="140" font-size="15" font-weight="700" fill="#1B1B18">apps/web (Next.js, hosted on Vercel)</text>
+
+  <rect x="430" y="160" width="460" height="70" rx="10" fill="#FFFFFF" stroke="#E2E0DA"/>
+  <text x="448" y="188" font-size="14" font-weight="600" fill="#1B1B18">UI and API routes</text>
+  <text x="448" y="210" font-size="12" fill="#6B6A63">Invoices, documents, evidence, audit timeline, operator console</text>
+
+  <rect x="430" y="256" width="460" height="82" rx="10" fill="#FFFFFF" stroke="#E2E0DA"/>
+  <text x="448" y="284" font-size="14" font-weight="600" fill="#1B1B18">Off-chain database (libSQL)</text>
+  <text x="448" y="306" font-size="12" fill="#6B6A63">SQLite file locally, Turso when hosted. Invoice rows, documents,</text>
+  <text x="448" y="324" font-size="12" fill="#6B6A63">verification runs, wallet names. Chain is the source of truth for status.</text>
+  <path d="M660 230 V256" stroke="#1B1B18" stroke-width="1.5" fill="none" marker-end="url(#ah)"/>
+
+  <rect x="430" y="364" width="460" height="70" rx="10" fill="#FFFFFF" stroke="#E2E0DA"/>
+  <text x="448" y="392" font-size="14" font-weight="600" fill="#1B1B18">Verifier wallet (server side only)</text>
+  <text x="448" y="414" font-size="12" fill="#6B6A63">Signs recordVerification with VERIFIER_ROLE. Not a CRE DON write.</text>
+
+  <!-- verification engines -->
+  <rect x="430" y="460" width="460" height="190" rx="12" fill="#F1EFEA" stroke="#E2E0DA"/>
+  <text x="448" y="484" font-size="13" font-weight="600" fill="#1B1B18">Eligibility verification: ELIGIBLE, REJECTED or MANUAL_REVIEW</text>
+  <rect x="445" y="500" width="210" height="130" rx="10" fill="#FFFFFF" stroke="#0D3B35" stroke-width="1.5"/>
+  <text x="460" y="526" font-size="13" font-weight="700" fill="#0D3B35">Local: Chainlink CRE</text>
+  <text x="460" y="546" font-size="12" fill="#1B1B18">cre workflow simulate</text>
+  <text x="460" y="564" font-size="12" fill="#6B6A63">invoice-verification workflow,</text>
+  <text x="460" y="580" font-size="12" fill="#6B6A63">reads Whitechain, calls the</text>
+  <text x="460" y="596" font-size="12" fill="#6B6A63">external API, applies rules.ts</text>
+  <rect x="665" y="500" width="210" height="130" rx="10" fill="#FFFFFF" stroke="#CFCCC4" stroke-dasharray="6 4"/>
+  <text x="680" y="526" font-size="13" font-weight="700" fill="#1B1B18">Hosted: in process</text>
+  <text x="680" y="546" font-size="12" fill="#1B1B18">no CRE CLI on Vercel</text>
+  <text x="680" y="564" font-size="12" fill="#6B6A63">same rules.ts, a copy a test</text>
+  <text x="680" y="580" font-size="12" fill="#6B6A63">keeps identical. Labelled as</text>
+  <text x="680" y="596" font-size="12" fill="#6B6A63">not a CRE run in the UI</text>
+
+  <!-- simulated registry -->
+  <rect x="400" y="720" width="520" height="80" rx="12" fill="#FFFFFF" stroke="#8A887F" stroke-dasharray="6 4"/>
+  <text x="420" y="750" font-size="15" font-weight="600" fill="#1B1B18">Simulated external registry (labelled simulated)</text>
+  <text x="420" y="774" font-size="12" fill="#6B6A63">Mock API locally, a database table when hosted. Not a real company registry.</text>
+  <g stroke="#6B6A63" stroke-width="1.5" fill="none" marker-end="url(#ahg)">
+    <path d="M550 630 V720"/>
+    <path d="M770 630 V720"/>
+  </g>
+
+  <!-- ===== whitechain ===== -->
+  <rect x="1120" y="110" width="440" height="560" rx="16" fill="#FBFAF8" stroke="#CFCCC4"/>
+  <text x="1535" y="140" font-size="15" font-weight="700" fill="#1B1B18" text-anchor="end">Whitechain Sepolia (chain 1874)</text>
+
+  <rect x="1145" y="160" width="185" height="90" rx="10" fill="#FFFFFF" stroke="#E2E0DA"/>
+  <text x="1160" y="188" font-size="14" font-weight="600" fill="#1B1B18">InvoiceRegistry</text>
+  <text x="1160" y="208" font-size="12" fill="#6B6A63">Invoice record, status,</text>
+  <text x="1160" y="224" font-size="12" fill="#6B6A63">duplicate checks</text>
+
+  <rect x="1350" y="160" width="185" height="90" rx="10" fill="#FFFFFF" stroke="#E2E0DA"/>
+  <text x="1365" y="188" font-size="14" font-weight="600" fill="#1B1B18">InvestorAllowlist</text>
+  <text x="1365" y="208" font-size="12" fill="#6B6A63">Approved investor</text>
+  <text x="1365" y="224" font-size="12" fill="#6B6A63">wallets only</text>
+
+  <rect x="1145" y="330" width="390" height="110" rx="10" fill="#FFFFFF" stroke="#0D3B35" stroke-width="1.5"/>
+  <text x="1162" y="360" font-size="14" font-weight="600" fill="#1B1B18">ReceivableFinance (ERC-721, CRDR)</text>
+  <text x="1162" y="382" font-size="12" fill="#6B6A63">Mints an allowlist-gated receivable when an investor funds.</text>
+  <text x="1162" y="400" font-size="12" fill="#6B6A63">Repayment pays the full amount to the current token holder.</text>
+  <text x="1162" y="420" font-size="12" fill="#6B6A63">Holds no funds, no admin withdrawal.</text>
+  <g stroke="#1B1B18" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+    <path d="M1237 330 V250"/>
+    <path d="M1442 330 V250"/>
+  </g>
+
+  <rect x="1145" y="520" width="390" height="80" rx="10" fill="#FFFFFF" stroke="#E2E0DA"/>
+  <text x="1162" y="550" font-size="14" font-weight="600" fill="#1B1B18">Official USDT (6 decimals)</text>
+  <text x="1162" y="572" font-size="12" fill="#6B6A63">Investor pays the business directly; payer repays the holder.</text>
+  <path d="M1340 440 V520" stroke="#1B1B18" stroke-width="1.5" fill="none" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text x="1350" y="486" font-size="12" fill="#6B6A63">settlement</text>
+
+  <!-- app to chain -->
+  <g stroke="#1B1B18" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+    <path d="M890 399 H1000 V205 H1145"/>
+    <path d="M890 600 H1070 V232 H1145"/>
+  </g>
+  <text transform="translate(992 300) rotate(-90)" font-size="12" fill="#1B1B18" text-anchor="middle">records verdict</text>
+  <text transform="translate(1062 420) rotate(-90)" font-size="12" fill="#1B1B18" text-anchor="middle">reads invoice over RPC</text>
+
+  <!-- wallet transactions straight to chain (drawn last so they sit above the panels) -->
+  <g stroke="#1B1B18" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+    <path d="M185 140 V92 H1237 V160"/>
+    <path d="M70 290 H30 V840 H1548 V385 H1535"/>
+  </g>
+  <rect x="595" y="80" width="290" height="22" fill="#F6F5F2"/>
+  <text x="740" y="96" font-size="13" fill="#1B1B18" text-anchor="middle">submit invoice (business wallet signs)</text>
+  <rect x="545" y="829" width="530" height="22" fill="#F6F5F2"/>
+  <text x="810" y="845" font-size="13" fill="#1B1B18" text-anchor="middle">approve and fund in USDT, repay (investor and payer wallets sign)</text>
+
+  <!-- legend -->
+  <g font-size="12" fill="#6B6A63">
+    <rect x="1120" y="720" width="30" height="16" rx="4" fill="#FFFFFF" stroke="#8A887F" stroke-dasharray="5 3"/>
+    <text x="1160" y="733">Dashed: simulated or demo-only</text>
+    <rect x="1120" y="750" width="30" height="16" rx="4" fill="#FFFFFF" stroke="#0D3B35" stroke-width="1.5"/>
+    <text x="1160" y="763">Outlined: the two core pieces</text>
+    <text x="1120" y="793">Verdicts are written by the verifier wallet,</text>
+    <text x="1120" y="811">never claimed as a DON-attested write.</text>
+  </g>
+</svg>

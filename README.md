@@ -85,6 +85,10 @@ To run the whole stack you also need Node 22, [bun](https://bun.sh) and the [CRE
 
 ## Architecture
 
+![Credra architecture](docs/images/architecture.svg)
+
+The same flow as an editable diagram:
+
 ```mermaid
 flowchart LR
     B[Business wallet] -->|submit invoice| R
@@ -93,13 +97,16 @@ flowchart LR
 
     subgraph W[apps/web - Next.js]
       UI[UI and API routes]
-      DB[(SQLite: off-chain data)]
-      V[Verifier key, server side]
+      DB[(libSQL: SQLite locally, Turso hosted)]
+      V[Verifier wallet, server side]
     end
 
-    UI -->|spawns| C[CRE workflow simulation]
+    UI -->|local: spawns| C[Chainlink CRE workflow simulation]
+    UI -->|hosted: in process| H[Same rules.ts, copy kept identical by a test]
     C -->|reads invoice| R
-    C -->|calls| E[Simulated external verification API]
+    H -->|reads invoice| R
+    C -->|calls| E[Simulated external registry]
+    H -->|reads| E
     V -->|records verdict| R
 
     subgraph WC[Whitechain Sepolia]
