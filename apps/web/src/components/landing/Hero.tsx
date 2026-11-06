@@ -220,52 +220,78 @@ export function Hero() {
 	)
 }
 
-/* ─── Ticker strip (Ramp's live counters, but real, checkable facts) ─── */
-const FACTS: [string, string][] = [
-	['Contracts verified on Blockscout', '3'],
-	['Automated tests passing', '40'],
-	['Fields cross-checked per invoice', '5'],
-	['USDT held by contracts', '0'],
-	['Outage falls back to', 'Manual review'],
-	['Duplicate invoices', 'Blocked onchain'],
-	['Settlement token', 'Official USDT'],
-]
+/* ─── Ticker strip: real testnet totals from /api/stats. Dark value chips make the numbers pop (Ramp's live counters). ─── */
+type Fact = { v: string; k: string; d?: string; href?: string }
+type Stats = { financedCount: number; financedUsdt: number; repaidCount: number; defaultedCount: number; avgReturnPct: number | null }
+
+function toFacts(s: Stats): Fact[] {
+	const pct = (n: number, of: number) => (of ? `${Math.round((n / of) * 1000) / 10}%` : '0%')
+	const resolved = s.repaidCount + s.defaultedCount
+	return [
+		{ v: String(s.financedCount), k: 'invoices financed', d: 'on testnet' },
+		{ v: s.financedUsdt.toLocaleString('en-US', { maximumFractionDigits: 2 }), k: 'USDT financed', d: 'paid straight to businesses', href: `${EXPLORER}/address/0x3025FDea4Aa3A96deC46451b7Eec2e83188307B6` },
+		{ v: resolved ? pct(s.repaidCount, resolved) : 'n/a', k: 'repaid in full', d: resolved ? `${s.repaidCount} of ${resolved} settled` : 'none settled yet' },
+		{ v: s.avgReturnPct === null ? 'n/a' : `${s.avgReturnPct}%`, k: 'avg investor return', d: 'per invoice' },
+		{ v: pct(s.defaultedCount, s.financedCount), k: 'default rate', d: `${s.defaultedCount} of ${s.financedCount} financed` },
+	]
+}
+
 export function Ticker() {
-	const row = [...FACTS, ...FACTS]
+	const [facts, setFacts] = useState<Fact[] | null>(null)
+	useEffect(() => {
+		let on = true
+		fetch('/api/stats').then((r) => (r.ok ? r.json() : Promise.reject())).then((s: Stats) => on && setFacts(toFacts(s))).catch(() => on && setFacts([]))
+		return () => { on = false }
+	}, [])
+	const row = facts?.length ? [...facts, ...facts, ...facts] : []
 	return (
-		<div className="pause-on-hover border-y border-hair bg-card py-3.5">
-			<div className="mask-fade-x overflow-hidden">
-				<div className="animate-marquee flex w-max gap-10 pr-10">
-					{row.map(([k, v], i) => (
-						<div key={i} className="flex shrink-0 items-center gap-3 whitespace-nowrap">
-							<span className="font-mono text-[11px] uppercase tracking-[0.05em] text-ink-3">{k}</span>
-							<span className="rounded-chip bg-canvas px-2 py-0.5 font-mono text-[12px] text-ink ring-1 ring-hair">{v}</span>
-						</div>
-					))}
-				</div>
+		<div className="pause-on-hover flex items-stretch border-y border-hair bg-card">
+			<div className="hidden shrink-0 items-center gap-2.5 border-r border-hair bg-canvas px-6 sm:flex">
+				<span className="animate-pulse-ring h-2 w-2 rounded-full bg-accent" />
+				<span className="font-mono text-[11px] font-medium uppercase tracking-[0.06em] text-ink">Credra in numbers</span>
+				<span className="rounded-chip border border-dashed border-s-review px-1.5 py-px font-mono text-[10px] uppercase text-s-review">Testnet data</span>
+			</div>
+			<div className="mask-fade-x min-w-0 flex-1 overflow-hidden py-4">
+				{facts === null ? (
+					<div className="flex gap-12 px-6" aria-label="Loading">{[0, 1, 2, 3, 4].map((i) => <div key={i} className="skeleton h-7 w-52 shrink-0" />)}</div>
+				) : (
+					<div className="animate-marquee flex w-max items-center gap-12 pr-12">
+						{row.map((f, i) => {
+							const inner = (
+								<>
+									<span className="rounded-[8px] bg-pine px-2.5 py-1 font-mono text-[14px] font-semibold leading-none text-white shadow-[0_4px_10px_-4px_rgba(13,59,53,0.6)]">{f.v}</span>
+									<span className="text-[14px] font-medium text-ink">{f.k}</span>
+									{f.d && <span className="text-[13px] text-ink-3">{f.d}</span>}
+								</>
+							)
+							const cls = 'flex shrink-0 items-center gap-2.5 whitespace-nowrap'
+							return f.href
+								? <a key={i} href={f.href} target="_blank" rel="noreferrer" className={`${cls} transition-opacity hover:opacity-70`}>{inner}</a>
+								: <div key={i} className={cls}>{inner}</div>
+						})}
+					</div>
+				)}
 			</div>
 		</div>
 	)
 }
 
-/* ─── Built on (bordered logo cells, as on Ramp's customer grid) ─── */
+/* ─── Built on: one compact row ─── */
 export function BuiltOn() {
 	const cells = [
-		{ k: 'Chain', node: <WhitechainLogo height={24} />, sub: 'Whitechain Sepolia' },
-		{ k: 'Verification', node: <span className="flex items-center gap-2.5"><ChainlinkMark size={26} /><span className="text-[19px] font-semibold tracking-[-0.02em] text-ink">Chainlink <span className="text-ink-3">CRE</span></span></span>, sub: 'Workflow runtime' },
-		{ k: 'Settlement', node: <span className="flex items-center gap-2.5"><UsdtMark size={26} /><span className="text-[19px] font-semibold tracking-[-0.02em] text-ink">Tether <span className="text-ink-3">USDT</span></span></span>, sub: 'Official token, 6 decimals' },
-		{ k: 'Standards', node: <span className="text-[19px] font-semibold tracking-[-0.02em] text-ink">ERC-721 <span className="text-ink-3">receivables</span></span>, sub: 'Allowlist-gated transfers' },
+		{ k: 'Chain', node: <WhitechainLogo height={22} />, sub: 'Whitechain Sepolia' },
+		{ k: 'Verification', node: <span className="flex items-center gap-2"><ChainlinkMark size={22} /><span className="text-[17px] font-semibold tracking-[-0.02em] text-ink">Chainlink <span className="text-ink-3">CRE</span></span></span>, sub: 'Workflow runtime' },
+		{ k: 'Settlement', node: <span className="flex items-center gap-2"><UsdtMark size={22} /><span className="text-[17px] font-semibold tracking-[-0.02em] text-ink">Tether <span className="text-ink-3">USDT</span></span></span>, sub: 'Official token' },
+		{ k: 'Receivables', node: <span className="text-[17px] font-semibold tracking-[-0.02em] text-ink">ERC-721 <span className="text-ink-3">CRDR</span></span>, sub: 'Allowlist-gated' },
 	]
 	return (
-		<section className="mx-auto max-w-[1200px] px-5 py-14 md:px-8 md:py-20">
-			<p className="mb-6 font-mono text-[11px] uppercase tracking-[0.06em] text-ink-3">Built on</p>
+		<section className="mx-auto max-w-[1200px] px-5 py-10 md:px-8 md:py-12">
 			<div className="grid gap-px overflow-hidden rounded-card border border-hair bg-hair sm:grid-cols-2 lg:grid-cols-4">
 				{cells.map((c) => (
-					<div key={c.k} className="group flex min-h-[132px] flex-col justify-between bg-card p-6 transition-colors hover:bg-canvas">
-						<span className="font-mono text-[11px] uppercase tracking-[0.05em] text-ink-3">{c.k}</span>
+					<div key={c.k} className="group flex items-center justify-between gap-3 bg-card px-5 py-4 transition-colors hover:bg-canvas">
 						<div>
-							<div className="flex h-8 items-center transition-transform duration-300 group-hover:-translate-y-0.5">{c.node}</div>
-							<p className="mt-1.5 text-[12px] text-ink-3">{c.sub}</p>
+							<p className="mb-2 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-3">{c.k}</p>
+							<div className="flex h-7 items-center whitespace-nowrap">{c.node}</div>
 						</div>
 					</div>
 				))}

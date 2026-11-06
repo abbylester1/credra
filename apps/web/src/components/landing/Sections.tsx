@@ -298,23 +298,14 @@ export function Trust() {
 /* ─────────── Final CTA ─────────── */
 export function CtaBanner() {
 	return (
-		<section className="px-5 py-[72px] md:px-8 md:py-[104px]">
+		<section className="px-5 py-[56px] md:px-8 md:py-[80px]">
 			<Reveal>
-				<div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[28px] bg-pine px-6 py-16 text-center md:px-16 md:py-24">
+				<div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-[24px] bg-pine px-6 py-12 text-center md:px-16 md:py-16">
 					<div className="linegrid absolute inset-0 opacity-70 [mask-image:radial-gradient(ellipse_at_center,#000_30%,transparent_75%)]" />
-					<div className="animate-floaty absolute left-[3%] top-[14%] hidden w-[210px] rounded-card bg-card p-3.5 text-left shadow-[0_20px_40px_-16px_rgba(0,0,0,0.5)] xl:block">
-						<div className="flex items-center justify-between"><span className="font-mono text-[11px] text-ink-2">INV-1001</span><Chip tone="accent">Eligible</Chip></div>
-						<p className="mt-2 font-mono text-[18px] font-medium text-ink">10,000.00</p>
-						<p className="text-[11px] text-ink-3">Acme Corp · USDT</p>
-					</div>
-					<div className="animate-floaty-slow absolute bottom-[14%] right-[3%] hidden w-[220px] rounded-card bg-card p-3.5 text-left shadow-[0_20px_40px_-16px_rgba(0,0,0,0.5)] xl:block">
-						<div className="flex items-center gap-2"><UsdtMark size={22} /><div><p className="text-[12px] font-medium text-ink">Repaid in full</p><p className="font-mono text-[10px] text-ink-3">tx {short(TX.repay)}</p></div></div>
-					</div>
 					<div className="relative">
-						<p className="mb-4 font-mono text-[11px] uppercase tracking-[0.06em] text-white/60">Testnet demo</p>
-						<h2 className="mx-auto max-w-[720px] text-[36px] font-semibold leading-[1.04] tracking-[-0.03em] text-white md:text-[64px]">Invoice financing <span className="text-white/55">you can verify.</span></h2>
-						<p className="mx-auto mt-5 max-w-[480px] text-[16px] leading-[1.6] text-white/70">Submit, verify, fund, settle. All onchain.</p>
-						<div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+						<h2 className="mx-auto max-w-[720px] text-[32px] font-semibold leading-[1.06] tracking-[-0.03em] text-white md:text-[48px]">Invoice financing <span className="text-white/55">you can verify.</span></h2>
+						<p className="mx-auto mt-3 max-w-[420px] text-[15px] leading-[1.6] text-white/70">Submit, verify, fund, settle. All onchain.</p>
+						<div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
 							<Link href="/app" className="group inline-flex h-12 items-center gap-2 rounded-ctl bg-white px-6 text-[14px] font-semibold text-pine transition-colors hover:bg-white/90">Launch app <span className="transition-transform group-hover:translate-x-0.5" aria-hidden>→</span></Link>
 							<a href="https://github.com/abbylester1/credra" target="_blank" rel="noreferrer" className="inline-flex h-12 items-center gap-1.5 rounded-ctl border border-white/25 px-6 text-[14px] font-medium text-white transition-colors hover:bg-white/10">View on GitHub <ExternalArrow /></a>
 						</div>
