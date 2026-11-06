@@ -234,3 +234,19 @@ export function DetailSkeleton() {
 		</div>
 	)
 }
+
+const METRIC_ICONS = ['M4 4h12v12H4zM8 8h4M8 12h4', 'M4 10l4 4 8-8', 'M10 3v14M6 7h8M6 13h8', 'M5 3v14M5 5h10l-2 3 2 3H5']
+/** Tinted summary tile used on Overview and Positions, same language as the landing page cards. */
+export function MetricCard({ label, children, i = 0 }: { label: string; children: ReactNode; i?: number }) {
+	return (
+		<div className="animate-popin" style={{ animationDelay: `${i * 70}ms` }}>
+			<div className="rounded-[20px] border border-hair bg-inset p-5 transition-shadow duration-300 hover:shadow-[0_18px_40px_-24px_rgba(15,26,22,0.35)]">
+				<span className="flex h-9 w-9 items-center justify-center rounded-ctl border border-hair bg-card text-accent">
+					<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={METRIC_ICONS[i % METRIC_ICONS.length]} /></svg>
+				</span>
+				<div className="mt-5 text-[13px] text-ink-3">{label}</div>
+				<div className="mt-1.5">{children}</div>
+			</div>
+		</div>
+	)
+}

@@ -101,10 +101,10 @@ export function InvoiceTable({ items, showReturn = true }: { items: InvoiceSumma
 							</tr>
 						</thead>
 						<tbody>
-							{rows.map((i) => {
+							{rows.map((i, k) => {
 								const due = relativeDue(i.dueDate)
 								return (
-									<tr key={i.invoiceId} className="border-b border-hair last:border-0 hover:bg-canvas">
+									<tr key={i.invoiceId} style={{ animationDelay: `${Math.min(k, 8) * 40}ms` }} className="animate-slidein border-b border-hair last:border-0 hover:bg-canvas">
 										<td className="w-1 p-0"><span className={`block h-[52px] w-[3px] ${marker(i)}`} aria-hidden /></td>
 										<td className="px-4 py-2.5">
 											<Link href={`/app/invoices/${i.invoiceId}`} className="font-medium hover:underline">{i.issuerName}</Link>

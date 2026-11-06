@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useAccount } from 'wagmi'
-import { Amount, Card, EmptyState, fmtDate, InlineNotice, PageHeader, relativeDue, StatusChip, TableSkeleton } from '@/components/ui'
+import { Amount, EmptyState, MetricCard, fmtDate, InlineNotice, PageHeader, relativeDue, StatusChip, TableSkeleton } from '@/components/ui'
 import { apiJson } from '@/lib/client'
 import type { InvoiceSummary } from '@/lib/useInvoices'
 
@@ -33,9 +33,9 @@ export default function PositionsPage() {
 			) : (
 				<>
 					<div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-						<Card className="animate-popin"><div className="text-[13px] text-ink-3">Capital deployed</div><div className="mt-2"><Amount value={sum((p) => p.fundedAmount)} figure /></div></Card>
-						<Card className="animate-popin [animation-delay:70ms]"><div className="text-[13px] text-ink-3">Expected repayment</div><div className="mt-2"><Amount value={sum((p) => p.amount, (p) => p.status === 5)} figure /></div></Card>
-						<Card className="animate-popin [animation-delay:140ms]"><div className="text-[13px] text-ink-3">Repaid to date</div><div className="mt-2"><Amount value={sum((p) => p.repaidAmount)} figure tone="accent" /></div></Card>
+						<MetricCard i={0} label="Capital deployed"><Amount value={sum((p) => p.fundedAmount)} figure /></MetricCard>
+						<MetricCard i={1} label="Expected repayment"><Amount value={sum((p) => p.amount, (p) => p.status === 5)} figure /></MetricCard>
+						<MetricCard i={2} label="Repaid to date"><Amount value={sum((p) => p.repaidAmount)} figure tone="accent" /></MetricCard>
 					</div>
 					<div className="overflow-x-auto rounded-[16px] border border-hair bg-card">
 						<table className="w-full min-w-[760px] border-collapse text-left text-[14px]">
@@ -48,10 +48,10 @@ export default function PositionsPage() {
 								<th className="px-4 py-3 font-medium">Status</th>
 							</tr></thead>
 							<tbody>
-								{items.map((p) => {
+								{items.map((p, k) => {
 									const due = relativeDue(p.dueDate)
 									return (
-										<tr key={p.invoiceId} className="border-b border-hair last:border-0 hover:bg-canvas">
+										<tr key={p.invoiceId} style={{ animationDelay: `${k * 50}ms` }} className="animate-slidein border-b border-hair last:border-0 hover:bg-canvas">
 											<td className="px-4 py-2.5"><Link href={`/app/invoices/${p.invoiceId}`} className="font-medium hover:underline">{p.issuerName}</Link><div className="num text-[12px] text-ink-3">{p.invoiceNumber}</div></td>
 											<td className="px-4 py-2.5 text-right"><Amount value={p.fundedAmount} /></td>
 											<td className="px-4 py-2.5 text-right"><Amount value={p.amount} /></td>

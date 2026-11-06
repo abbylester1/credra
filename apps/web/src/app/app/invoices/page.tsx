@@ -14,7 +14,7 @@ function List({ scope, headers }: { scope: Scope; headers?: Record<string, strin
 	if (q.error) return <InlineNotice tone="error">We could not load invoices. Nothing was changed. {(q.error as Error).message}</InlineNotice>
 	return (
 		<div className="space-y-6">
-			<div className="dotgrid rounded-[20px] border border-hair bg-inset p-4 md:p-6"><Pipeline items={q.data ?? []} /></div>
+			<Pipeline compact items={q.data ?? []} />
 			<InvoiceTable items={q.data ?? []} />
 		</div>
 	)

@@ -41,9 +41,22 @@ const STAGES: [number[], string, string][] = [
 	[[6], 'Repaid', 'bg-s-repaid'],
 	[[4, 7], 'Rejected or defaulted', 'bg-s-reject'],
 ]
-export function Pipeline({ items }: { items: InvoiceSummary[] }) {
+export function Pipeline({ items, compact }: { items: InvoiceSummary[]; compact?: boolean }) {
 	const counts = STAGES.map(([codes]) => items.filter((i) => codes.includes(i.status)).length)
 	const total = counts.reduce((a, b) => a + b, 0)
+	if (compact) {
+		return (
+			<div className="rounded-[16px] border border-hair bg-card px-5 py-4">
+				<div className="flex h-2.5 gap-0.5 overflow-hidden rounded-full bg-inset">
+					{total > 0 && STAGES.map(([, label, bg], i) => counts[i] > 0 && <div key={label} title={`${label}: ${counts[i]}`} className={`animate-fillbar h-full ${bg}`} style={{ width: `${(counts[i] / total) * 100}%`, animationDelay: `${i * 80}ms` }} />)}
+				</div>
+				<p className="mt-2.5 flex flex-wrap gap-x-5 gap-y-1 text-[12px] text-ink-3">
+					{STAGES.map(([, label, bg], i) => counts[i] > 0 && <span key={label} className="flex items-center gap-1.5"><span className={`h-2 w-2 ${bg}`} />{label} <span className="num text-ink">{counts[i]}</span></span>)}
+					{total === 0 && <span>No invoices yet</span>}
+				</p>
+			</div>
+		)
+	}
 	return (
 		<section className="rounded-[16px] border border-hair bg-card p-6">
 			<div className="flex items-baseline justify-between">
