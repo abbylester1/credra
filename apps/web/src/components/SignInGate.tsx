@@ -7,7 +7,7 @@ import { useConnectMode } from './Providers'
 import { CHAIN_ID } from '@/lib/config'
 import { friendlyError } from '@/lib/errors'
 import { useWalletHeaders } from '@/lib/client'
-import { Button, InlineNotice } from './ui'
+import { Button, InlineNotice, Spinner } from './ui'
 
 /** Requires a connected wallet on the right network and a signed access message before showing children. */
 export function SignInGate({ children }: { children: (headers: Record<string, string>) => React.ReactNode }) {
@@ -23,6 +23,16 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 	useEffect(() => setHeaders(null), [address])
 
 	if (!isConnected) {
+		// Privy user is logged in but the embedded wallet is still being created/reconnected.
+		// Show a neutral wait state rather than a "Sign in" prompt.
+		if (mode.privy && mode.authenticated) {
+			return (
+				<div className="flex items-center gap-2.5 rounded-[14px] border border-hair bg-card px-5 py-4 text-[14px] text-ink-2">
+					<Spinner className="h-4 w-4 shrink-0" />
+					{mode.hasWallet ? 'Reconnecting your wallet…' : 'Setting up your wallet…'}
+				</div>
+			)
+		}
 		const inj = connectors[0]
 		return (
 			<div className="flex flex-col gap-3 rounded-[14px] border border-hair bg-card px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
