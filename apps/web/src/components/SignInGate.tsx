@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAccount, useConnect } from 'wagmi'
 import { useWalletChainId } from '@/lib/useWalletChain'
 import { useConnectMode } from './Providers'
@@ -18,13 +18,25 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 	const getHeaders = useWalletHeaders()
 	const [headers, setHeaders] = useState<Record<string, string> | null>(null)
 	const [err, setErr] = useState<string | null>(null)
+	const [signing, setSigning] = useState(false)
 	const { address } = useAccount()
+	const signingRef = useRef(false)
 
-	useEffect(() => setHeaders(null), [address])
+	useEffect(() => { setHeaders(null); setErr(null) }, [address])
+
+	// For Privy embedded wallets, sign silently as soon as the wallet is ready — no prompt needed.
+	useEffect(() => {
+		if (!mode.privy || !isConnected || chainId !== CHAIN_ID || headers || signingRef.current) return
+		signingRef.current = true
+		setSigning(true)
+		getHeaders()
+			.then(setHeaders)
+			.catch((e) => { console.error('auto sign-in failed', e); setErr(friendlyError(e)) })
+			.finally(() => { setSigning(false); signingRef.current = false })
+	}, [mode.privy, isConnected, chainId, headers, getHeaders])
 
 	if (!isConnected) {
-		// Privy user is authenticated but wallet is still pending — show a neutral skeleton so
-		// the reconnection is invisible; the content will appear once isConnected becomes true.
+		// Privy user is authenticated but wallet is still pending — neutral skeleton.
 		if (mode.privy && mode.authenticated) {
 			return <div className="h-24 animate-pulse rounded-[14px] border border-hair bg-inset" />
 		}
@@ -44,6 +56,25 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 	if (chainId !== CHAIN_ID) {
 		return <InlineNotice tone="warn">Wrong network. Switch to Whitechain Sepolia using the banner above.</InlineNotice>
 	}
+	// Privy: auto-signing in progress — show skeleton.
+	if (mode.privy && (signing || !headers)) {
+		if (err) {
+			return (
+				<div className="flex flex-col gap-3 rounded-[14px] border border-hair bg-card px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+					<div>
+						<p className="text-[15px] font-medium text-ink">Could not verify your wallet</p>
+						<div className="mt-2"><InlineNotice tone="error">{err}</InlineNotice></div>
+					</div>
+					<Button variant="primary" className="shrink-0" onClick={async () => {
+						setErr(null); setSigning(true)
+						try { setHeaders(await getHeaders()) } catch (e) { setErr(friendlyError(e)) } finally { setSigning(false) }
+					}}>Retry</Button>
+				</div>
+			)
+		}
+		return <div className="h-24 animate-pulse rounded-[14px] border border-hair bg-inset" />
+	}
+	// Non-Privy: external wallet — keep the explicit sign prompt.
 	if (!headers) {
 		return (
 			<div className="flex flex-col gap-3 rounded-[14px] border border-hair bg-card px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
@@ -57,12 +88,7 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 					className="shrink-0"
 					onClick={async () => {
 						setErr(null)
-						try {
-							setHeaders(await getHeaders())
-						} catch (e) {
-							console.error('wallet sign-in failed', e)
-							setErr(friendlyError(e))
-						}
+						try { setHeaders(await getHeaders()) } catch (e) { console.error('wallet sign-in failed', e); setErr(friendlyError(e)) }
 					}}
 				>
 					Sign in
