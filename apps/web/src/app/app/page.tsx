@@ -45,7 +45,7 @@ function Overview({ scope, role, headers }: { scope: Scope; role: string; header
 				{metrics.map(([l, v], i) => <Metric key={l as string} label={l as string} i={i}>{v}</Metric>)}
 			</div>
 			<div className="dotgrid mt-6 grid gap-4 rounded-[20px] border border-hair bg-inset p-4 md:p-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-				<Activity items={items} />
+				<Activity items={items} label={role === 'investor' ? 'Available invoices' : undefined} />
 				<Pipeline items={items} />
 			</div>
 		</>
@@ -58,7 +58,11 @@ export default function OverviewPage() {
 		<>
 			<PageHeader
 				title="Overview"
-				description="Your financing activity, the pipeline and where to go next."
+				description={
+					role === 'investor' ? 'Verified invoices open for funding. Browse, review and commit.' :
+					role === 'operator' ? 'Platform activity across all invoices and investors.' :
+					'Your financing activity, the pipeline and where to go next.'
+				}
 			/>
 			{loading ? (
 				<MetricsSkeleton />

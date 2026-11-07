@@ -8,25 +8,6 @@ import type { InvoiceSummary } from '@/lib/useInvoices'
 import { statusLabel } from '@/lib/status'
 import { Amount, fmtDate, StatusChip } from './ui'
 
-/* ───────── Welcome banner ───────── */
-export function Welcome({ role, name }: { role: 'business' | 'investor' | 'operator'; name?: string }) {
-	const copy = {
-		business: { title: 'Turn invoices into capital.', body: 'Submit an invoice, get it verified, and receive USDT once an investor funds it.', cta: ['Submit invoice', '/app/invoices/new'] as const },
-		investor: { title: 'Back verified invoices.', body: 'Every invoice here cleared verification. Review the record, commit in USDT, and track repayment as the receivable holder.', cta: ['Browse invoices', '/app/invoices'] as const },
-		operator: { title: 'Run the verification desk.', body: 'Seed the simulated registry, review flagged invoices and manage the investor allowlist.', cta: ['Open console', '/app/operator'] as const },
-	}[role]
-	return (
-		<div className="mb-6 rounded-[20px] border border-hair bg-card p-7 md:p-9">
-			<div className="max-w-[520px]">
-				<p className="font-mono text-[11px] uppercase tracking-[0.06em] text-ink-3">{name ? `${name} · ` : ''}{role}</p>
-				<h2 className="mt-2 text-[28px] font-semibold leading-[1.1] tracking-[-0.025em] text-ink md:text-[34px]">{copy.title}</h2>
-				<p className="mt-2 text-[15px] leading-[1.55] text-ink-2">{copy.body}</p>
-				<Link href={copy.cta[1]} className="mt-5 inline-flex h-11 items-center gap-2 rounded-ctl bg-pine px-5 text-[14px] font-semibold text-white transition-colors hover:bg-pine-hover">{copy.cta[0]} <span aria-hidden>→</span></Link>
-			</div>
-		</div>
-	)
-}
-
 /* ───────── Pipeline distribution ───────── */
 const STAGES: [number[], string, string][] = [
 	[[1], 'Submitted', 'bg-s-neutral'],
@@ -76,16 +57,16 @@ export function Pipeline({ items, compact }: { items: InvoiceSummary[]; compact?
 }
 
 /* ───────── Recent activity ───────── */
-export function Activity({ items }: { items: InvoiceSummary[] }) {
+export function Activity({ items, label }: { items: InvoiceSummary[]; label?: string }) {
 	const recent = [...items].sort((a, b) => b.createdAt - a.createdAt).slice(0, 6)
 	return (
 		<section className="rounded-[16px] border border-hair bg-card">
 			<div className="flex items-center justify-between px-6 py-4">
-				<h2 className="text-[16px] font-semibold">Recent activity</h2>
+				<h2 className="text-[16px] font-semibold">{label ?? 'Recent activity'}</h2>
 				<Link href="/app/invoices" className="text-[13px] text-accent hover:underline">All invoices</Link>
 			</div>
 			{recent.length === 0 ? (
-				<p className="border-t border-hair px-6 py-8 text-center text-[14px] text-ink-3">Activity will appear here as invoices are submitted.</p>
+				<p className="border-t border-hair px-6 py-8 text-center text-[14px] text-ink-3">{label ? 'No invoices open for funding right now.' : 'Activity will appear here as invoices are submitted.'}</p>
 			) : (
 				<ol className="border-t border-hair">
 					{recent.map((i, k) => (
