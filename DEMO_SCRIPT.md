@@ -19,12 +19,11 @@ Open `apps/web/public/teleprompter.html` (double-click the file, or visit `/tele
 ## Setup (once)
 
 1. Mock registry running: `cd apps/mock-registry && bun server.ts` (port 8787).
-2. Production app on port 3100 (no dev badge, no console warnings):
-   `cd apps/web && NEXT_DIST_DIR=.next-prod bun run build && NEXT_DIST_DIR=.next-prod bunx next start -p 3100`
-   Rebuild after any code change. Sessions are per origin, so sign in on `localhost:3100` ahead of time.
+2. App: use the Vercel deployment at `https://credra-seven.vercel.app` — no local build needed. The mock registry still needs to run locally for the CRE terminal clip (step 5), but the browser demo runs entirely on Vercel.
 3. Two browser profiles, signed in beforehand so no email code is typed on camera:
    - Business: `abbylester@gmail.com` (wallet `0x2db8…495a`)
    - Investor: `abbylester+investor@gmail.com` (wallet `0x0b0e…9Ca6`, allowlisted, named "Halden Capital Partners")
+   Sign in at `https://credra-seven.vercel.app` for both profiles before recording.
 4. Balances: investor wallet at least 22 USDT and some WBT for gas; business wallet some WBT for gas.
 5. Terminal clip invoice (already registered; to register another run `./scripts/prepare-demo-invoice.sh <NUMBER> [AMOUNT] [FINANCING]` after `set -a && . ./.env && set +a`):
    ```
@@ -85,13 +84,13 @@ Whitechain note to include if time allows: chain 1874, all three contracts sourc
 - If the RPC or Privy is slow, record each segment separately and keep a backup take. Cut waits, do not speed footage up.
 - Keep the whole thing under 3:40 on the rehearsal, and above 2:00 on the final export.
 
-## Dry run notes (production build, port 3100)
+## Dry run notes (Vercel deployment)
 
 A full rehearsal ran with a 10 USDT invoice (Meridian Textiles Ltd): sign, submit, onchain registration, CRE verification (Eligible), approve, fund, approve, repay. The status ended Repaid and the timeline recorded all four events with names (Meridian Textiles Ltd, Credra Verifier, Halden Capital Partners) and explorer links.
 
 - Console shows "Unable to fetch token price for chain with id 1874" from Privy (no USD price for testnet gas). It is harmless and not visible on screen. Keep devtools closed while recording.
-- Sessions are per origin: sign in on `localhost:3100` for both users before recording.
-- Keep the sample invoice at its generated 20 and 18 USDT. The generated document image says 20.00, so editing the form amounts would make the document and the form disagree.
+- Sign in on `https://credra-seven.vercel.app` for both users before recording — sessions are per origin.
+- Sample invoices now pick a random company, buyer, and amount each time. Use the "Use sample invoice" button and accept whatever is generated; the document image matches the form values so they will stay consistent.
 - The investor wallet cannot repay 20 USDT after funding 18 (22 USDT balance). Repay as the business user, whose wallet holds enough, or top the investor up first.
 - Wait for the Funded event to appear on the timeline before moving on. It is recorded automatically after the transaction confirms (leaving the page too early skips it).
 
