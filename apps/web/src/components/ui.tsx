@@ -267,7 +267,7 @@ export function DetailSkeleton() {
 	)
 }
 
-const METRIC_ICONS = ['M4 4h12v12H4zM8 8h4M8 12h4', 'M4 10l4 4 8-8', 'M10 3v14M6 7h8M6 13h8', 'M5 3v14M5 5h10l-2 3 2 3H5']
+const METRIC_ICONS = ['M4 4h12v12H4zM8 8h4M8 12h4', 'M4 10l4 4 8-8', 'M3 15l5-5 4 3 5-7M14 8h3v3', 'M5 3v14M5 5h10l-2 3 2 3H5']
 /** Tinted summary tile used on Overview and Positions, same language as the landing page cards. */
 export function MetricCard({ label, children, i = 0 }: { label: string; children: ReactNode; i?: number }) {
 	return (
