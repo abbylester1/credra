@@ -66,7 +66,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 				config={{
 					loginMethods: ['email', 'google', 'wallet'],
 					appearance: { theme: 'light', accentColor: '#0D3B35', showWalletLoginFirst: false },
-					embeddedWallets: { ethereum: { createOnLogin: 'users-without-wallets' } },
+					embeddedWallets: { ethereum: { createOnLogin: 'users-without-wallets' }, showWalletUIs: false },
 					defaultChain: whitechain,
 					supportedChains: [whitechain],
 				}}

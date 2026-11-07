@@ -9,8 +9,9 @@ import { friendlyError } from '@/lib/errors'
 import { useWalletHeaders } from '@/lib/client'
 import { Button, InlineNotice } from './ui'
 
-/** Requires a connected wallet on the right network and a signed access message before showing children. */
-export function SignInGate({ children }: { children: (headers: Record<string, string>) => React.ReactNode }) {
+/** Requires a connected wallet on the right network and a signed access message before showing children.
+ *  Pass `skeleton` to show a custom loading placeholder while the wallet auto-signs. */
+export function SignInGate({ children, skeleton }: { children: (headers: Record<string, string>) => React.ReactNode; skeleton?: React.ReactNode }) {
 	const { isConnected } = useAccount()
 	const { connectors, connect, isPending } = useConnect()
 	const chainId = useWalletChainId()
@@ -53,7 +54,7 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 	if (!isConnected) {
 		// Privy user is authenticated but wallet is still pending — neutral skeleton.
 		if (mode.privy && mode.authenticated) {
-			return <div className="h-24 animate-pulse rounded-[14px] border border-hair bg-inset" />
+			return <>{skeleton ?? <div className="h-24 animate-pulse rounded-[14px] border border-hair bg-inset" />}</>
 		}
 		const inj = connectors[0]
 		return (
@@ -87,7 +88,7 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 				</div>
 			)
 		}
-		return <div className="h-24 animate-pulse rounded-[14px] border border-hair bg-inset" />
+		return <>{skeleton ?? <div className="h-24 animate-pulse rounded-[14px] border border-hair bg-inset" />}</>
 	}
 	// Non-Privy: external wallet — keep the explicit sign prompt.
 	if (!headers) {

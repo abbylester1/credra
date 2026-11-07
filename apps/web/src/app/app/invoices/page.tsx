@@ -37,7 +37,7 @@ export default function InvoicesPage() {
 			) : role === 'investor' ? (
 				<List scope="marketplace" />
 			) : (
-				<SignInGate>{(h) => <List scope="mine" headers={h} />}</SignInGate>
+				<SignInGate skeleton={<TableSkeleton />}>{(h) => <List scope="mine" headers={h} />}</SignInGate>
 			)}
 			{!loading && role === 'business' && (
 				<div className="mt-8"><EmptyState title="Need to finance an invoice?" body="Submit an invoice and its document. It gets registered onchain and verified before funding." action={<Link href="/app/invoices/new"><Button>Submit invoice</Button></Link>} /></div>

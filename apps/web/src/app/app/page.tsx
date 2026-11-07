@@ -71,7 +71,7 @@ export default function OverviewPage() {
 			) : role === 'investor' ? (
 				<Overview scope="marketplace" role="investor" />
 			) : (
-				<SignInGate>{(h) => <Overview scope="mine" role="business" headers={h} />}</SignInGate>
+				<SignInGate skeleton={<MetricsSkeleton />}>{(h) => <Overview scope="mine" role="business" headers={h} />}</SignInGate>
 			)}
 			<div className="mt-6 grid gap-6 lg:grid-cols-2">
 				<GettingStarted role={role} />

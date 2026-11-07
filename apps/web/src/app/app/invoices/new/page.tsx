@@ -23,7 +23,7 @@ const SCENARIOS = [
 	['none', 'Leave unchanged'],
 ] as const
 
-function Form({ headers }: { headers: Record<string, string> }) {
+function Form() {
 	const router = useRouter()
 	const { address } = useAccount()
 	const publicClient = usePublicClient()
@@ -47,8 +47,8 @@ function Form({ headers }: { headers: Record<string, string> }) {
 	const termsOk = amountBase !== null && financingBase !== null && amountBase > 0n && financingBase > 0n && financingBase < amountBase
 	const advance = termsOk && amountBase && financingBase ? Number((financingBase * 100n) / amountBase) : null
 	const dueTs = f.dueDate ? Math.floor(new Date(`${f.dueDate}T23:59:59Z`).getTime() / 1000) : 0
-	const ready = !!(f.number && f.issuer && f.buyer && file && termsOk && dueTs > Date.now() / 1000)
-	const reason = !f.number || !f.issuer || !f.buyer ? 'Fill in the invoice details.' : !file ? 'Attach the invoice document.' : !termsOk ? 'Financing must be above zero and below the invoice amount.' : dueTs <= Date.now() / 1000 ? 'The due date must be in the future.' : ''
+	const ready = !!(address && f.number && f.issuer && f.buyer && file && termsOk && dueTs > Date.now() / 1000)
+	const reason = !address ? 'Waiting for your wallet…' : !f.number || !f.issuer || !f.buyer ? 'Fill in the invoice details.' : !file ? 'Attach the invoice document.' : !termsOk ? 'Financing must be above zero and below the invoice amount.' : dueTs <= Date.now() / 1000 ? 'The due date must be in the future.' : ''
 
 	/** Fills the form with unique demo values and attaches a generated PNG invoice, so the whole flow can be tried in a minute. */
 	async function useSample() {
@@ -193,7 +193,7 @@ export default function NewInvoicePage() {
 	return (
 		<>
 			<PageHeader title="Submit invoice" description="Register it, attach the document, get it verified." />
-			<SignInGate>{(h) => <Form headers={h} />}</SignInGate>
+			<Form />
 		</>
 	)
 }
