@@ -13,7 +13,7 @@ import { WalletSplash } from './WalletSplash'
 import { useConnectMode } from './Providers'
 import { CHAIN_ID, EXPLORER, shorten } from '@/lib/config'
 import { useRole } from '@/lib/useRole'
-import { Button, Skeleton, Spinner, WalletTag } from './ui'
+import { Button, Skeleton, WalletTag } from './ui'
 
 type Item = { href: string; label: string; icon: string; roles?: string[] }
 const NAV: { group: string; items: Item[] }[] = [
@@ -41,6 +41,10 @@ function WalletCard() {
 	const mine = useWalletLabels([address]).data?.[address?.toLowerCase() ?? '']
 
 	if (!isConnected) {
+		// Privy user is authenticated but wallet is still being created/reconnected — show skeleton.
+		if (mode.privy && mode.authenticated) {
+			return <Skeleton className="h-9 w-full rounded-ctl" />
+		}
 		const inj = connectors[0]
 		return (
 			<div className="space-y-2">
@@ -161,12 +165,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 			</aside>
 			<div className="min-w-0">
 				<NetworkBanner />
-				{mode.privy && mode.authenticated && !isConnected && (
-					<div className="flex items-center gap-2.5 border-b border-hair bg-inset px-8 py-2.5 text-[13px] text-ink-2">
-						<Spinner className="h-3.5 w-3.5 shrink-0" />
-						{mode.hasWallet ? 'Reconnecting your wallet…' : 'Setting up your wallet in the background…'}
-					</div>
-				)}
 				<TopBar />
 				<main className="mx-auto max-w-[1120px] px-4 py-8 lg:px-8">
 					{HOSTED_DEMO && <p className="mb-6 rounded-ctl border border-hair bg-card px-4 py-3 text-[13px] leading-[1.55] text-ink-2">{VERIFY_ENGINE_NOTE}</p>}
