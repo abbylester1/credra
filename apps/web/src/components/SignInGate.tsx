@@ -25,14 +25,29 @@ export function SignInGate({ children }: { children: (headers: Record<string, st
 	useEffect(() => { setHeaders(null); setErr(null) }, [address])
 
 	// For Privy embedded wallets, sign silently as soon as the wallet is ready — no prompt needed.
+	// Retries up to 3 times with a short back-off before surfacing an error.
 	useEffect(() => {
 		if (!mode.privy || !isConnected || chainId !== CHAIN_ID || headers || signingRef.current) return
 		signingRef.current = true
 		setSigning(true)
-		getHeaders()
-			.then(setHeaders)
-			.catch((e) => { console.error('auto sign-in failed', e); setErr(friendlyError(e)) })
-			.finally(() => { setSigning(false); signingRef.current = false })
+		let attempt = 0
+		const MAX = 3
+		const run = (): void => {
+			getHeaders()
+				.then(setHeaders)
+				.catch((e) => {
+					attempt++
+					if (attempt < MAX) {
+						setTimeout(run, 1_500 * attempt)
+					} else {
+						console.error('auto sign-in failed after retries', e)
+						setErr(friendlyError(e))
+						setSigning(false)
+						signingRef.current = false
+					}
+				})
+		}
+		run()
 	}, [mode.privy, isConnected, chainId, headers, getHeaders])
 
 	if (!isConnected) {
