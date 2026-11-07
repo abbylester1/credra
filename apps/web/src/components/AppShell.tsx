@@ -120,7 +120,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 	const active = (href: string) => (href === '/app' ? pathname === '/app' : pathname.startsWith(href))
 
 	if (!mounted) return <div className="min-h-screen bg-canvas" aria-hidden />
-	if (mode.privy && !operator && !isConnected && (!mode.ready || mode.authenticated)) return <WalletSplash message={mode.ready ? 'Setting up your wallet' : 'Loading'} />
+	if (mode.privy && !operator && !isConnected && (!mode.ready || mode.authenticated)) return <WalletSplash message={mode.ready ? (mode.hasWallet ? 'Reconnecting' : 'Setting up your wallet') : 'Loading'} />
 	if (!isConnected && !operator && !isReconnecting && !isConnecting && pathname !== '/app/operator') return <AuthScreen />
 
 	return (

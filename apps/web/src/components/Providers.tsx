@@ -14,8 +14,8 @@ import { wagmiConfig } from '@/lib/wagmi'
  *  otherwise the app falls back to a plain browser wallet (MetaMask etc.). */
 export const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID
 
-type Connect = { privy: boolean; login: (() => void) | null; logout: (() => Promise<void>) | null; ready: boolean; authenticated: boolean }
-const ConnectContext = createContext<Connect>({ privy: false, login: null, logout: null, ready: true, authenticated: false })
+type Connect = { privy: boolean; login: (() => void) | null; logout: (() => Promise<void>) | null; ready: boolean; authenticated: boolean; hasWallet: boolean }
+const ConnectContext = createContext<Connect>({ privy: false, login: null, logout: null, ready: true, authenticated: false, hasWallet: false })
 /** `privy` is true when sign-in goes through Privy. `login`/`logout` are null for the browser-wallet fallback. */
 export const useConnectMode = () => useContext(ConnectContext)
 
@@ -53,7 +53,8 @@ function PrivyBridge({ children }: { children: React.ReactNode }) {
 		creating.current = true
 		createWallet().catch((e) => { console.error('embedded wallet creation failed', e); creating.current = false })
 	}, [ready, authenticated, user, createWallet])
-	return <ConnectContext.Provider value={{ privy: true, login: () => login(), logout, ready, authenticated }}>{children}</ConnectContext.Provider>
+	const hasWallet = !!user?.linkedAccounts.some((a) => a.type === 'wallet')
+	return <ConnectContext.Provider value={{ privy: true, login: () => login(), logout, ready, authenticated, hasWallet }}>{children}</ConnectContext.Provider>
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
